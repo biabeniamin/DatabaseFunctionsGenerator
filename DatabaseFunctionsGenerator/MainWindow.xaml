@@ -7,6 +7,26 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
+        <!--tables from database-->
+        <ListView x:Name="tablesListView" ItemsSource="{Binding Database.Tables}" SelectedItem="{Binding SelectedTable}" Margin="10,20,401,9">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
         
+        <!--columns from selected table-->
+        
+        <ListView ItemsSource="{Binding SelectedItem.Columns, ElementName=tablesListView}" Margin="121,19,215,10">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="Type" DisplayMemberBinding="{Binding Type}" />
+                    <GridViewColumn Header="Length" DisplayMemberBinding="{Binding Type.Length}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Label Content="{Binding SelectedTable}" HorizontalAlignment="Left" Margin="331,133,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>

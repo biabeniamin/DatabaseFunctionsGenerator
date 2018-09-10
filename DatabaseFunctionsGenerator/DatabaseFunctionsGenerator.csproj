@@ -55,6 +55,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Column.cs" />
+    <Compile Include="Database.cs" />
     <Compile Include="Table.cs" />
     <Compile Include="ColumnType.cs" />
     <Compile Include="Types.cs" />

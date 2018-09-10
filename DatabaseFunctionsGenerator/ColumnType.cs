@@ -8,7 +8,15 @@ namespace DatabaseFunctionsGenerator
 {
     public class ColumnType
     {
-        private Types _type;        
+        private Types _type;
+        private int _length;
+
+        public int Length
+        {
+            get { return _length; }
+            set { _length = value; }
+        }
+
 
         public Types Type
         {
@@ -16,5 +24,21 @@ namespace DatabaseFunctionsGenerator
             set { _type = value; }
         }
 
+        public ColumnType(Types type)
+            :this(type, 0)
+        {
+
+        }
+
+        public ColumnType(Types type, int length)
+        {
+            _type = type;
+            _length = length;
+        }
+
+        public override string ToString()
+        {
+            return _type.ToString();
+        }
     }
 }

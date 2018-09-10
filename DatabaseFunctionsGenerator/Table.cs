@@ -24,5 +24,21 @@ namespace DatabaseFunctionsGenerator
             set { _name = value; }
         }
 
+        public Table(string name)
+            :this(name, new ObservableCollection<Column>())
+        {
+
+        }
+
+        public Table(string name, ObservableCollection<Column> columns)
+        {
+            _name = name;
+            _columns = columns;
+        }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

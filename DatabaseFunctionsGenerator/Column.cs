@@ -23,5 +23,11 @@ namespace DatabaseFunctionsGenerator
             set { _name = value; }
         }
 
+        public Column(string name, ColumnType type)
+        {
+            _name = name;
+            _type = type;
+        }
+
     }
 }
