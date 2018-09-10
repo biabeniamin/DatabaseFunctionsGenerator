@@ -55,10 +55,19 @@ namespace DatabaseFunctionsGenerator
             Database.Tables.Add(new Table("Users"));
             Database.Tables.Add(new Table("Locations"));
 
+            Database.Tables[0].Columns.Add(new Column("Id", new ColumnType(Types.Integer, true)));
             Database.Tables[0].Columns.Add(new Column("Username", new ColumnType(Types.Varchar, 20)));
-            Database.Tables[0].Columns.Add(new Column("Password", new ColumnType(Types.Varchar, 20)));
+            Database.Tables[0].Columns.Add(new Column("Username", new ColumnType(Types.Varchar, 20)));
+            Database.Tables[0].Columns.Add(new Column("Age", new ColumnType(Types.Integer)));
+            Database.Tables[0].Columns.Add(new Column("Description", new ColumnType(Types.Text)));
+            Database.Tables[0].Columns.Add(new Column("CNP", new ColumnType(Types.Varchar, 20)));
+            Database.Tables[0].Columns.Add(new Column("DateOfBirth", new ColumnType(Types.Date)));
 
             SelectedTable = Database.Tables[0];
+
+            Generator generator = new Generator(_database);
+            generator.Generate();
+            
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

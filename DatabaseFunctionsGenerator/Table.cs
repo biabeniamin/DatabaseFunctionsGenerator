@@ -24,6 +24,16 @@ namespace DatabaseFunctionsGenerator
             set { _name = value; }
         }
 
+        public bool HasPrimaryKey
+        {
+            get
+            {
+                return 0 < _columns.Where((column) => {
+                    return true == column.Type.IsPrimaryKey;
+                }).Count();
+            }
+        }
+
         public Table(string name)
             :this(name, new ObservableCollection<Column>())
         {
