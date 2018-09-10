@@ -35,13 +35,15 @@ namespace DatabaseFunctionsGenerator
         private string GenerateTableQuery(Table table)
         {
             StringBuilder builder = new StringBuilder();
-            
-            if(!table.HasPrimaryKey)
+            Column primaryKeyColumn;
+
+
+            if (!table.HasPrimaryKey)
             {
                 Column column;
                 ColumnType type;
 
-                type = new ColumnType(Types.Integer, true);     
+                type = new ColumnType(Types.Integer, true, true);     
                 column = new Column($"{table.Name}Id", type);
 
                 if ("s" == table.Name.Substring(table.Name.Length - 1, 1))
@@ -60,6 +62,18 @@ namespace DatabaseFunctionsGenerator
             }
 
             builder.AppendLine($") ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+            builder.AppendLine();
+
+            foreach (Column column in table.PrimaryKeyColumns)
+            {
+                builder.AppendLine($"ALTER TABLE `{table.Name}` ADD PRIMARY KEY(`{column.Name}`); ");
+
+                if (column.Type.AutoIncrement)
+                {
+                    builder.AppendLine($"ALTER TABLE `{table.Name}`  MODIFY `{column.Name}` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT = 1; ");
+                }
+            }
+
 
             return builder.ToString();
         }

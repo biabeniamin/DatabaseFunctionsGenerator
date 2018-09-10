@@ -34,6 +34,35 @@ namespace DatabaseFunctionsGenerator
             }
         }
 
+        public Column PrimaryKeyColumn
+        {
+            get
+            {
+                IEnumerable<Column> columns;
+
+                columns = _columns.Where((column) => {
+                    return true == column.Type.IsPrimaryKey;
+                });
+
+                if (0 == columns.Count())
+                {
+                    return null;
+                }
+
+                return columns.ElementAt(0);
+            }
+        }
+
+        public IEnumerable<Column> PrimaryKeyColumns
+        {
+            get
+            {
+                return _columns.Where((column) => {
+                    return true == column.Type.IsPrimaryKey;
+                });
+            }
+        }
+
         public Table(string name)
             :this(name, new ObservableCollection<Column>())
         {

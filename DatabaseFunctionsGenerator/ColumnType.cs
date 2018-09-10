@@ -11,6 +11,13 @@ namespace DatabaseFunctionsGenerator
         private Types _type;
         private int _length;
         private bool _isPrimaryKey;
+        private bool _autoIncrement;
+
+        public bool AutoIncrement
+        {
+            get { return _autoIncrement; }
+            set { _autoIncrement = value; }
+        }
 
         public bool IsPrimaryKey
         {
@@ -38,21 +45,28 @@ namespace DatabaseFunctionsGenerator
         }
 
         public ColumnType(Types type, bool isPrimaryKey)
-            : this(type, 0, isPrimaryKey)
+            : this(type, 0, isPrimaryKey, false)
+        {
+
+        }
+
+        public ColumnType(Types type, bool isPrimaryKey, bool autoIncrement)
+            : this(type, 0, isPrimaryKey, autoIncrement)
         {
 
         }
 
         public ColumnType(Types type, int length)
-            : this(type, length, false)
+            : this(type, length, false, false)
         {
         }
 
-        public ColumnType(Types type, int length, bool isPrimaryKey)
+        public ColumnType(Types type, int length, bool isPrimaryKey, bool autoIncrement)
         {
             _type = type;
             _length = length;
             _isPrimaryKey = isPrimaryKey;
+            _autoIncrement = autoIncrement;
         }
 
         public string GetMysqlType()
