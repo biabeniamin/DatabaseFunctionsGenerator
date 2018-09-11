@@ -59,5 +59,24 @@ namespace DatabaseFunctionsGenerator
 
             return builder.ToString();
         }
+        public static string GetSingular(string plural)
+        {
+            string singular;
+
+            singular = plural;
+
+            if ("s" == singular.Substring(singular.Length - 1, 1))
+            {
+                singular = singular.Substring(0, singular.Length - 1); 
+            }
+
+            return singular;
+        }
+
+        public static string GenerateTimeStamp()
+        {
+            return DateTime.Now.ToString("yyyyMMddHHmmssfff");
+        }
     }
+
 }

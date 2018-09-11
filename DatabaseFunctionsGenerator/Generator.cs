@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,8 +25,20 @@ namespace DatabaseFunctionsGenerator
 
         public void Generate()
         {
+            string path;
+
+            path = $"GeneratorResult\\{Helpers.GenerateTimeStamp()}";
+
+            if (!Directory.Exists("GeneratorResult"))
+            {
+                Directory.CreateDirectory("GeneratorResult");
+            }
+
+            Directory.CreateDirectory(path);
+
             //System.Windows.MessageBox.Show(_sqlGenerator.Generate());
-            _phpModelsGenerator.Generate();
+
+            _phpModelsGenerator.Generate(path);
         }
     }
 }

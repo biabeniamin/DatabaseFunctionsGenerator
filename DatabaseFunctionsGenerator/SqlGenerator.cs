@@ -44,12 +44,9 @@ namespace DatabaseFunctionsGenerator
                 ColumnType type;
 
                 type = new ColumnType(Types.Integer, true, true);     
-                column = new Column($"{table.Name}Id", type);
+                column = new Column($"{table.SingularName}Id", type);
 
-                if ("s" == table.Name.Substring(table.Name.Length - 1, 1))
-                {
-                    column.Name = $"{table.Name.Substring(0, table.Name.Length - 1)}Id";
-                }
+                
 
                 table.Columns.Insert(0, column);
             }

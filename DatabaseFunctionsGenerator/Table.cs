@@ -11,6 +11,21 @@ namespace DatabaseFunctionsGenerator
     {
         private string _name;
         private ObservableCollection<Column> _columns;
+        private string _singularName;
+
+        public string SingularName
+        {
+            get
+            {
+                if(String.IsNullOrEmpty(_singularName))
+                {
+                    _singularName = Helpers.GetSingular(_name);
+                }
+                return _singularName;
+            }
+            set { _singularName = value; }
+        }
+
 
         public ObservableCollection<Column> Columns
         {
@@ -21,7 +36,11 @@ namespace DatabaseFunctionsGenerator
         public string Name
         {
             get { return _name; }
-            set { _name = value; }
+            set
+            {
+                _name = value;
+                _singularName = Helpers.GetSingular(_name);
+            }
         }
 
         public bool HasPrimaryKey
@@ -59,6 +78,16 @@ namespace DatabaseFunctionsGenerator
             {
                 return _columns.Where((column) => {
                     return true == column.Type.IsPrimaryKey;
+                });
+            }
+        }
+
+        public IEnumerable<Column> EditableColumns
+        {
+            get
+            {
+                return _columns.Where((column) => {
+                    return false == column.Type.IsPrimaryKey;
                 });
             }
         }
