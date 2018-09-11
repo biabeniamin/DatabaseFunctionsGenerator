@@ -60,7 +60,7 @@ namespace DatabaseFunctionsGenerator
             Database.Tables[0].Columns.Add(new Column("Age", new ColumnType(Types.Integer)));
             Database.Tables[0].Columns.Add(new Column("Description", new ColumnType(Types.Text)));
             Database.Tables[0].Columns.Add(new Column("CNP", new ColumnType(Types.Varchar, 20)));
-            Database.Tables[0].Columns.Add(new Column("DateOfBirth", new ColumnType(Types.Date)));
+            Database.Tables[0].Columns.Add(new Column("DateOfBirth", new ColumnType(Types.DateTime)));
 
             SelectedTable = Database.Tables[0];
 

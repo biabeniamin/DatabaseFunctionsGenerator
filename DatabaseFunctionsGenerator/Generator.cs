@@ -12,7 +12,7 @@ namespace DatabaseFunctionsGenerator
         private Database _database;
 
         private SqlGenerator _sqlGenerator;
-        //private PhpHelpers _phps
+        private PhpHelpersGenerator _phpHelpersGenerator;
         private PhpModelsGenerator _phpModelsGenerator;
 
         public Generator(Database database)
@@ -21,6 +21,7 @@ namespace DatabaseFunctionsGenerator
 
             _sqlGenerator = new SqlGenerator(_database);
             _phpModelsGenerator = new PhpModelsGenerator(_database);
+            _phpHelpersGenerator = new PhpHelpersGenerator();
         }
 
         public void Generate()
@@ -36,9 +37,10 @@ namespace DatabaseFunctionsGenerator
 
             Directory.CreateDirectory(path);
 
-            //System.Windows.MessageBox.Show(_sqlGenerator.Generate());
+            _sqlGenerator.Generate(path);
 
             _phpModelsGenerator.Generate(path);
+            _phpHelpersGenerator.Generate(path);
         }
     }
 }

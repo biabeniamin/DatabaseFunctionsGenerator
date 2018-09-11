@@ -43,12 +43,21 @@ namespace DatabaseFunctionsGenerator
                 Column column;
                 ColumnType type;
 
-                type = new ColumnType(Types.Integer, true, true);     
+                type = new ColumnType(Types.Integer, true, true);
                 column = new Column($"{table.SingularName}Id", type);
 
-                
-
                 table.Columns.Insert(0, column);
+            }
+
+            if (!table.HasCreationTime)
+            {
+                Column column;
+                ColumnType type;
+
+                type = new ColumnType(Types.DateTime);
+                column = new Column($"CreationTime", type);
+
+                table.Columns.Add(column);
             }
 
             builder.AppendLine($"CREATE TABLE `{table.Name}` (");
@@ -78,7 +87,7 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
-        public string Generate()
+        public void Generate(string path)
         {
             StringBuilder builder = new StringBuilder();
 
@@ -92,7 +101,7 @@ namespace DatabaseFunctionsGenerator
                 builder.AppendLine(GenerateTableQuery(table));
             }
 
-            return builder.ToString();
+            Helpers.WriteFile($"{path}\\sqlDatabase.sql", builder.ToString());
         }
     }
 }

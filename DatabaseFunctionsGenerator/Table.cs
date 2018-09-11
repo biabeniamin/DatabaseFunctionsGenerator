@@ -92,6 +92,17 @@ namespace DatabaseFunctionsGenerator
             }
         }
 
+        public bool HasCreationTime
+        {
+            get
+            {
+                return 0 < _columns.Where((column) =>
+                {
+                    return String.Equals(column.Name, "CreationTime");
+                }).Count();
+            }
+        }
+
         public Table(string name)
             :this(name, new ObservableCollection<Column>())
         {

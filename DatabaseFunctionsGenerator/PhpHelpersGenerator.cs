@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace DatabaseFunctionsGenerator
 {
-    public class PhpHelpers
+    public class PhpHelpersGenerator
     {
-        public string Generate()
+        public string Generate(string path)
         {
             StringBuilder builder;
 

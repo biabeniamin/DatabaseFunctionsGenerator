@@ -11,6 +11,6 @@ namespace DatabaseFunctionsGenerator
         Integer,
         Varchar,
         Text,
-        Date
+        DateTime
     }
 }

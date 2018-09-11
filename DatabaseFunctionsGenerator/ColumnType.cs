@@ -73,7 +73,7 @@ namespace DatabaseFunctionsGenerator
         {
             switch(Type)
             {
-                case Types.Date:
+                case Types.DateTime:
                     return "DATETIME";
                 case Types.Integer:
                     return "INT";
