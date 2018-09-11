@@ -57,7 +57,6 @@ namespace DatabaseFunctionsGenerator
 
             Database.Tables[0].Columns.Add(new Column("Id", new ColumnType(Types.Integer, true, true)));
             Database.Tables[0].Columns.Add(new Column("Username", new ColumnType(Types.Varchar, 20)));
-            Database.Tables[0].Columns.Add(new Column("Username", new ColumnType(Types.Varchar, 20)));
             Database.Tables[0].Columns.Add(new Column("Age", new ColumnType(Types.Integer)));
             Database.Tables[0].Columns.Add(new Column("Description", new ColumnType(Types.Text)));
             Database.Tables[0].Columns.Add(new Column("CNP", new ColumnType(Types.Varchar, 20)));
