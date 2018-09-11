@@ -37,29 +37,6 @@ namespace DatabaseFunctionsGenerator
             StringBuilder builder = new StringBuilder();
             Column primaryKeyColumn;
 
-
-            if (!table.HasPrimaryKey)
-            {
-                Column column;
-                ColumnType type;
-
-                type = new ColumnType(Types.Integer, true, true);
-                column = new Column($"{table.SingularName}Id", type);
-
-                table.Columns.Insert(0, column);
-            }
-
-            if (!table.HasCreationTime)
-            {
-                Column column;
-                ColumnType type;
-
-                type = new ColumnType(Types.DateTime);
-                column = new Column($"CreationTime", type);
-
-                table.Columns.Add(column);
-            }
-
             builder.AppendLine($"CREATE TABLE `{table.Name}` (");
 
             foreach (Column column in table.Columns)

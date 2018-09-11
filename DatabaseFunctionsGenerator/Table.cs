@@ -109,10 +109,10 @@ namespace DatabaseFunctionsGenerator
 
         }
 
-        public Table(string name, ObservableCollection<Column> columns)
+        public Table(string name, IEnumerable<Column> columns)
         {
             _name = name;
-            _columns = columns;
+            _columns = new ObservableCollection<Column>(columns);
         }
 
         public override string ToString()

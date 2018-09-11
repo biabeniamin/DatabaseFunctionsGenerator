@@ -17,6 +17,16 @@ namespace DatabaseFunctionsGenerator
             set { _tables = value; }
         }
 
+        public bool HasNotificationSystem
+        {
+            get
+            {
+                return 0 < _tables.Where((table) => {
+                    return String.Equals("Notifications", table.Name);
+                }). Count();
+            }
+        }
+
         public Database()
             :this(new ObservableCollection<Table>())
         {
