@@ -77,6 +77,19 @@ namespace DatabaseFunctionsGenerator
         {
             return DateTime.Now.ToString("yyyyMMddHHmmssfff");
         }
+
+        public static string GetLowerCaseString(string text)
+        {
+            if(1 > text.Length)
+            {
+                return "";
+            }
+
+                //transform to lower
+            text = text.Substring(0, 1).ToLower() + text.Substring(1);
+
+            return text;
+        }
     }
 
 }

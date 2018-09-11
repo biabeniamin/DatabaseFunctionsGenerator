@@ -103,6 +103,14 @@ namespace DatabaseFunctionsGenerator
             }
         }
 
+        public string LowerCaseName
+        {
+            get
+            {
+                return Helpers.GetLowerCaseString(Name);
+            }
+        }
+
         public Table(string name)
             :this(name, new ObservableCollection<Column>())
         {

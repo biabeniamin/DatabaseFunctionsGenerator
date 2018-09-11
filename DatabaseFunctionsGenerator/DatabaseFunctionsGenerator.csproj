@@ -59,6 +59,7 @@
     <Compile Include="Generator.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="NotificationSystem.cs" />
+    <Compile Include="PhpDatabaseFunctionGenerator.cs" />
     <Compile Include="PhpHelpersGenerator.cs" />
     <Compile Include="PhpModelsGenerator.cs" />
     <Compile Include="SqlGenerator.cs" />

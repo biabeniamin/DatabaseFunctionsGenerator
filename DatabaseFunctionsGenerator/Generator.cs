@@ -15,6 +15,7 @@ namespace DatabaseFunctionsGenerator
         private PhpHelpersGenerator _phpHelpersGenerator;
         private PhpModelsGenerator _phpModelsGenerator;
         private NotificationSystem _notificationSystem;
+        private PhpDatabaseFunctionGenerator _phpDatabaseFunctionGenerator;
 
         public Generator(Database database)
         {
@@ -23,6 +24,7 @@ namespace DatabaseFunctionsGenerator
             _sqlGenerator = new SqlGenerator(_database);
             _phpModelsGenerator = new PhpModelsGenerator(_database);
             _phpHelpersGenerator = new PhpHelpersGenerator();
+            _phpDatabaseFunctionGenerator = new PhpDatabaseFunctionGenerator(_database);
             _notificationSystem = new NotificationSystem();
         }
 
@@ -77,7 +79,7 @@ namespace DatabaseFunctionsGenerator
             AddMissingFields();
 
             _sqlGenerator.Generate(path);
-
+            _phpDatabaseFunctionGenerator.Generate(path);
             _phpModelsGenerator.Generate(path);
             _phpHelpersGenerator.Generate(path);
         }
