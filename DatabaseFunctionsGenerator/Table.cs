@@ -87,7 +87,7 @@ namespace DatabaseFunctionsGenerator
             get
             {
                 return _columns.Where((column) => {
-                    return false == column.Type.IsPrimaryKey;
+                    return (false == column.Type.IsPrimaryKey);
                 });
             }
         }
@@ -122,6 +122,8 @@ namespace DatabaseFunctionsGenerator
             _name = name;
             _columns = new ObservableCollection<Column>(columns);
         }
+
+        
 
         public override string ToString()
         {

@@ -23,6 +23,14 @@ namespace DatabaseFunctionsGenerator
             set { _name = value; }
         }
 
+        public bool IsCreationTimeColumn
+        {
+            get
+            {
+                return String.Equals("CreationTime", Name) && Types.DateTime == Type.Type;
+            }
+        }
+
         public Column(string name, ColumnType type)
         {
             _name = name;
