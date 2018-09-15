@@ -173,7 +173,14 @@ namespace DatabaseFunctionsGenerator
         {
             StringBuilder builder = new StringBuilder();
 
-            //builder.Append(GenerateGetFunction(table));
+            builder.AppendLine("if(isset($_GET[\"cmd\"]))");
+            builder.AppendLine("{");
+            builder.AppendLine("\tif(\"getData\" == $_GET[\"cmd\"])");
+            builder.AppendLine("\t{");
+            builder.AppendLine($"\t\t$database = new DatabaseOperations();");
+            builder.AppendLine($"\t\techo json_encode(Get{table.Name}($database));");
+            builder.AppendLine("\t}");
+            builder.AppendLine("}");
 
             return builder.ToString();
         }
@@ -182,12 +189,17 @@ namespace DatabaseFunctionsGenerator
         {
             StringBuilder builder = new StringBuilder();
 
-            builder.Append(GenerateGetFunction(table));
-            builder.Append(GenerateAddFunction(table));
-            builder.Append(GenerateTestAddFunction(table));
-            builder.Append(GenerateGetRequest(table));
+            builder.AppendLine($"<?php");
+            builder.AppendLine($"require \'Models/{table.SingularName}.php\';");
+            builder.AppendLine($"require \'DatabaseOperations.php\';");
+            builder.AppendLine($"require \'Helpers.php\';");
+            builder.AppendLine(GenerateGetFunction(table));
+            builder.AppendLine(GenerateAddFunction(table));
+            builder.AppendLine(GenerateTestAddFunction(table));
+            builder.AppendLine(GenerateGetRequest(table));
+            builder.AppendLine($"?>");
 
-            Helpers.WriteFile($"{path}\\Php\\{table.Name}",
+            Helpers.WriteFile($"{path}\\Php\\{table.Name}.php",
                 builder.ToString());
 
             return builder.ToString();
