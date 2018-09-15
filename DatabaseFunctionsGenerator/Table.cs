@@ -87,7 +87,16 @@ namespace DatabaseFunctionsGenerator
             get
             {
                 return _columns.Where((column) => {
-                    return (false == column.Type.IsPrimaryKey);
+                    return (false == column.Type.IsPrimaryKey) && (false == column.IsCreationTimeColumn);
+                });
+            }
+        }
+        public IEnumerable<Column> NonEditableColumns
+        {
+            get
+            {
+                return _columns.Where((column) => {
+                    return (true == column.Type.IsPrimaryKey) || (true == column.IsCreationTimeColumn);
                 });
             }
         }

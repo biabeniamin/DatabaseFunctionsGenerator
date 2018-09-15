@@ -19,6 +19,9 @@ namespace DatabaseFunctionsGenerator
         {
             StringBuilder builder = new StringBuilder();
             StringBuilder functionBody = new StringBuilder();
+            string objectName;
+
+            objectName = Helpers.GetLowerCaseString(table.SingularName);
 
             builder.AppendLine($"function Get{table.Name}($database)");
             builder.AppendLine("{");
@@ -29,15 +32,24 @@ namespace DatabaseFunctionsGenerator
 
             functionBody.AppendLine("foreach($data as $row)");
             functionBody.AppendLine("{");
-            functionBody.AppendLine($"\t${Helpers.GetLowerCaseString(table.SingularName)} = new {table.SingularName}(");
-            foreach (Column column in table.Columns)
+            functionBody.AppendLine($"\t${objectName} = new {table.SingularName}(");
+            foreach (Column column in table.EditableColumns)
             {
                 functionBody.AppendLine($"\t$row[\"{column.Name}\"], ");
             }
             //to remove , \r\n
-            functionBody.Remove(functionBody.Length - 4, 4);
+            if(functionBody.ToString().Contains(','))
+                functionBody.Remove(functionBody.ToString().LastIndexOf(','), 1);
+
             functionBody.AppendLine("\t);");
             functionBody.AppendLine();
+
+            foreach (Column column in table.NonEditableColumns)
+            {
+                functionBody.AppendLine($"\t${objectName}->Set{column.Name}($row[\"{column.Name}\"]);");
+            }
+            functionBody.AppendLine();
+
 
             functionBody.AppendLine($"\t${table.LowerCaseName}[count(${table.LowerCaseName})] = ${Helpers.GetLowerCaseString(table.SingularName)};");
 
@@ -69,8 +81,11 @@ namespace DatabaseFunctionsGenerator
             parameter = Helpers.GetLowerCaseString(table.SingularName);
 
             //generate columnsCommaSeparated and columnsCommaSeparated with data
-            foreach (Column column in table.EditableColumns)
+            foreach (Column column in table.Columns)
             {
+                if (column.Type.IsPrimaryKey)
+                    continue;
+
                 columnsCommaSeparated.Append($"{column.Name}, ");
 
 
@@ -149,7 +164,7 @@ namespace DatabaseFunctionsGenerator
 
             functionBody.AppendLine($"${objectName} = new {table.SingularName}(");
 
-            foreach (Column column in table.Columns)
+            foreach (Column column in table.EditableColumns)
             {
                 functionBody.AppendLine($"\t{Helpers.GetDefaultColumnData(column.Type.Type)},//{column.Name}");
             }
@@ -172,11 +187,24 @@ namespace DatabaseFunctionsGenerator
         private string GenerateGetRequest(Table table)
         {
             StringBuilder builder = new StringBuilder();
+            StringBuilder addBlock = new StringBuilder();
 
             builder.AppendLine("if(isset($_GET[\"cmd\"]))");
             builder.AppendLine("{");
+            //to get data
             builder.AppendLine("\tif(\"getData\" == $_GET[\"cmd\"])");
             builder.AppendLine("\t{");
+            builder.AppendLine($"\t\t$database = new DatabaseOperations();");
+            builder.AppendLine($"\t\techo json_encode(Get{table.Name}($database));");
+            builder.AppendLine("\t}");
+
+            //to add data
+            builder.AppendLine("\tif(\"addData\" == $_GET[\"cmd\"])");
+            builder.AppendLine("\t{");
+
+            addBlock.AppendLine("if(CheckGetParameters([");
+            //foreach(Column )
+
             builder.AppendLine($"\t\t$database = new DatabaseOperations();");
             builder.AppendLine($"\t\techo json_encode(Get{table.Name}($database));");
             builder.AppendLine("\t}");

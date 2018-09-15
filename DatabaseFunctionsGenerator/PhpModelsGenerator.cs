@@ -69,7 +69,7 @@ namespace DatabaseFunctionsGenerator
             columnsCommaSeparated = new StringBuilder();
 
             //generate columnsCommaSeparated
-            foreach (Column column in table.Columns)
+            foreach (Column column in table.EditableColumns)
             {
                 columnsCommaSeparated.Append($"${column.Name}, ");
             }
@@ -82,7 +82,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine($"function {table.SingularName}({columnsCommaSeparated.ToString()})");
             builder.AppendLine("{");
 
-            foreach (Column column in table.Columns)
+            foreach (Column column in table.EditableColumns)
             {
                 builder.AppendLine($"\t$this->{column.Name} = ${column.Name};");
             }
