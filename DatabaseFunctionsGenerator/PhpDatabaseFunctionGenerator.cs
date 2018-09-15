@@ -188,6 +188,9 @@ namespace DatabaseFunctionsGenerator
         {
             StringBuilder builder = new StringBuilder();
             StringBuilder addBlock = new StringBuilder();
+            string objectName;
+
+            objectName = Helpers.GetLowerCaseString(table.SingularName);
 
             builder.AppendLine("if(isset($_GET[\"cmd\"]))");
             builder.AppendLine("{");
@@ -202,11 +205,40 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine("\tif(\"addData\" == $_GET[\"cmd\"])");
             builder.AppendLine("\t{");
 
-            addBlock.AppendLine("if(CheckGetParameters([");
-            //foreach(Column )
+            addBlock.AppendLine("\tif(CheckGetParameters([");
+            foreach(Column column in table.EditableColumns)
+            {
+                addBlock.AppendLine($"\t\t\'{column.Name}\',");
+            }
+            if (addBlock.ToString().Contains(','))
+            {
+                addBlock.Remove(addBlock.ToString().LastIndexOf(','), 1);
+            }
 
-            builder.AppendLine($"\t\t$database = new DatabaseOperations();");
-            builder.AppendLine($"\t\techo json_encode(Get{table.Name}($database));");
+            addBlock.AppendLine("\t]))");
+            addBlock.AppendLine("\t{");
+
+            addBlock.AppendLine($"\t\t$database = new DatabaseOperations();");
+            addBlock.AppendLine($"\t\t${objectName} = new {table.SingularName}(");
+
+            foreach (Column column in table.EditableColumns)
+            {
+                addBlock.AppendLine($"\t\t\t$_GET[\'{column.Name}\'],");
+            }
+
+            if(addBlock.ToString().Contains(','))
+            {
+                addBlock.Remove(addBlock.ToString().LastIndexOf(','), 1);
+            }
+
+            addBlock.AppendLine($"\t\t);");
+            addBlock.AppendLine();
+
+            addBlock.AppendLine($"\t\tAdd{table.SingularName}($database, ${objectName});");
+
+            addBlock.AppendLine($"\t}}");
+            builder.AppendLine(Helpers.AddIndentation(addBlock.ToString(), 1));
+
             builder.AppendLine("\t}");
             builder.AppendLine("}");
 
