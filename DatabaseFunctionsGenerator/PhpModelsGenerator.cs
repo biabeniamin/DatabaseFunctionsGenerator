@@ -123,7 +123,7 @@ namespace DatabaseFunctionsGenerator
         {
             string modelsPath;
 
-            modelsPath = $"{path}\\Models";
+            modelsPath = $"{path}\\Php\\Models";
 
             Directory.CreateDirectory(modelsPath);
 

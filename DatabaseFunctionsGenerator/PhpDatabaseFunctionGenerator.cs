@@ -121,7 +121,7 @@ namespace DatabaseFunctionsGenerator
             functionBody.AppendLine($"$data = $database->ReadData(\"SELECT * FROM {table.Name}\");");
             functionBody.AppendLine();
 
-            
+
 
             builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
             builder.AppendLine("}");
@@ -129,12 +129,56 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
+        private string GenerateTestAddFunction(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder functionBody;
+            String parameter;
+            String objectName;
+
+            builder = new StringBuilder();
+            functionBody = new StringBuilder();
+            objectName = Helpers.GetLowerCaseString(table.SingularName);
+
+            parameter = Helpers.GetLowerCaseString(table.SingularName);
+
+            builder.AppendLine($"function AddTest{table.SingularName}($database)");
+            builder.AppendLine("{");
+
+
+            functionBody.AppendLine($"${objectName} = new {table.SingularName}();");
+
+            foreach (Column column in table.EditableColumns)
+            {
+                if(column.IsCreationTimeColumn)
+                {
+                    continue;
+                }
+
+                functionBody.AppendLine($"${objectName}->Set{column.Name}({Helpers.GetDefaultColumnData(column.Type.Type)});");
+            }
+            functionBody.AppendLine();
+
+            functionBody.AppendLine($"Add{table.SingularName}($database, ${objectName});");
+
+            builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
+        //private string GenerateGet
+
         private string GenerateFunctionsForTable(string path, Table table)
         {
             StringBuilder builder = new StringBuilder();
 
-            //builder.Append(GenerateGetFunction(table);
+            builder.Append(GenerateGetFunction(table));
             builder.Append(GenerateAddFunction(table));
+            builder.Append(GenerateTestAddFunction(table));
+
+            Helpers.WriteFile($"{path}\\Php\\{table.Name}",
+                builder.ToString());
 
             return builder.ToString();
         }

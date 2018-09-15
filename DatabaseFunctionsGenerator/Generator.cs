@@ -74,6 +74,7 @@ namespace DatabaseFunctionsGenerator
             }
 
             Directory.CreateDirectory(path);
+            Directory.CreateDirectory($"{path}\\Php");
 
             //add missing fields
             AddMissingFields();

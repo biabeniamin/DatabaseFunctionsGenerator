@@ -90,6 +90,27 @@ namespace DatabaseFunctionsGenerator
 
             return text;
         }
+
+        public static string GetDefaultColumnData(Types type)
+        {
+            switch(type)
+            {
+                case Types.DateTime:
+                    return "\'2000-01-01 00:00:00\'";
+                    break;
+                case Types.Integer:
+                    return "0";
+                    break;
+                case Types.Text:
+                    return "\'Test\'";
+                    break;
+                case Types.Varchar:
+                    return "\'Test\'";
+                    break;
+                default:
+                    return "";
+            }
+        }
     }
 
 }
