@@ -136,28 +136,29 @@ namespace DatabaseFunctionsGenerator
             StringBuilder functionBody;
             String parameter;
             String objectName;
-
+            
             builder = new StringBuilder();
             functionBody = new StringBuilder();
             objectName = Helpers.GetLowerCaseString(table.SingularName);
 
             parameter = Helpers.GetLowerCaseString(table.SingularName);
 
-            builder.AppendLine($"function AddTest{table.SingularName}($database)");
+            builder.AppendLine($"function TestAdd{table.SingularName}($database)");
             builder.AppendLine("{");
 
 
-            functionBody.AppendLine($"${objectName} = new {table.SingularName}();");
+            functionBody.AppendLine($"${objectName} = new {table.SingularName}(");
 
-            foreach (Column column in table.EditableColumns)
+            foreach (Column column in table.Columns)
             {
-                if(column.IsCreationTimeColumn)
-                {
-                    continue;
-                }
-
-                functionBody.AppendLine($"${objectName}->Set{column.Name}({Helpers.GetDefaultColumnData(column.Type.Type)});");
+                functionBody.AppendLine($"\t{Helpers.GetDefaultColumnData(column.Type.Type)},//{column.Name}");
             }
+
+            if (functionBody.ToString().Contains(','))
+            {
+                functionBody.Remove(functionBody.ToString().LastIndexOf(','), 1);
+            }
+            functionBody.AppendLine(");");
             functionBody.AppendLine();
 
             functionBody.AppendLine($"Add{table.SingularName}($database, ${objectName});");
