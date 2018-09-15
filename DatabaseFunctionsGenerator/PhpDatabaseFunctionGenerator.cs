@@ -118,7 +118,8 @@ namespace DatabaseFunctionsGenerator
             functionBody.AppendLine($"$query = \"INSERT INTO {table.Name}({columnsCommaSeparated.ToString()}) VALUES(\";");
             functionBody.AppendLine(dataColumnsCommaSeparated.ToString());
             functionBody.AppendLine($"$query = $query . \");\";");
-            functionBody.AppendLine($"$data = $database->ReadData(\"SELECT * FROM {table.Name}\");");
+            functionBody.AppendLine($"$result = $database->ExecuteSqlWithoutWarning($query);");
+            functionBody.AppendLine("return $result;");
             functionBody.AppendLine();
 
 
@@ -167,7 +168,14 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
-        //private string GenerateGet
+        private string GenerateGetRequest(Table table)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            //builder.Append(GenerateGetFunction(table));
+
+            return builder.ToString();
+        }
 
         private string GenerateFunctionsForTable(string path, Table table)
         {
@@ -176,6 +184,7 @@ namespace DatabaseFunctionsGenerator
             builder.Append(GenerateGetFunction(table));
             builder.Append(GenerateAddFunction(table));
             builder.Append(GenerateTestAddFunction(table));
+            builder.Append(GenerateGetRequest(table));
 
             Helpers.WriteFile($"{path}\\Php\\{table.Name}",
                 builder.ToString());
