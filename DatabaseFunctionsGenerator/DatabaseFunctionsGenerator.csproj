@@ -62,6 +62,7 @@
     <Compile Include="PhpDatabaseFunctionGenerator.cs" />
     <Compile Include="PhpHelpersGenerator.cs" />
     <Compile Include="PhpModelsGenerator.cs" />
+    <Compile Include="Relation.cs" />
     <Compile Include="SqlGenerator.cs" />
     <Compile Include="Table.cs" />
     <Compile Include="ColumnType.cs" />

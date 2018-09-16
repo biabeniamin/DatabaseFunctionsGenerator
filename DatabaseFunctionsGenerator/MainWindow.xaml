@@ -13,12 +13,13 @@
                 <GridView>
                     <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" />
                     <GridViewColumn Header="Has prim key" DisplayMemberBinding="{Binding HasPrimaryKey}" />
+                    <GridViewColumn Header="ParentTable" DisplayMemberBinding="{Binding Parent}" />
                 </GridView>
             </ListView.View>
         </ListView>
         
         <!--columns from selected table-->
-        
+
         <ListView ItemsSource="{Binding SelectedItem.Columns, ElementName=tablesListView}" Margin="121,19,215,10">
             <ListView.View>
                 <GridView>
@@ -28,6 +29,15 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Label Content="{Binding SelectedTable}" HorizontalAlignment="Left" Margin="331,133,0,0" VerticalAlignment="Top"/>
+
+        <ListView ItemsSource="{Binding Database.Relations}" Margin="331,19,5,10">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Table1" DisplayMemberBinding="{Binding Table1}" />
+                    <GridViewColumn Header="Table2" DisplayMemberBinding="{Binding Table2}" />
+                    <GridViewColumn Header="Type" DisplayMemberBinding="{Binding Type}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Window>

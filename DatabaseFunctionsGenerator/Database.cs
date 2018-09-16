@@ -10,6 +10,13 @@ namespace DatabaseFunctionsGenerator
     public class Database
     {
         private ObservableCollection<Table> _tables;
+        private ObservableCollection<Relation> _relations;
+
+        public ObservableCollection<Relation> Relations
+        {
+            get { return _relations; }
+            set { _relations = value; }
+        }
 
         public ObservableCollection<Table> Tables
         {
@@ -36,6 +43,7 @@ namespace DatabaseFunctionsGenerator
         public Database(ObservableCollection<Table> tables)
         {
             _tables = tables;
+            _relations = new ObservableCollection<Relation>();
         }
     }
 }

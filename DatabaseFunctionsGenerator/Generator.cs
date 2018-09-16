@@ -62,6 +62,20 @@ namespace DatabaseFunctionsGenerator
             }
         }
 
+        private void SetParentChildsFields()
+        {
+            foreach(Relation relation in _database.Relations)
+            {
+                switch(relation.Type)
+                {
+                    case RelationType.OneToMany:
+                        relation.Table1.Childs.Add(relation.Table2);
+                        relation.Table2.Parent = relation.Table1;
+                        break;
+                }
+            }
+        }
+
         public void Generate()
         {
             string path;
@@ -78,6 +92,7 @@ namespace DatabaseFunctionsGenerator
 
             //add missing fields
             AddMissingFields();
+            SetParentChildsFields();
 
             _sqlGenerator.Generate(path);
             _phpDatabaseFunctionGenerator.Generate(path);

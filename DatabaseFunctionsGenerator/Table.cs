@@ -12,6 +12,21 @@ namespace DatabaseFunctionsGenerator
         private string _name;
         private ObservableCollection<Column> _columns;
         private string _singularName;
+        private Table _parent;
+        private ObservableCollection<Table> _childs;
+
+        public ObservableCollection<Table> Childs
+        {
+            get { return _childs; }
+            set { _childs = value; }
+        }
+
+        public Table Parent
+        {
+            get { return _parent; }
+            set { _parent = value; }
+        }
+
 
         public string SingularName
         {
@@ -25,7 +40,6 @@ namespace DatabaseFunctionsGenerator
             }
             set { _singularName = value; }
         }
-
 
         public ObservableCollection<Column> Columns
         {
@@ -130,6 +144,7 @@ namespace DatabaseFunctionsGenerator
         {
             _name = name;
             _columns = new ObservableCollection<Column>(columns);
+            _childs = new ObservableCollection<Table>();
         }
 
         
