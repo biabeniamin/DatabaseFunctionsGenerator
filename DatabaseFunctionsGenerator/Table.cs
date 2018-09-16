@@ -12,7 +12,7 @@ namespace DatabaseFunctionsGenerator
         private string _name;
         private ObservableCollection<Column> _columns;
         private string _singularName;
-        private Table _parent;
+        private ObservableCollection<Table> _parents;
         private ObservableCollection<Table> _childs;
 
         public ObservableCollection<Table> Childs
@@ -21,10 +21,10 @@ namespace DatabaseFunctionsGenerator
             set { _childs = value; }
         }
 
-        public Table Parent
+        public ObservableCollection<Table> Parents
         {
-            get { return _parent; }
-            set { _parent = value; }
+            get { return _parents; }
+            set { _parents = value; }
         }
 
 
@@ -81,6 +81,16 @@ namespace DatabaseFunctionsGenerator
             {
                 return _columns.Where((column) => {
                     return true == column.Type.IsPrimaryKey;
+                });
+            }
+        }
+
+        public IEnumerable<Column> ForeignKeyColumns
+        {
+            get
+            {
+                return _columns.Where((column) => {
+                    return true == column.Type.IsForeignKey;
                 });
             }
         }
@@ -149,7 +159,7 @@ namespace DatabaseFunctionsGenerator
         {
             get
             {
-                if (null != _parent)
+                if (null != _parents)
                     return true;
                 return false;
             }
@@ -165,6 +175,7 @@ namespace DatabaseFunctionsGenerator
         {
             _name = name;
             _columns = new ObservableCollection<Column>(columns);
+            _parents = new ObservableCollection<Table>();
             _childs = new ObservableCollection<Table>();
         }
 

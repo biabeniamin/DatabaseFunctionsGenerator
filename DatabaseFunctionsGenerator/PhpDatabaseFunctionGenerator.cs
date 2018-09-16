@@ -101,6 +101,11 @@ namespace DatabaseFunctionsGenerator
             functionBody.AppendLine($"$data = $database->ReadData(\"SELECT * FROM {table.Name} WHERE {table.PrimaryKeyColumn.Name} = ${Helpers.ConvertToSql(table.LowerCaseSingularName, table.PrimaryKeyColumn.Type.Type)}Id\");");
             functionBody.AppendLine($"${table.LowerCaseName} = ConvertListTo{table.Name}($data);");
 
+            foreach (Table parentTable in table.Parents)
+            {
+                functionBody.AppendLine($"${table.LowerCaseName} = Complete{parentTable.Name}($database, ${table.LowerCaseName});");
+            }
+
 
             functionBody.AppendLine($"return ${table.LowerCaseName};");
 
@@ -108,6 +113,44 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine("}");
 
             return builder.ToString();
+        }
+
+        private string GenerateGetParentFunction(Table table)
+        {
+            StringBuilder builder = new StringBuilder();
+            StringBuilder functionBody = new StringBuilder();
+            string objectName;
+
+            objectName = table.LowerCaseSingularName;
+
+            foreach (Table parentTable in table.Parents)
+            {
+
+                builder.AppendLine($"function Complete{parentTable.Name}($database, ${table.LowerCaseName})");
+                builder.AppendLine("{");
+                {
+
+                    functionBody.AppendLine($"foreach(${table.LowerCaseName} as ${table.LowerCaseSingularName})");
+                    functionBody.AppendLine("{");
+                    {
+                        foreach (Column column in table.ForeignKeyColumns.Where((c) => { return String.Equals(c.Name, $"{parentTable.SingularName}Id"); }))
+                        {
+                            functionBody.AppendLine($"\t${objectName}->Set{parentTable.SingularName}(Get{parentTable.Name}ById($database, ${table.LowerCaseSingularName}->Get{column.Name}()));");
+                        }
+                        functionBody.AppendLine();
+
+                    }
+                    functionBody.AppendLine("}");
+                    functionBody.AppendLine();
+
+                    functionBody.AppendLine($"return ${table.LowerCaseName};");
+
+                    builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
+                }
+                builder.AppendLine("}");
+            }
+
+             return builder.ToString();
         }
 
         private string GenerateAddFunction(Table table)
@@ -238,7 +281,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine("{");
             {
                 //to get data
-                builder.AppendLine("\tif(\"getData\" == $_GET[\"cmd\"])");
+                builder.AppendLine($"\tif(\"get{table.Name}\" == $_GET[\"cmd\"])");
                 builder.AppendLine("\t{");
                 {
                     builder.AppendLine($"\t\t$database = new DatabaseOperations();");
@@ -248,7 +291,7 @@ namespace DatabaseFunctionsGenerator
 
                 //to get data by id
 
-                builder.AppendLine("\telse if(\"getDataById\" == $_GET[\"cmd\"])");
+                builder.AppendLine($"\telse if(\"get{table.SingularName}ById\" == $_GET[\"cmd\"])");
                 builder.AppendLine("\t{");
                 {
                     builder.AppendLine($"\t\tif(CheckGetParameters([\"{table.SingularName}Id\"]))");
@@ -262,7 +305,7 @@ namespace DatabaseFunctionsGenerator
                 builder.AppendLine("\t}");
 
                 //to add data
-                builder.AppendLine("\telse if(\"addData\" == $_GET[\"cmd\"])");
+                builder.AppendLine($"\telse if(\"add{table.SingularName}\" == $_GET[\"cmd\"])");
                 builder.AppendLine("\t{");
                 {
 
@@ -319,14 +362,15 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine($"require_once \'DatabaseOperations.php\';");
             builder.AppendLine($"require_once \'Helpers.php\';");
 
-            if(table.HasParent)
+            foreach(Table parentTable in table.Parents)
             {
-                builder.AppendLine($"require_once \'{table.Parent.Name}.php\';");
+                builder.AppendLine($"require_once \'{parentTable.Name}.php\';");
             }
 
             builder.AppendLine(GenerateListToObjectFunction(table));
             builder.AppendLine(GenerateGetFunction(table));
             builder.AppendLine(GenerateGetByIdFunction(table));
+            builder.AppendLine(GenerateGetParentFunction(table));
             builder.AppendLine(GenerateAddFunction(table));
             builder.AppendLine(GenerateTestAddFunction(table));
             builder.AppendLine(GenerateGetRequest(table));

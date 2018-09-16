@@ -70,7 +70,7 @@ namespace DatabaseFunctionsGenerator
                 {
                     case RelationType.OneToMany:
                         relation.Table1.Childs.Add(relation.Table2);
-                        relation.Table2.Parent = relation.Table1;
+                        relation.Table2.Parents.Add(relation.Table1);
 
                         relation.Table2.Columns.Insert(1, new Column($"{relation.Table1.SingularName}Id", new ColumnType(Types.Integer, true)));
                         break;

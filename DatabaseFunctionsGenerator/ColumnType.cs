@@ -73,6 +73,7 @@ namespace DatabaseFunctionsGenerator
             _length = length;
             _isPrimaryKey = isPrimaryKey;
             _autoIncrement = autoIncrement;
+            _isForeignKey = isForeignKey;
         }
 
         public string GetMysqlType()

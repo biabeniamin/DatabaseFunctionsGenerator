@@ -28,9 +28,9 @@ namespace DatabaseFunctionsGenerator
                 builder.AppendLine($"var ${Helpers.GetLowerCaseString(column.Name)};");
             }
 
-            if(table.HasParent)
+            foreach (Table parentTable in table.Parents)
             {
-                builder.AppendLine($"var ${table.Parent.LowerCaseSingularName};");
+                builder.AppendLine($"var ${parentTable.LowerCaseSingularName};");
             }
 
 
@@ -56,6 +56,23 @@ namespace DatabaseFunctionsGenerator
                 builder.AppendLine($"function Set{column.Name}($value)");
                 builder.AppendLine("{");
                 builder.AppendLine($"\t$this->{Helpers.GetLowerCaseString(column.Name)} = $value;");
+                builder.AppendLine("}");
+
+                builder.AppendLine();
+            }
+
+            foreach (Table parentTable in table.Parents)
+            {
+                //getter
+                builder.AppendLine($"function Get{parentTable.SingularName}()");
+                builder.AppendLine("{");
+                builder.AppendLine($"\treturn $this->{parentTable.LowerCaseSingularName};");
+                builder.AppendLine("}");
+
+                //setter
+                builder.AppendLine($"function Set{parentTable.SingularName}($value)");
+                builder.AppendLine("{");
+                builder.AppendLine($"\t$this->{parentTable.LowerCaseSingularName} = $value;");
                 builder.AppendLine("}");
 
                 builder.AppendLine();
@@ -89,7 +106,7 @@ namespace DatabaseFunctionsGenerator
 
             foreach (Column column in table.EditableColumns)
             {
-                builder.AppendLine($"\t$this->{column.Name} = ${column.Name};");
+                builder.AppendLine($"\t$this->{Helpers.GetLowerCaseString(column.Name)} = ${column.Name};");
             }
 
             builder.AppendLine("}");
@@ -106,9 +123,9 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine("<?php");
             builder.AppendLine("//generated automatically");
 
-            if(null != table.Parent)
+            foreach (Table parentTable in table.Parents)
             {
-                builder.AppendLine($"require '{table.Parent.SingularName}.php';");
+                builder.AppendLine($"require '{parentTable.SingularName}.php';");
             }
 
             builder.AppendLine($"class {table.SingularName}");
