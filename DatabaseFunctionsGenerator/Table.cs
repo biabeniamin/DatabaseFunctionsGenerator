@@ -140,11 +140,7 @@ namespace DatabaseFunctionsGenerator
         {
             get
             {
-                if (String.IsNullOrEmpty(_singularName))
-                {
-                    _singularName = Helpers.GetLowerCaseString(Helpers.GetSingular(_name));
-                }
-                return _singularName;
+                return Helpers.GetLowerCaseString(Helpers.GetSingular(_name));
             }
             set { _singularName = value; }
         }
