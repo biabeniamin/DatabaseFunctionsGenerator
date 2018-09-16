@@ -15,7 +15,7 @@ namespace DatabaseFunctionsGenerator
             _database = database;
         }
 
-        private string GenerateGetFunction(Table table)
+        private string GenerateListToObjectFunction(Table table)
         {
             StringBuilder builder = new StringBuilder();
             StringBuilder functionBody = new StringBuilder();
@@ -23,11 +23,10 @@ namespace DatabaseFunctionsGenerator
 
             objectName = Helpers.GetLowerCaseString(table.SingularName);
 
-            builder.AppendLine($"function Get{table.Name}($database)");
+            builder.AppendLine($"function ConvertListTo{table.Name}($data)");
             builder.AppendLine("{");
 
             functionBody.AppendLine($"${table.LowerCaseName} = [];");
-            functionBody.AppendLine($"$data = $database->ReadData(\"SELECT * FROM {table.Name}\");");
             functionBody.AppendLine();
 
             functionBody.AppendLine("foreach($data as $row)");
@@ -38,7 +37,7 @@ namespace DatabaseFunctionsGenerator
                 functionBody.AppendLine($"\t$row[\"{column.Name}\"], ");
             }
             //to remove , \r\n
-            if(functionBody.ToString().Contains(','))
+            if (functionBody.ToString().Contains(','))
                 functionBody.Remove(functionBody.ToString().LastIndexOf(','), 1);
 
             functionBody.AppendLine("\t);");
@@ -56,6 +55,52 @@ namespace DatabaseFunctionsGenerator
 
             functionBody.AppendLine("}");
             functionBody.AppendLine();
+
+            functionBody.AppendLine($"return ${table.LowerCaseName};");
+
+            builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
+        private string GenerateGetFunction(Table table)
+        {
+            StringBuilder builder = new StringBuilder();
+            StringBuilder functionBody = new StringBuilder();
+            string objectName;
+
+            objectName = Helpers.GetLowerCaseString(table.SingularName);
+
+            builder.AppendLine($"function Get{table.Name}($database)");
+            builder.AppendLine("{");
+
+            functionBody.AppendLine($"$data = $database->ReadData(\"SELECT * FROM {table.Name}\");");
+            functionBody.AppendLine($"${table.LowerCaseName} = ConvertListTo{table.Name}($data);");
+
+
+            functionBody.AppendLine($"return ${table.LowerCaseName};");
+
+            builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
+        private string GenerateGetByIdFunction(Table table)
+        {
+            StringBuilder builder = new StringBuilder();
+            StringBuilder functionBody = new StringBuilder();
+            string objectName;
+
+            objectName = Helpers.GetLowerCaseString(table.SingularName);
+
+            builder.AppendLine($"function Get{table.Name}ById($database, ${Helpers.GetSingular(table.LowerCaseName)}Id)");
+            builder.AppendLine("{");
+
+            functionBody.AppendLine($"$data = $database->ReadData(\"SELECT * FROM {table.Name} WHERE {table.PrimaryKeyColumn.Name} = ${Helpers.ConvertToSql(Helpers.GetSingular(table.LowerCaseName), table.PrimaryKeyColumn.Type.Type)}Id\");");
+            functionBody.AppendLine($"${table.LowerCaseName} = ConvertListTo{table.Name}($data);");
+
 
             functionBody.AppendLine($"return ${table.LowerCaseName};");
 
@@ -201,8 +246,23 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine($"\t\techo json_encode(Get{table.Name}($database));");
             builder.AppendLine("\t}");
 
+            //to get data by id
+
+            builder.AppendLine("\telse if(\"getDataById\" == $_GET[\"cmd\"])");
+            builder.AppendLine("\t{");
+            {
+                builder.AppendLine($"\t\tif(isset($_GET[\"{Helpers.GetSingular(table.LowerCaseName)}Id\"]))");
+                builder.AppendLine("\t\t{");
+                {
+                    builder.AppendLine($"\t\t\t$database = new DatabaseOperations();");
+                    builder.AppendLine($"\t\t\techo json_encode(Get{table.Name}ById($database, $_GET[\"{Helpers.GetSingular(table.LowerCaseName)}Id\"]));");
+                }
+                builder.AppendLine("\t\t}");
+            }
+            builder.AppendLine("\t}");
+
             //to add data
-            builder.AppendLine("\tif(\"addData\" == $_GET[\"cmd\"])");
+            builder.AppendLine("\telse if(\"addData\" == $_GET[\"cmd\"])");
             builder.AppendLine("\t{");
 
             addBlock.AppendLine("\tif(CheckGetParameters([");
@@ -253,7 +313,9 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine($"require \'Models/{table.SingularName}.php\';");
             builder.AppendLine($"require \'DatabaseOperations.php\';");
             builder.AppendLine($"require \'Helpers.php\';");
+            builder.AppendLine(GenerateListToObjectFunction(table));
             builder.AppendLine(GenerateGetFunction(table));
+            builder.AppendLine(GenerateGetByIdFunction(table));
             builder.AppendLine(GenerateAddFunction(table));
             builder.AppendLine(GenerateTestAddFunction(table));
             builder.AppendLine(GenerateGetRequest(table));

@@ -111,6 +111,21 @@ namespace DatabaseFunctionsGenerator
                     return "";
             }
         }
+
+        public static string ConvertToSql(string input, Types type)
+        {
+            switch(type)
+            {
+                case Types.DateTime:
+                case Types.Text:
+                case Types.Varchar:
+                    return $"\'{input}\'";
+                case Types.Integer:
+                    return $"{input}";
+            }
+            
+            return "";
+        }
     }
 
 }
