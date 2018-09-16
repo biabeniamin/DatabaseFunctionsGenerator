@@ -28,18 +28,7 @@ namespace DatabaseFunctionsGenerator
         }
 
 
-        public string SingularName
-        {
-            get
-            {
-                if(String.IsNullOrEmpty(_singularName))
-                {
-                    _singularName = Helpers.GetSingular(_name);
-                }
-                return _singularName;
-            }
-            set { _singularName = value; }
-        }
+        
 
         public ObservableCollection<Column> Columns
         {
@@ -131,6 +120,42 @@ namespace DatabaseFunctionsGenerator
             get
             {
                 return Helpers.GetLowerCaseString(Name);
+            }
+        }
+
+        public string SingularName
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(_singularName))
+                {
+                    _singularName = Helpers.GetSingular(_name);
+                }
+                return _singularName;
+            }
+            set { _singularName = value; }
+        }
+
+        public string LowerCaseSingularName
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(_singularName))
+                {
+                    _singularName = Helpers.GetLowerCaseString(Helpers.GetSingular(_name));
+                }
+                return _singularName;
+            }
+            set { _singularName = value; }
+        }
+
+        public bool HasParent
+        {
+            get
+            {
+                if (null != _parent)
+                    return true;
+                return false;
             }
         }
 

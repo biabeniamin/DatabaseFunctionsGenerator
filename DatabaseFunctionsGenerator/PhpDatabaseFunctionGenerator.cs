@@ -21,7 +21,7 @@ namespace DatabaseFunctionsGenerator
             StringBuilder functionBody = new StringBuilder();
             string objectName;
 
-            objectName = Helpers.GetLowerCaseString(table.SingularName);
+            objectName = table.LowerCaseSingularName;
 
             builder.AppendLine($"function ConvertListTo{table.Name}($data)");
             builder.AppendLine("{");
@@ -50,7 +50,7 @@ namespace DatabaseFunctionsGenerator
             functionBody.AppendLine();
 
 
-            functionBody.AppendLine($"\t${table.LowerCaseName}[count(${table.LowerCaseName})] = ${Helpers.GetLowerCaseString(table.SingularName)};");
+            functionBody.AppendLine($"\t${table.LowerCaseName}[count(${table.LowerCaseName})] = ${table.LowerCaseSingularName};");
 
 
             functionBody.AppendLine("}");
@@ -93,12 +93,12 @@ namespace DatabaseFunctionsGenerator
             StringBuilder functionBody = new StringBuilder();
             string objectName;
 
-            objectName = Helpers.GetLowerCaseString(table.SingularName);
+            objectName = table.LowerCaseSingularName;
 
-            builder.AppendLine($"function Get{table.Name}ById($database, ${Helpers.GetSingular(table.LowerCaseName)}Id)");
+            builder.AppendLine($"function Get{table.Name}ById($database, ${table.LowerCaseSingularName}Id)");
             builder.AppendLine("{");
 
-            functionBody.AppendLine($"$data = $database->ReadData(\"SELECT * FROM {table.Name} WHERE {table.PrimaryKeyColumn.Name} = ${Helpers.ConvertToSql(Helpers.GetSingular(table.LowerCaseName), table.PrimaryKeyColumn.Type.Type)}Id\");");
+            functionBody.AppendLine($"$data = $database->ReadData(\"SELECT * FROM {table.Name} WHERE {table.PrimaryKeyColumn.Name} = ${Helpers.ConvertToSql(table.LowerCaseSingularName, table.PrimaryKeyColumn.Type.Type)}Id\");");
             functionBody.AppendLine($"${table.LowerCaseName} = ConvertListTo{table.Name}($data);");
 
 
@@ -123,7 +123,7 @@ namespace DatabaseFunctionsGenerator
             columnsCommaSeparated = new StringBuilder();
             dataColumnsCommaSeparated = new StringBuilder();
 
-            parameter = Helpers.GetLowerCaseString(table.SingularName);
+            parameter = table.LowerCaseSingularName;
 
             //generate columnsCommaSeparated and columnsCommaSeparated with data
             foreach (Column column in table.Columns)
@@ -194,14 +194,11 @@ namespace DatabaseFunctionsGenerator
         {
             StringBuilder builder;
             StringBuilder functionBody;
-            String parameter;
             String objectName;
             
             builder = new StringBuilder();
             functionBody = new StringBuilder();
-            objectName = Helpers.GetLowerCaseString(table.SingularName);
-
-            parameter = Helpers.GetLowerCaseString(table.SingularName);
+            objectName = table.LowerCaseSingularName;
 
             builder.AppendLine($"function TestAdd{table.SingularName}($database)");
             builder.AppendLine("{");
@@ -235,7 +232,7 @@ namespace DatabaseFunctionsGenerator
             StringBuilder addBlock = new StringBuilder();
             string objectName;
 
-            objectName = Helpers.GetLowerCaseString(table.SingularName);
+            objectName = table.LowerCaseSingularName;
 
             builder.AppendLine("if(CheckGetParameters([\"cmd\"]))");
             builder.AppendLine("{");

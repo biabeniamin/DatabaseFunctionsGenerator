@@ -25,7 +25,12 @@ namespace DatabaseFunctionsGenerator
             //generate fields
             foreach (Column column in table.Columns)
             {
-                builder.AppendLine($"var ${column.Name};");
+                builder.AppendLine($"var ${Helpers.GetLowerCaseString(column.Name)};");
+            }
+
+            if(table.HasParent)
+            {
+                builder.AppendLine($"var ${table.Parent.LowerCaseSingularName};");
             }
 
 
@@ -44,13 +49,13 @@ namespace DatabaseFunctionsGenerator
                 //getter
                 builder.AppendLine($"function Get{column.Name}()");
                 builder.AppendLine("{");
-                builder.AppendLine($"\treturn $this->{column.Name};");
+                builder.AppendLine($"\treturn $this->{Helpers.GetLowerCaseString(column.Name)};");
                 builder.AppendLine("}");
 
                 //setter
                 builder.AppendLine($"function Set{column.Name}($value)");
                 builder.AppendLine("{");
-                builder.AppendLine($"\t$this->{column.Name} = $value;");
+                builder.AppendLine($"\t$this->{Helpers.GetLowerCaseString(column.Name)} = $value;");
                 builder.AppendLine("}");
 
                 builder.AppendLine();
