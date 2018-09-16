@@ -12,6 +12,13 @@ namespace DatabaseFunctionsGenerator
         private int _length;
         private bool _isPrimaryKey;
         private bool _autoIncrement;
+        private bool _isForeignKey; 
+
+        public bool IsForeignKey
+        {
+            get { return _isForeignKey; }
+            set { _isForeignKey = value; }
+        }
 
         public bool AutoIncrement
         {
@@ -44,24 +51,23 @@ namespace DatabaseFunctionsGenerator
 
         }
 
-        public ColumnType(Types type, bool isPrimaryKey)
-            : this(type, 0, isPrimaryKey, false)
+        public ColumnType(Types type, bool isForeignKey)
+            : this(type, 0, false, true, false)
         {
-
         }
 
         public ColumnType(Types type, bool isPrimaryKey, bool autoIncrement)
-            : this(type, 0, isPrimaryKey, autoIncrement)
+            : this(type, 0, isPrimaryKey, false, autoIncrement)
         {
-
+            
         }
 
         public ColumnType(Types type, int length)
-            : this(type, length, false, false)
+            : this(type, length, false, false, false)
         {
         }
 
-        public ColumnType(Types type, int length, bool isPrimaryKey, bool autoIncrement)
+        public ColumnType(Types type, int length, bool isPrimaryKey, bool isForeignKey, bool autoIncrement)
         {
             _type = type;
             _length = length;
