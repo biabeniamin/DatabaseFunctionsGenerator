@@ -315,9 +315,15 @@ namespace DatabaseFunctionsGenerator
             StringBuilder builder = new StringBuilder();
 
             builder.AppendLine($"<?php");
-            builder.AppendLine($"require \'Models/{table.SingularName}.php\';");
-            builder.AppendLine($"require \'DatabaseOperations.php\';");
-            builder.AppendLine($"require \'Helpers.php\';");
+            builder.AppendLine($"require_once \'Models/{table.SingularName}.php\';");
+            builder.AppendLine($"require_once \'DatabaseOperations.php\';");
+            builder.AppendLine($"require_once \'Helpers.php\';");
+
+            if(table.HasParent)
+            {
+                builder.AppendLine($"require_once \'{table.Parent.Name}.php\';");
+            }
+
             builder.AppendLine(GenerateListToObjectFunction(table));
             builder.AppendLine(GenerateGetFunction(table));
             builder.AppendLine(GenerateGetByIdFunction(table));
