@@ -101,6 +101,11 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine("<?php");
             builder.AppendLine("//generated automatically");
 
+            if(null != table.Parent)
+            {
+                builder.AppendLine($"require '{table.Parent.Name}.php';");
+            }
+
             builder.AppendLine($"class {table.SingularName}");
             builder.AppendLine("{");
 

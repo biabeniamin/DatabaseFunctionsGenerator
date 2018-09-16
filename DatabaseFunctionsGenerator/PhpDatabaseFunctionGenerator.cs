@@ -237,69 +237,77 @@ namespace DatabaseFunctionsGenerator
 
             objectName = Helpers.GetLowerCaseString(table.SingularName);
 
-            builder.AppendLine("if(isset($_GET[\"cmd\"]))");
+            builder.AppendLine("if(CheckGetParameters([\"cmd\"]))");
             builder.AppendLine("{");
-            //to get data
-            builder.AppendLine("\tif(\"getData\" == $_GET[\"cmd\"])");
-            builder.AppendLine("\t{");
-            builder.AppendLine($"\t\t$database = new DatabaseOperations();");
-            builder.AppendLine($"\t\techo json_encode(Get{table.Name}($database));");
-            builder.AppendLine("\t}");
-
-            //to get data by id
-
-            builder.AppendLine("\telse if(\"getDataById\" == $_GET[\"cmd\"])");
-            builder.AppendLine("\t{");
             {
-                builder.AppendLine($"\t\tif(isset($_GET[\"{Helpers.GetSingular(table.LowerCaseName)}Id\"]))");
-                builder.AppendLine("\t\t{");
+                //to get data
+                builder.AppendLine("\tif(\"getData\" == $_GET[\"cmd\"])");
+                builder.AppendLine("\t{");
                 {
-                    builder.AppendLine($"\t\t\t$database = new DatabaseOperations();");
-                    builder.AppendLine($"\t\t\techo json_encode(Get{table.Name}ById($database, $_GET[\"{Helpers.GetSingular(table.LowerCaseName)}Id\"]));");
+                    builder.AppendLine($"\t\t$database = new DatabaseOperations();");
+                    builder.AppendLine($"\t\techo json_encode(Get{table.Name}($database));");
                 }
-                builder.AppendLine("\t\t}");
+                builder.AppendLine("\t}");
+
+                //to get data by id
+
+                builder.AppendLine("\telse if(\"getDataById\" == $_GET[\"cmd\"])");
+                builder.AppendLine("\t{");
+                {
+                    builder.AppendLine($"\t\tif(CheckGetParameters([\"{table.SingularName}Id\"]))");
+                    builder.AppendLine("\t\t{");
+                    {
+                        builder.AppendLine($"\t\t\t$database = new DatabaseOperations();");
+                        builder.AppendLine($"\t\t\techo json_encode(Get{table.Name}ById($database, $_GET[\"{table.SingularName}Id\"]));");
+                    }
+                    builder.AppendLine("\t\t}");
+                }
+                builder.AppendLine("\t}");
+
+                //to add data
+                builder.AppendLine("\telse if(\"addData\" == $_GET[\"cmd\"])");
+                builder.AppendLine("\t{");
+                {
+
+                    addBlock.AppendLine("\tif(CheckGetParameters([");
+                    foreach (Column column in table.EditableColumns)
+                    {
+                        addBlock.AppendLine($"\t\t\'{column.Name}\',");
+                    }
+                    if (addBlock.ToString().Contains(','))
+                    {
+                        addBlock.Remove(addBlock.ToString().LastIndexOf(','), 1);
+                    }
+
+                    addBlock.AppendLine("\t]))");
+                    addBlock.AppendLine("\t{");
+                    {
+
+                        addBlock.AppendLine($"\t\t$database = new DatabaseOperations();");
+                        addBlock.AppendLine($"\t\t${objectName} = new {table.SingularName}(");
+
+                        foreach (Column column in table.EditableColumns)
+                        {
+                            addBlock.AppendLine($"\t\t\t$_GET[\'{column.Name}\'],");
+                        }
+
+                        if (addBlock.ToString().Contains(','))
+                        {
+                            addBlock.Remove(addBlock.ToString().LastIndexOf(','), 1);
+                        }
+
+                        addBlock.AppendLine($"\t\t);");
+                        addBlock.AppendLine();
+
+                        addBlock.AppendLine($"\t\tAdd{table.SingularName}($database, ${objectName});");
+
+                    }
+                    addBlock.AppendLine($"\t}}");
+                    builder.AppendLine(Helpers.AddIndentation(addBlock.ToString(), 1));
+
+                }
+                builder.AppendLine("\t}");
             }
-            builder.AppendLine("\t}");
-
-            //to add data
-            builder.AppendLine("\telse if(\"addData\" == $_GET[\"cmd\"])");
-            builder.AppendLine("\t{");
-
-            addBlock.AppendLine("\tif(CheckGetParameters([");
-            foreach(Column column in table.EditableColumns)
-            {
-                addBlock.AppendLine($"\t\t\'{column.Name}\',");
-            }
-            if (addBlock.ToString().Contains(','))
-            {
-                addBlock.Remove(addBlock.ToString().LastIndexOf(','), 1);
-            }
-
-            addBlock.AppendLine("\t]))");
-            addBlock.AppendLine("\t{");
-
-            addBlock.AppendLine($"\t\t$database = new DatabaseOperations();");
-            addBlock.AppendLine($"\t\t${objectName} = new {table.SingularName}(");
-
-            foreach (Column column in table.EditableColumns)
-            {
-                addBlock.AppendLine($"\t\t\t$_GET[\'{column.Name}\'],");
-            }
-
-            if(addBlock.ToString().Contains(','))
-            {
-                addBlock.Remove(addBlock.ToString().LastIndexOf(','), 1);
-            }
-
-            addBlock.AppendLine($"\t\t);");
-            addBlock.AppendLine();
-
-            addBlock.AppendLine($"\t\tAdd{table.SingularName}($database, ${objectName});");
-
-            addBlock.AppendLine($"\t}}");
-            builder.AppendLine(Helpers.AddIndentation(addBlock.ToString(), 1));
-
-            builder.AppendLine("\t}");
             builder.AppendLine("}");
 
             return builder.ToString();

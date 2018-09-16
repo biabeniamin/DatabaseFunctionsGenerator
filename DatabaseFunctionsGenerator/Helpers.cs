@@ -75,6 +75,7 @@ namespace DatabaseFunctionsGenerator
 
         public static string GenerateTimeStamp()
         {
+            return "20180916213520426";
             return DateTime.Now.ToString("yyyyMMddHHmmssfff");
         }
 
