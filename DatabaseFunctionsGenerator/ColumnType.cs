@@ -78,7 +78,7 @@ namespace DatabaseFunctionsGenerator
 
         public string GetMysqlType()
         {
-            switch(Type)
+            switch (Type)
             {
                 case Types.DateTime:
                     return "DATETIME";
@@ -88,6 +88,24 @@ namespace DatabaseFunctionsGenerator
                     return "TEXT";
                 case Types.Varchar:
                     return $"VARCHAR({_length})";
+                    break;
+            }
+
+            return "NOT_EXISTING";
+        }
+
+        public string GetTypescriptType()
+        {
+            switch (Type)
+            {
+                case Types.DateTime:
+                    return "string";
+                case Types.Integer:
+                    return "number";
+                case Types.Text:
+                    return "string";
+                case Types.Varchar:
+                    return $"string";
                     break;
             }
 

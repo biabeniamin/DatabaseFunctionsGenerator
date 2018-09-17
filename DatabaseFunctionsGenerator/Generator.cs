@@ -12,10 +12,13 @@ namespace DatabaseFunctionsGenerator
         private Database _database;
 
         private SqlGenerator _sqlGenerator;
+
         private PhpHelpersGenerator _phpHelpersGenerator;
         private PhpModelsGenerator _phpModelsGenerator;
         private NotificationSystem _notificationSystem;
         private PhpDatabaseFunctionGenerator _phpDatabaseFunctionGenerator;
+
+        private TypescriptModelsGenerator _typescriptModelsGenerator;
 
         public Generator(Database database)
         {
@@ -26,6 +29,7 @@ namespace DatabaseFunctionsGenerator
             _phpHelpersGenerator = new PhpHelpersGenerator();
             _phpDatabaseFunctionGenerator = new PhpDatabaseFunctionGenerator(_database);
             _notificationSystem = new NotificationSystem();
+            _typescriptModelsGenerator = new TypescriptModelsGenerator(_database);
         }
 
         private void AddMissingFields()
@@ -91,6 +95,7 @@ namespace DatabaseFunctionsGenerator
 
             Directory.CreateDirectory(path);
             Directory.CreateDirectory($"{path}\\Php");
+            Directory.CreateDirectory($"{path}\\Typescript");
 
             //add missing fields
             AddMissingFields();
@@ -100,6 +105,7 @@ namespace DatabaseFunctionsGenerator
             _phpDatabaseFunctionGenerator.Generate(path);
             _phpModelsGenerator.Generate(path);
             _phpHelpersGenerator.Generate(path);
+            _typescriptModelsGenerator.Generate(path);
 
             foreach (string file in Directory.EnumerateFiles($"{path}\\Php"))
             {
