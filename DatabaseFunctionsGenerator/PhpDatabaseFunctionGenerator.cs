@@ -78,6 +78,11 @@ namespace DatabaseFunctionsGenerator
             functionBody.AppendLine($"$data = $database->ReadData(\"SELECT * FROM {table.Name}\");");
             functionBody.AppendLine($"${table.LowerCaseName} = ConvertListTo{table.Name}($data);");
 
+            foreach (Table parentTable in table.Parents)
+            {
+                functionBody.AppendLine($"${table.LowerCaseName} = Complete{parentTable.Name}($database, ${table.LowerCaseName});");
+            }
+
 
             functionBody.AppendLine($"return ${table.LowerCaseName};");
 
@@ -119,6 +124,7 @@ namespace DatabaseFunctionsGenerator
         {
             StringBuilder builder = new StringBuilder();
             StringBuilder functionBody = new StringBuilder();
+            StringBuilder doWhilenBody = new StringBuilder();
             string objectName;
 
             objectName = table.LowerCaseSingularName;
@@ -130,15 +136,43 @@ namespace DatabaseFunctionsGenerator
                 builder.AppendLine("{");
                 {
 
+                    functionBody.AppendLine($"${parentTable.LowerCaseName} = Get{parentTable.Name}($database);");
+
                     functionBody.AppendLine($"foreach(${table.LowerCaseName} as ${table.LowerCaseSingularName})");
                     functionBody.AppendLine("{");
                     {
-                        foreach (Column column in table.ForeignKeyColumns.Where((c) => { return String.Equals(c.Name, $"{parentTable.SingularName}Id"); }))
+                        functionBody.AppendLine("\t$start = 0;");
+                        functionBody.AppendLine($"\t$end = count(${parentTable.LowerCaseName}) - 1;");
+                        functionBody.AppendLine("\tdo");
+                        functionBody.AppendLine("\t{");
                         {
-                            functionBody.AppendLine($"\t${objectName}->Set{parentTable.SingularName}(Get{parentTable.Name}ById($database, ${table.LowerCaseSingularName}->Get{column.Name}()));");
-                        }
-                        functionBody.AppendLine();
+                            doWhilenBody.AppendLine("$mid = floor(($start + $end) / 2);");
+                            doWhilenBody.AppendLine($"if(${table.LowerCaseSingularName}->Get{parentTable.SingularName}Id() > ${parentTable.LowerCaseName}[$mid]->Get{parentTable.PrimaryKeyColumn.Name}())");
+                            doWhilenBody.AppendLine("{");
+                            {
+                                doWhilenBody.AppendLine("\t$start = $mid + 1;");
+                            }
+                            doWhilenBody.AppendLine("}");
 
+                            doWhilenBody.AppendLine($"else if(${table.LowerCaseSingularName}->Get{parentTable.SingularName}Id() < ${parentTable.LowerCaseName}[$mid]->Get{parentTable.PrimaryKeyColumn.Name}())");
+                            doWhilenBody.AppendLine("{");
+                            {
+                                doWhilenBody.AppendLine("\t$end = $mid - 1;");
+                            }
+                            doWhilenBody.AppendLine("}");
+
+                            doWhilenBody.AppendLine($"else if(${table.LowerCaseSingularName}->Get{parentTable.SingularName}Id() == ${parentTable.LowerCaseName}[$mid]->Get{parentTable.PrimaryKeyColumn.Name}())");
+                            doWhilenBody.AppendLine("{");
+                            {
+                                doWhilenBody.AppendLine("\t$start = $mid + 1;");
+                                doWhilenBody.AppendLine("\t$end = $mid - 1;");
+                                doWhilenBody.AppendLine($"\t${table.LowerCaseSingularName}->Set{parentTable.SingularName}(${parentTable.LowerCaseName}[$mid]);");
+                            }
+                            doWhilenBody.AppendLine("}");
+                            functionBody.AppendLine();
+                        }
+                        functionBody.AppendLine(Helpers.AddIndentation(doWhilenBody.ToString(), 2));
+                        functionBody.AppendLine("\t}while($start <= $end);");
                     }
                     functionBody.AppendLine("}");
                     functionBody.AppendLine();
