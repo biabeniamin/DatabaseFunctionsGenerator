@@ -373,7 +373,7 @@ namespace DatabaseFunctionsGenerator
                         addBlock.AppendLine($"\t\t);");
                         addBlock.AppendLine();
 
-                        addBlock.AppendLine($"\t\tAdd{table.SingularName}($database, ${objectName});");
+                        addBlock.AppendLine($"\t\techo Add{table.SingularName}($database, ${objectName});");
 
                     }
                     addBlock.AppendLine($"\t}}");
