@@ -100,6 +100,16 @@ namespace DatabaseFunctionsGenerator
             _phpDatabaseFunctionGenerator.Generate(path);
             _phpModelsGenerator.Generate(path);
             _phpHelpersGenerator.Generate(path);
+
+            foreach (string file in Directory.EnumerateFiles($"{path}\\Php"))
+            {
+                File.Copy(file, $"d:\\xampp\\htdocs\\generator\\Test\\{Path.GetFileName(file)}", true);
+            }
+
+            foreach (string file in Directory.EnumerateFiles($"{path}\\Php\\Models"))
+            {
+                File.Copy(file, $"d:\\xampp\\htdocs\\generator\\Test\\Models\\{Path.GetFileName(file)}", true);
+            }
         }
     }
 }
