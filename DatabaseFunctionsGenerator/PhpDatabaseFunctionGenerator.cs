@@ -131,7 +131,8 @@ namespace DatabaseFunctionsGenerator
 
             foreach (Table parentTable in table.Parents)
             {
-
+                functionBody = new StringBuilder();
+                doWhilenBody = new StringBuilder();
                 builder.AppendLine($"function Complete{parentTable.Name}($database, ${table.LowerCaseName})");
                 builder.AppendLine("{");
                 {
