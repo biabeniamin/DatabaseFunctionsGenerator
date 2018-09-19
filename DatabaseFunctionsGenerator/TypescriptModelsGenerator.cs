@@ -49,7 +49,7 @@ namespace DatabaseFunctionsGenerator
 
             foreach (Table parentTable in table.Parents)
             {
-                //builder.AppendLine($"require '{parentTable.SingularName}.php';");
+                builder.AppendLine($"import {{ {parentTable.SingularName} }} from '../app/{parentTable.SingularName}'");
             }
 
             builder.AppendLine($"export interface {table.SingularName}");
