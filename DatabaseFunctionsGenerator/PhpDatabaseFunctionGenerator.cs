@@ -393,6 +393,7 @@ namespace DatabaseFunctionsGenerator
             StringBuilder builder = new StringBuilder();
 
             builder.AppendLine($"<?php");
+            builder.AppendLine("header('Access-Control-Allow-Origin: *'); ");
             builder.AppendLine($"require_once \'Models/{table.SingularName}.php\';");
             builder.AppendLine($"require_once \'DatabaseOperations.php\';");
             builder.AppendLine($"require_once \'Helpers.php\';");
