@@ -58,8 +58,10 @@
     <Compile Include="Database.cs" />
     <Compile Include="Generator.cs" />
     <Compile Include="Helpers.cs" />
+    <Compile Include="IGenerator.cs" />
     <Compile Include="NotificationSystem.cs" />
     <Compile Include="PhpDatabaseFunctionGenerator.cs" />
+    <Compile Include="PhpGenerator.cs" />
     <Compile Include="PhpHelpersGenerator.cs" />
     <Compile Include="PhpModelsGenerator.cs" />
     <Compile Include="Relation.cs" />
@@ -67,6 +69,8 @@
     <Compile Include="Table.cs" />
     <Compile Include="ColumnType.cs" />
     <Compile Include="Types.cs" />
+    <Compile Include="TypescriptGenerator.cs" />
+    <Compile Include="TypescriptGetDataGenerator.cs" />
     <Compile Include="TypescriptModelsGenerator.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

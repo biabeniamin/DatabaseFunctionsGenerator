@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DatabaseFunctionsGenerator
 {
-    public class SqlGenerator
+    public class SqlGenerator : IGenerator
     {
         private Database _database;
 

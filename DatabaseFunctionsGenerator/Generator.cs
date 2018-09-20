@@ -12,24 +12,18 @@ namespace DatabaseFunctionsGenerator
         private Database _database;
 
         private SqlGenerator _sqlGenerator;
-
-        private PhpHelpersGenerator _phpHelpersGenerator;
-        private PhpModelsGenerator _phpModelsGenerator;
+        private TypescriptGenerator _typescriptGenerator;
+        private PhpGenerator _phpGenerator;
         private NotificationSystem _notificationSystem;
-        private PhpDatabaseFunctionGenerator _phpDatabaseFunctionGenerator;
-
-        private TypescriptModelsGenerator _typescriptModelsGenerator;
 
         public Generator(Database database)
         {
             _database = database;
 
             _sqlGenerator = new SqlGenerator(_database);
-            _phpModelsGenerator = new PhpModelsGenerator(_database);
-            _phpHelpersGenerator = new PhpHelpersGenerator();
-            _phpDatabaseFunctionGenerator = new PhpDatabaseFunctionGenerator(_database);
+            _phpGenerator = new PhpGenerator(_database);
+            _typescriptGenerator = new TypescriptGenerator(_database);
             _notificationSystem = new NotificationSystem();
-            _typescriptModelsGenerator = new TypescriptModelsGenerator(_database);
         }
 
         private void AddMissingFields()
@@ -102,10 +96,8 @@ namespace DatabaseFunctionsGenerator
             SetParentChildsFields();
 
             _sqlGenerator.Generate(path);
-            _phpDatabaseFunctionGenerator.Generate(path);
-            _phpModelsGenerator.Generate(path);
-            _phpHelpersGenerator.Generate(path);
-            _typescriptModelsGenerator.Generate(path);
+            _phpGenerator.Generate(path);
+            _typescriptGenerator.Generate(path);
 
             foreach (string file in Directory.EnumerateFiles($"{path}\\Php"))
             {
