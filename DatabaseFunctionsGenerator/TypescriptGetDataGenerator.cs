@@ -90,6 +90,43 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
+        private string GenerateGetDefaultValueFunction(Table table)
+        {
+            StringBuilder builder = new StringBuilder();
+            StringBuilder functionBody = new StringBuilder();
+            string objectName;
+
+            objectName = Helpers.GetLowerCaseString(table.SingularName);
+
+            builder.AppendLine($"static GetDefault{table.SingularName}()");
+            builder.AppendLine("{");
+            {
+
+                functionBody.AppendLine($"return {{");
+
+                foreach(Column column in table.Columns)
+                {
+                    functionBody.AppendLine($"{Helpers.GetLowerCaseString(column.Name)} : {Helpers.GetDefaultColumnData(column.Type.Type)},");
+                }
+
+                foreach (Table parentTable in table.Parents)
+                {
+                    functionBody.AppendLine($"{parentTable.LowerCaseSingularName} : {parentTable.Name}.GetDefault{parentTable.SingularName}(),");
+                }
+
+                functionBody.AppendLine("};");
+                if (functionBody.ToString().Contains(','))
+                {
+                    functionBody = functionBody.Remove(functionBody.ToString().LastIndexOf(','), 1);
+                }
+
+                builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
         private string GenerateConstructor(Table table)
         {
             StringBuilder builder = new StringBuilder();
@@ -101,7 +138,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine($"constructor(private http:HttpClient)");
             builder.AppendLine("{");
             {
-
+                functionBody.AppendLine($"this.{table.LowerCaseName} = [{table.Name}.GetDefault{table.SingularName}()];");
                 functionBody.AppendLine($"this.Get{table.Name}();");
             }
             builder.AppendLine(Helpers.AddIndentation(functionBody.ToString(), 1));
@@ -204,6 +241,7 @@ namespace DatabaseFunctionsGenerator
             foreach (Table parentTable in table.Parents)
             {
                 builder.AppendLine($"import {{ {parentTable.SingularName} }} from '../app/Models/{parentTable.SingularName}'");
+                builder.AppendLine($"import {{ {parentTable.Name} }} from './{parentTable.Name}'");
             }
 
             builder.AppendLine($"export class {table.Name}");
@@ -215,6 +253,7 @@ namespace DatabaseFunctionsGenerator
 
                 //builder.AppendLine(GenerateListToObjectFunction(table));
                 classBody.AppendLine(GenerateGetFunction(table));
+                classBody.AppendLine(GenerateGetDefaultValueFunction(table));
                 classBody.AppendLine(GenerateConstructor(table));
                 //builder.AppendLine(GenerateGetByIdFunction(table));
                 //builder.AppendLine(GenerateGetParentFunction(table));

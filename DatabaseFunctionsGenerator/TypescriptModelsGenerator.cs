@@ -49,7 +49,7 @@ namespace DatabaseFunctionsGenerator
 
             foreach (Table parentTable in table.Parents)
             {
-                builder.AppendLine($"import {{ {parentTable.SingularName} }} from '../app/Models/{parentTable.SingularName}'");
+                builder.AppendLine($"import {{ {parentTable.SingularName} }} from './/{parentTable.SingularName}'");
             }
 
             builder.AppendLine($"export interface {table.SingularName}");
