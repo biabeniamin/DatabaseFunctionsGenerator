@@ -76,7 +76,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine("{");
             {
 
-                functionBody.AppendLine($"return this.http.get<{table.SingularName}[]>(Url2.getUrl()  + \"{table.Name}.php?cmd=get{table.Name}\").subscribe(data =>");
+                functionBody.AppendLine($"return this.http.get<{table.SingularName}[]>(ServerUrl.GetUrl()  + \"{table.Name}.php?cmd=get{table.Name}\").subscribe(data =>");
                 functionBody.AppendLine("{");
                 {
                     functionBody.AppendLine($"\tthis.{table.LowerCaseName} = data;");
@@ -235,7 +235,7 @@ namespace DatabaseFunctionsGenerator
             StringBuilder classBody = new StringBuilder();
 
             builder.AppendLine($"import {{HttpClient}} from '@angular/common/http';");
-            builder.AppendLine($"import {{ Url2 }} from './Url'");
+            builder.AppendLine($"import {{ ServerUrl }} from './ServerUrl'");
             builder.AppendLine($"import {{ {table.SingularName} }} from '../app/Models/{table.SingularName}'");
 
             foreach (Table parentTable in table.Parents)

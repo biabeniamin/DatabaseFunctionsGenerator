@@ -71,7 +71,9 @@
     <Compile Include="Types.cs" />
     <Compile Include="TypescriptGenerator.cs" />
     <Compile Include="TypescriptGetDataGenerator.cs" />
+    <Compile Include="TypescriptHelpersGenerator.cs" />
     <Compile Include="TypescriptModelsGenerator.cs" />
+    <Compile Include="TypescriptViewGenerator.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
