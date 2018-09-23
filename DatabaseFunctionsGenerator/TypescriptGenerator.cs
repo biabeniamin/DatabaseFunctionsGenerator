@@ -27,10 +27,14 @@ namespace DatabaseFunctionsGenerator
 
         public void Generate(string path)
         {
-            _typescriptModelsGenerator.Generate(path);
-            _typescriptGetDataGenerator.Generate(path);
-            _typescriptHelpersGenerator.Generate(path);
-            _typescriptViewGenerator.Generate(path);
+            string typescriptPath;
+
+            typescriptPath = $"{path}\\Typescript";
+
+            _typescriptModelsGenerator.Generate(typescriptPath);
+            _typescriptGetDataGenerator.Generate(typescriptPath);
+            _typescriptHelpersGenerator.Generate(typescriptPath);
+            _typescriptViewGenerator.Generate(typescriptPath);
         }
     }
 }

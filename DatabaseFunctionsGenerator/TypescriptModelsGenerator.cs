@@ -71,7 +71,7 @@ namespace DatabaseFunctionsGenerator
         {
             string modelsPath;
 
-            modelsPath = $"{path}\\Typescript\\Models";
+            modelsPath = $"{path}\\Models";
 
             Directory.CreateDirectory(modelsPath);
 

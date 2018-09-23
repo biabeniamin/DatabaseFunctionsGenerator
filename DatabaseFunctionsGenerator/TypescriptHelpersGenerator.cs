@@ -17,7 +17,7 @@ namespace DatabaseFunctionsGenerator
             builder = new StringBuilder();
             serverUrl = Helpers.ReadFile("ServerUrl.ts");
 
-            Helpers.WriteFile($"{path}\\Typescript\\ServerUrl.ts", serverUrl);
+            Helpers.WriteFile($"{path}\\ServerUrl.ts", serverUrl);
 
             return builder.ToString();
         }

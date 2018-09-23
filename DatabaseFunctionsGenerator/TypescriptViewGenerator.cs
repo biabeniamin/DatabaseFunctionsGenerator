@@ -22,15 +22,54 @@ namespace DatabaseFunctionsGenerator
 
             builder.AppendLine($"<tbody>");
             {
-                tableBody.AppendLine($"<tr *ngFor=\"let {table.LowerCaseSingularName} of {table.LowerCaseName}Controller; let i = index\">");
+                //generate header of table
+                tableBody.AppendLine($"<tr>");
                 {
                     foreach (Column column in table.Columns)
                     {
-                        tableBody.AppendLine("/t<td>");
+                        tableBody.AppendLine("\t<th>");
                         {
-                            tableBody.AppendLine("/t<td>");
+                            tableBody.AppendLine($"\t\t{column.Name}");
                         }
-                        tableBody.AppendLine("/t</td>");
+                        tableBody.AppendLine("\t</th>");
+                    }
+
+                    foreach (Table parentTable in table.Parents)
+                    {
+                        foreach (Column column in parentTable.Columns)
+                        {
+                            tableBody.AppendLine("\t<th>");
+                            {
+                                tableBody.AppendLine($"\t\t{parentTable.LowerCaseSingularName}.{column.Name}");
+                            }
+                            tableBody.AppendLine("\t</th>");
+                        }
+                    }
+                }
+                tableBody.AppendLine("</tr>");
+
+                //generate data
+                tableBody.AppendLine($"<tr *ngFor=\"let {table.LowerCaseSingularName} of {table.LowerCaseName}Controller.{table.LowerCaseName}; let i = index\">");
+                {
+                    foreach (Column column in table.Columns)
+                    {
+                        tableBody.AppendLine("\t<td>");
+                        {
+                            tableBody.AppendLine($"\t\t{{{{{table.LowerCaseSingularName}.{Helpers.GetLowerCaseString(column.Name)}}}}}");
+                        }
+                        tableBody.AppendLine("\t</td>");
+                    }
+
+                    foreach (Table parentTable in table.Parents)
+                    {
+                        foreach (Column column in parentTable.Columns)
+                        {
+                            tableBody.AppendLine("\t<td>");
+                            {
+                                tableBody.AppendLine($"\t\t{{{{{table.LowerCaseSingularName}.{parentTable.LowerCaseSingularName}.{Helpers.GetLowerCaseString(column.Name)}}}}}");
+                            }
+                            tableBody.AppendLine("\t</td>");
+                        }
                     }
                 }
                 tableBody.AppendLine("</tr>");
@@ -48,6 +87,9 @@ namespace DatabaseFunctionsGenerator
             StringBuilder builder = new StringBuilder();
 
             builder.AppendLine(GenerateListView(table));
+
+            Helpers.WriteFile($"{path}\\{table.SingularName}View.component.html",
+                builder.ToString());
 
             return builder.ToString();
         }

@@ -264,7 +264,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine(Helpers.AddIndentation(classBody.ToString(), 1));
             builder.AppendLine("}");
 
-            Helpers.WriteFile($"{path}\\Typescript\\{table.Name}.ts",
+            Helpers.WriteFile($"{path}\\{table.Name}.ts",
                 builder.ToString());
 
             return builder.ToString();
