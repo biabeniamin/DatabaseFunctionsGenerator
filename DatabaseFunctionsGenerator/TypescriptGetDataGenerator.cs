@@ -150,79 +150,25 @@ namespace DatabaseFunctionsGenerator
 
         private string GenerateAddFunction(Table table)
         {
-            StringBuilder builder;
-            StringBuilder functionBody;
-            StringBuilder columnsCommaSeparated;
-            StringBuilder dataColumnsCommaSeparated;
-            String parameter;
+            StringBuilder builder = new StringBuilder();
+            StringBuilder functionBody = new StringBuilder();
+            string objectName;
 
-            builder = new StringBuilder();
-            functionBody = new StringBuilder();
-            columnsCommaSeparated = new StringBuilder();
-            dataColumnsCommaSeparated = new StringBuilder();
+            objectName = Helpers.GetLowerCaseString(table.SingularName);
 
-            parameter = table.LowerCaseSingularName;
-
-            //generate columnsCommaSeparated and columnsCommaSeparated with data
-            foreach (Column column in table.Columns)
-            {
-                if (column.Type.IsPrimaryKey)
-                    continue;
-
-                columnsCommaSeparated.Append($"{column.Name}, ");
-
-
-                dataColumnsCommaSeparated.Append($"$query = $query . ");
-
-                if (Types.Integer != column.Type.Type
-                    && !column.IsCreationTimeColumn)
-                {
-                    dataColumnsCommaSeparated.Append("\"'\" . ");
-                }
-
-                if (column.IsCreationTimeColumn)
-                {
-                    dataColumnsCommaSeparated.Append($"\"NOW()\"");
-                }
-                else
-                {
-                    dataColumnsCommaSeparated.Append($"${parameter}->Get{column.Name}()");
-                }
-
-                if (Types.Integer != column.Type.Type
-                    && !column.IsCreationTimeColumn)
-                {
-                    dataColumnsCommaSeparated.AppendLine(" . \"', \";");
-                }
-                else
-                {
-                    dataColumnsCommaSeparated.AppendLine(".\", \";");
-                }
-            }
-
-            if (1 < columnsCommaSeparated.Length)
-            {
-                columnsCommaSeparated = columnsCommaSeparated.Remove(columnsCommaSeparated.Length - 2, 2);
-            }
-
-            if (1 < dataColumnsCommaSeparated.Length)
-            {
-                dataColumnsCommaSeparated = dataColumnsCommaSeparated.Remove(dataColumnsCommaSeparated.Length - 6, 2);
-            }
-
-            builder.AppendLine($"function Add{table.SingularName}($database, ${parameter})");
+            builder.AppendLine($"Add{table.SingularName}({table.LowerCaseSingularName})");
             builder.AppendLine("{");
+            {
 
-            functionBody.AppendLine($"$query = \"INSERT INTO {table.Name}({columnsCommaSeparated.ToString()}) VALUES(\";");
-            functionBody.AppendLine(dataColumnsCommaSeparated.ToString());
-            functionBody.AppendLine($"$query = $query . \");\";");
-            functionBody.AppendLine($"$result = $database->ExecuteSqlWithoutWarning($query);");
-            functionBody.AppendLine("return $result;");
-            functionBody.AppendLine();
+                functionBody.AppendLine($"return this.http.get<{table.SingularName}[]>(ServerUrl.GetUrl()  + \"{table.Name}.php?cmd=get{table.Name}\").subscribe(data =>");
+                functionBody.AppendLine("{");
+                {
+                    functionBody.AppendLine($"\tthis.{table.LowerCaseName} = data;");
+                }
+                functionBody.AppendLine("});");
 
-
-
-            builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
+                builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
+            }
             builder.AppendLine("}");
 
             return builder.ToString();
@@ -257,7 +203,7 @@ namespace DatabaseFunctionsGenerator
                 classBody.AppendLine(GenerateConstructor(table));
                 //builder.AppendLine(GenerateGetByIdFunction(table));
                 //builder.AppendLine(GenerateGetParentFunction(table));
-                //builder.AppendLine(GenerateAddFunction(table));
+                classBody.AppendLine(GenerateAddFunction(table));
                 //builder.AppendLine(GenerateTestAddFunction(table));
                 //builder.AppendLine(GenerateGetRequest(table));
             }

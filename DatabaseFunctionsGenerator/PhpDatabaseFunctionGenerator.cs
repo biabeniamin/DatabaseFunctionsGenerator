@@ -388,12 +388,74 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
+        private string GeneratePostRequest(Table table)
+        {
+            StringBuilder builder = new StringBuilder();
+            StringBuilder addBlock = new StringBuilder();
+            string objectName;
+
+            objectName = table.LowerCaseSingularName;
+
+            builder.AppendLine("if(CheckPostParameters([\"cmd\"]))");
+            builder.AppendLine("{");
+            {
+                //to add data
+                builder.AppendLine($"\tif(\"add{table.SingularName}\" == $_POST[\"cmd\"])");
+                builder.AppendLine("\t{");
+                {
+
+                    addBlock.AppendLine("\tif(CheckPostParameters([");
+                    foreach (Column column in table.EditableColumns)
+                    {
+                        addBlock.AppendLine($"\t\t\'{column.Name}\',");
+                    }
+                    if (addBlock.ToString().Contains(','))
+                    {
+                        addBlock.Remove(addBlock.ToString().LastIndexOf(','), 1);
+                    }
+
+                    addBlock.AppendLine("\t]))");
+                    addBlock.AppendLine("\t{");
+                    {
+
+                        addBlock.AppendLine($"\t\t$database = new DatabaseOperations();");
+                        addBlock.AppendLine($"\t\t${objectName} = new {table.SingularName}(");
+
+                        foreach (Column column in table.EditableColumns)
+                        {
+                            addBlock.AppendLine($"\t\t\t$_POST[\'{column.Name}\'],");
+                        }
+
+                        if (addBlock.ToString().Contains(','))
+                        {
+                            addBlock.Remove(addBlock.ToString().LastIndexOf(','), 1);
+                        }
+
+                        addBlock.AppendLine($"\t\t);");
+                        addBlock.AppendLine();
+
+                        addBlock.AppendLine($"\t\techo Add{table.SingularName}($database, ${objectName});");
+
+                    }
+                    addBlock.AppendLine($"\t}}");
+                    builder.AppendLine(Helpers.AddIndentation(addBlock.ToString(), 1));
+
+                }
+                builder.AppendLine("\t}");
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
         private string GenerateFunctionsForTable(string path, Table table)
         {
             StringBuilder builder = new StringBuilder();
 
             builder.AppendLine($"<?php");
             builder.AppendLine("header('Access-Control-Allow-Origin: *'); ");
+            builder.AppendLine("header('Access-Control-Allow-Headers: *'); ");
+            builder.AppendLine("$_POST = json_decode(file_get_contents('php://input'), true);");
             builder.AppendLine($"require_once \'Models/{table.SingularName}.php\';");
             builder.AppendLine($"require_once \'DatabaseOperations.php\';");
             builder.AppendLine($"require_once \'Helpers.php\';");
@@ -410,6 +472,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine(GenerateAddFunction(table));
             builder.AppendLine(GenerateTestAddFunction(table));
             builder.AppendLine(GenerateGetRequest(table));
+            builder.AppendLine(GeneratePostRequest(table));
             builder.AppendLine($"?>");
 
             Helpers.WriteFile($"{path}\\Php\\{table.Name}.php",
