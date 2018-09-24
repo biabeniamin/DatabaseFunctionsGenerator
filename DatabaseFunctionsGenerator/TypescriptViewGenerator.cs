@@ -81,11 +81,47 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
+        private string GenerateAddForm(Table table)
+        {
+            StringBuilder builder = new StringBuilder();
+            StringBuilder tableBody = new StringBuilder();
+
+            builder.AppendLine($"<form (submit)=\"add{table.SingularName}($event)\">");
+            {
+                foreach (Column column in table.EditableColumns)
+                {
+                    tableBody.AppendLine($"{column.Name}");
+                    tableBody.AppendLine($"<input type=\"text\" id=\"{column.Name}\"><br>");
+
+                }
+
+                foreach (Table parentTable in table.Parents)
+                {
+                    foreach (Column column in parentTable.Columns)
+                    {
+                        /* tableBody.AppendLine("\t<td>");
+                         {
+                             tableBody.AppendLine($"\t\t{{{{{table.LowerCaseSingularName}.{parentTable.LowerCaseSingularName}.{Helpers.GetLowerCaseString(column.Name)}}}}}");
+                         }
+                         tableBody.AppendLine("\t</td>");*/
+                    }
+                }
+
+                tableBody.AppendLine("<input type=\"submit\" value=\"Add\">");
+
+                builder.Append(Helpers.AddIndentation(tableBody.ToString(), 1));
+            }
+            builder.AppendLine($"</form>");
+
+            return builder.ToString();
+        }
+
 
         private string GenerateViewForTable(string path, Table table)
         {
             StringBuilder builder = new StringBuilder();
 
+            builder.AppendLine(GenerateAddForm(table));
             builder.AppendLine(GenerateListView(table));
 
             Helpers.WriteFile($"{path}\\{table.SingularName}View.component.html",
