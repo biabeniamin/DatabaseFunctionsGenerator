@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace DatabaseFunctionsGenerator
 {
-    public class TypescriptViewGenerator
+    public class TypescriptComponentViewGenerator
     {
         private Database _database;
 
-        public TypescriptViewGenerator(Database database)
+        public TypescriptComponentViewGenerator(Database database)
         {
             _database = database;
         }
@@ -124,7 +124,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine(GenerateAddForm(table));
             builder.AppendLine(GenerateListView(table));
 
-            Helpers.WriteFile($"{path}\\{table.SingularName}View.component.html",
+            Helpers.WriteFile($"{path}\\{table.SingularName}.component.html",
                 builder.ToString());
 
             return builder.ToString();
