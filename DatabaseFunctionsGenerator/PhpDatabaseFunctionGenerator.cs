@@ -106,11 +106,17 @@ namespace DatabaseFunctionsGenerator
             functionBody.AppendLine($"$data = $database->ReadData(\"SELECT * FROM {table.Name} WHERE {table.PrimaryKeyColumn.Name} = ${Helpers.ConvertToSql(table.LowerCaseSingularName, table.PrimaryKeyColumn.Type.Type)}Id\");");
             functionBody.AppendLine($"${table.LowerCaseName} = ConvertListTo{table.Name}($data);");
 
+            functionBody.AppendLine($"if(0== count(${table.LowerCaseName}))");
+            functionBody.AppendLine("{");
+            {
+                functionBody.AppendLine($"\treturn GetEmpty{table.SingularName}();");
+            }
+            functionBody.AppendLine("}");
+
             foreach (Table parentTable in table.Parents)
             {
-                functionBody.AppendLine($"${table.LowerCaseName} = Complete{parentTable.Name}($database, ${table.LowerCaseName});");
+                functionBody.AppendLine($"${table.LowerCaseName}[0]->Set{parentTable.SingularName}(Get{parentTable.SingularName}ById($database, ${table.LowerCaseName}[0]->Get{parentTable.PrimaryKeyColumn.Name}()));");
             }
-
 
             functionBody.AppendLine($"return ${table.LowerCaseName};");
 
@@ -282,7 +288,7 @@ namespace DatabaseFunctionsGenerator
             StringBuilder builder;
             StringBuilder functionBody;
             String objectName;
-            
+
             builder = new StringBuilder();
             functionBody = new StringBuilder();
             objectName = table.LowerCaseSingularName;
@@ -306,6 +312,42 @@ namespace DatabaseFunctionsGenerator
             functionBody.AppendLine();
 
             functionBody.AppendLine($"Add{table.SingularName}($database, ${objectName});");
+
+            builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
+        private string GenerateGetEmptyEntryFunction(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder functionBody;
+            String objectName;
+
+            builder = new StringBuilder();
+            functionBody = new StringBuilder();
+            objectName = table.LowerCaseSingularName;
+
+            builder.AppendLine($"function GetEmpty{table.SingularName}()");
+            builder.AppendLine("{");
+
+
+            functionBody.AppendLine($"${objectName} = new {table.SingularName}(");
+
+            foreach (Column column in table.EditableColumns)
+            {
+                functionBody.AppendLine($"\t{Helpers.GetEmptyColumnData(column.Type.Type)},//{column.Name}");
+            }
+
+            if (functionBody.ToString().Contains(','))
+            {
+                functionBody.Remove(functionBody.ToString().LastIndexOf(','), 1);
+            }
+            functionBody.AppendLine(");");
+            functionBody.AppendLine();
+
+            functionBody.AppendLine($"return ${objectName};");
 
             builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
             builder.AppendLine("}");
@@ -342,7 +384,7 @@ namespace DatabaseFunctionsGenerator
                     builder.AppendLine("\t\t{");
                     {
                         builder.AppendLine($"\t\t\t$database = new DatabaseOperations();");
-                        builder.AppendLine($"\t\t\techo json_encode(Get{table.Name}ById($database, $_GET[\"{table.SingularName}Id\"]));");
+                        builder.AppendLine($"\t\t\techo json_encode(Get{table.SingularName}ById($database, $_GET[\"{table.SingularName}Id\"]));");
                     }
                     builder.AppendLine("\t\t}");
                 }
@@ -480,6 +522,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine(GenerateGetParentFunction(table));
             builder.AppendLine(GenerateAddFunction(table));
             builder.AppendLine(GenerateTestAddFunction(table));
+            builder.AppendLine(GenerateGetEmptyEntryFunction(table));
             builder.AppendLine(GenerateGetRequest(table));
             builder.AppendLine(GeneratePostRequest(table));
             builder.AppendLine($"?>");

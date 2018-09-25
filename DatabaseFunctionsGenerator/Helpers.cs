@@ -94,7 +94,7 @@ namespace DatabaseFunctionsGenerator
 
         public static string GetDefaultColumnData(Types type)
         {
-            switch(type)
+            switch (type)
             {
                 case Types.DateTime:
                     return "\'2000-01-01 00:00:00\'";
@@ -107,6 +107,27 @@ namespace DatabaseFunctionsGenerator
                     break;
                 case Types.Varchar:
                     return "\'Test\'";
+                    break;
+                default:
+                    return "";
+            }
+        }
+
+        public static string GetEmptyColumnData(Types type)
+        {
+            switch (type)
+            {
+                case Types.DateTime:
+                    return "\'2000-01-01 00:00:00\'";
+                    break;
+                case Types.Integer:
+                    return "0";
+                    break;
+                case Types.Text:
+                    return "\'\'";
+                    break;
+                case Types.Varchar:
+                    return "\'\'";
                     break;
                 default:
                     return "";
