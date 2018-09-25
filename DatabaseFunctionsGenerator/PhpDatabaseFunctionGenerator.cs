@@ -118,7 +118,7 @@ namespace DatabaseFunctionsGenerator
                 functionBody.AppendLine($"${table.LowerCaseName}[0]->Set{parentTable.SingularName}(Get{parentTable.SingularName}ById($database, ${table.LowerCaseName}[0]->Get{parentTable.PrimaryKeyColumn.Name}()));");
             }
 
-            functionBody.AppendLine($"return ${table.LowerCaseName};");
+            functionBody.AppendLine($"return ${table.LowerCaseName}[0];");
 
             builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
             builder.AppendLine("}");
