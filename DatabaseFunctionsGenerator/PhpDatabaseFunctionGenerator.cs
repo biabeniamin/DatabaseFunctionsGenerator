@@ -256,8 +256,12 @@ namespace DatabaseFunctionsGenerator
             functionBody.AppendLine($"$query = \"INSERT INTO {table.Name}({columnsCommaSeparated.ToString()}) VALUES(\";");
             functionBody.AppendLine(dataColumnsCommaSeparated.ToString());
             functionBody.AppendLine($"$query = $query . \");\";");
-            functionBody.AppendLine($"$result = $database->ExecuteSqlWithoutWarning($query);");
-            functionBody.AppendLine("return $result;");
+            functionBody.AppendLine($"$id = $database->ExecuteSqlWithoutWarning($query);");
+
+            functionBody.AppendLine($"${parameter}->Set{table.PrimaryKeyColumn.Name}($id);");
+            functionBody.AppendLine($"${parameter}->Set{table.CreationTimeColumn.Name}(date('Y-m-d H:i:s'));");
+
+            functionBody.AppendLine($"return ${parameter};");
             functionBody.AppendLine();
 
 
@@ -374,7 +378,7 @@ namespace DatabaseFunctionsGenerator
                         addBlock.AppendLine($"\t\t);");
                         addBlock.AppendLine();
 
-                        addBlock.AppendLine($"\t\techo Add{table.SingularName}($database, ${objectName});");
+                        addBlock.AppendLine($"\t\techo json_encode(Add{table.SingularName}($database, ${objectName}));");
 
                     }
                     addBlock.AppendLine($"\t}}");
@@ -434,7 +438,7 @@ namespace DatabaseFunctionsGenerator
                         addBlock.AppendLine($"\t\t);");
                         addBlock.AppendLine();
 
-                        addBlock.AppendLine($"\t\techo Add{table.SingularName}($database, ${objectName});");
+                        addBlock.AppendLine($"\t\techo json_encode(Add{table.SingularName}($database, ${objectName}));");
 
                     }
                     addBlock.AppendLine($"\t}}");

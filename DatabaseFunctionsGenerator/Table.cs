@@ -75,6 +75,25 @@ namespace DatabaseFunctionsGenerator
             }
         }
 
+        public Column CreationTimeColumn
+        {
+            get
+            {
+                IEnumerable<Column> columns;
+
+                columns = _columns.Where((column) => {
+                    return String.Equals(column.Name, "CreationTime");
+                });
+
+                if (0 == columns.Count())
+                {
+                    return null;
+                }
+
+                return columns.ElementAt(0);
+            }
+        }
+
         public IEnumerable<Column> PrimaryKeyColumns
         {
             get

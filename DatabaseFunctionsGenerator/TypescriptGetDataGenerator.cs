@@ -160,10 +160,16 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine("{");
             {
 
-                functionBody.AppendLine($"return this.http.post<{table.SingularName}>(ServerUrl.GetUrl()  + \"{table.Name}.php?cmd=add{table.SingularName}\", {table.LowerCaseSingularName}).subscribe(data =>");
+                functionBody.AppendLine($"return this.http.post<{table.SingularName}>(ServerUrl.GetUrl()  + \"{table.Name}.php?cmd=add{table.SingularName}\", {table.LowerCaseSingularName}).subscribe({table.LowerCaseSingularName} =>");
                 functionBody.AppendLine("{");
                 {
-                    functionBody.AppendLine($"\tconsole.log(data);");
+                    functionBody.AppendLine($"\tconsole.log({table.LowerCaseSingularName});");
+                    functionBody.AppendLine($"\tif(0 != {table.LowerCaseSingularName}.{Helpers.GetLowerCaseString(table.PrimaryKeyColumn.Name)})");
+                    functionBody.AppendLine("\t{");
+                    {
+                        functionBody.AppendLine($"\t\tthis.{table.LowerCaseName}.push({table.LowerCaseSingularName})");
+                    }
+                    functionBody.AppendLine("\t}");
                 }
                 functionBody.AppendLine("});");
 
