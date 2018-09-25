@@ -347,7 +347,7 @@ namespace DatabaseFunctionsGenerator
                     addBlock.AppendLine("\tif(CheckGetParameters([");
                     foreach (Column column in table.EditableColumns)
                     {
-                        addBlock.AppendLine($"\t\t\'{column.Name}\',");
+                        addBlock.AppendLine($"\t\t\'{column.LowerCaseName}\',");
                     }
                     if (addBlock.ToString().Contains(','))
                     {
@@ -363,7 +363,7 @@ namespace DatabaseFunctionsGenerator
 
                         foreach (Column column in table.EditableColumns)
                         {
-                            addBlock.AppendLine($"\t\t\t$_GET[\'{column.Name}\'],");
+                            addBlock.AppendLine($"\t\t\t$_GET[\'{column.LowerCaseName}\'],");
                         }
 
                         if (addBlock.ToString().Contains(','))
@@ -396,18 +396,18 @@ namespace DatabaseFunctionsGenerator
 
             objectName = table.LowerCaseSingularName;
 
-            builder.AppendLine("if(CheckPostParameters([\"cmd\"]))");
+            builder.AppendLine("if(CheckGetParameters([\"cmd\"]))");
             builder.AppendLine("{");
             {
                 //to add data
-                builder.AppendLine($"\tif(\"add{table.SingularName}\" == $_POST[\"cmd\"])");
+                builder.AppendLine($"\tif(\"add{table.SingularName}\" == $_GET[\"cmd\"])");
                 builder.AppendLine("\t{");
                 {
 
                     addBlock.AppendLine("\tif(CheckPostParameters([");
                     foreach (Column column in table.EditableColumns)
                     {
-                        addBlock.AppendLine($"\t\t\'{column.Name}\',");
+                        addBlock.AppendLine($"\t\t\'{column.LowerCaseName}\',");
                     }
                     if (addBlock.ToString().Contains(','))
                     {
@@ -423,7 +423,7 @@ namespace DatabaseFunctionsGenerator
 
                         foreach (Column column in table.EditableColumns)
                         {
-                            addBlock.AppendLine($"\t\t\t$_POST[\'{column.Name}\'],");
+                            addBlock.AppendLine($"\t\t\t$_POST[\'{column.LowerCaseName}\'],");
                         }
 
                         if (addBlock.ToString().Contains(','))

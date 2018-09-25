@@ -23,6 +23,14 @@ namespace DatabaseFunctionsGenerator
             set { _name = value; }
         }
 
+        public string LowerCaseName
+        {
+            get
+            {
+                return Helpers.GetLowerCaseString(_name);
+            }
+        }
+
         public bool IsCreationTimeColumn
         {
             get
