@@ -100,7 +100,7 @@ namespace DatabaseFunctionsGenerator
 
             objectName = table.LowerCaseSingularName;
 
-            builder.AppendLine($"function Get{table.Name}ById($database, ${table.LowerCaseSingularName}Id)");
+            builder.AppendLine($"function Get{table.SingularName}ById($database, ${table.LowerCaseSingularName}Id)");
             builder.AppendLine("{");
 
             functionBody.AppendLine($"$data = $database->ReadData(\"SELECT * FROM {table.Name} WHERE {table.PrimaryKeyColumn.Name} = ${Helpers.ConvertToSql(table.LowerCaseSingularName, table.PrimaryKeyColumn.Type.Type)}Id\");");
@@ -260,6 +260,11 @@ namespace DatabaseFunctionsGenerator
 
             functionBody.AppendLine($"${parameter}->Set{table.PrimaryKeyColumn.Name}($id);");
             functionBody.AppendLine($"${parameter}->Set{table.CreationTimeColumn.Name}(date('Y-m-d H:i:s'));");
+
+            foreach(Table parentTable in table.Parents)
+            {
+                functionBody.AppendLine($"${parameter}->Set{parentTable.SingularName}(Get{parentTable.SingularName}ById($database, ${parameter}->Get{parentTable.PrimaryKeyColumn.Name}()));");
+            }
 
             functionBody.AppendLine($"return ${parameter};");
             functionBody.AppendLine();
