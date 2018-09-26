@@ -49,7 +49,7 @@ namespace DatabaseFunctionsGenerator
                 tableBody.AppendLine("</tr>");
 
                 //generate data
-                tableBody.AppendLine($"<tr *ngFor=\"let {table.LowerCaseSingularName} of {table.LowerCaseName}Controller.{table.LowerCaseName}; let i = index\">");
+                tableBody.AppendLine($"<tr *ngFor=\"let {table.LowerCaseSingularName} of {table.LowerCaseSingularName}Controller.{table.LowerCaseName}; let i = index\">");
                 {
                     foreach (Column column in table.Columns)
                     {
@@ -81,6 +81,31 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
+        private string GenerateDropDownForParentSelection(Table table)
+        {
+            StringBuilder builder = new StringBuilder();
+            StringBuilder optionBody = new StringBuilder();
+
+            builder.AppendLine($"<select id={table.PrimaryKeyColumn.Name}DropDown (change)=\"{table.LowerCaseSingularName}Changed($event.target.value)\">");
+            {
+                optionBody.AppendLine($"<option [value]=\"{table.LowerCaseSingularName}.{table.PrimaryKeyColumn.LowerCaseName}\" *ngFor= \"let {table.LowerCaseSingularName} of {table.LowerCaseSingularName}Controller.{table.LowerCaseName}\" >");
+                {
+                    optionBody.AppendLine($"{{{{{table.LowerCaseSingularName}.{table.PrimaryKeyColumn.LowerCaseName}}}}}");
+                    foreach (Column column in table.EditableColumns)
+                    {
+                        optionBody.AppendLine($"{{{{{table.LowerCaseSingularName}.{column.LowerCaseName}}}}}");
+                        //optionBody.AppendLine($"<input type=\"text\" id=\"{column.Name}\"><br>");
+
+                    }
+                }
+                optionBody.AppendLine("</option>");
+                builder.Append(Helpers.AddIndentation(optionBody.ToString(), 1));
+            }
+            builder.AppendLine($"</select>");
+
+            return builder.ToString();
+        }
+
         private string GenerateAddForm(Table table)
         {
             StringBuilder builder = new StringBuilder();
@@ -97,14 +122,7 @@ namespace DatabaseFunctionsGenerator
 
                 foreach (Table parentTable in table.Parents)
                 {
-                    foreach (Column column in parentTable.Columns)
-                    {
-                        /* tableBody.AppendLine("\t<td>");
-                         {
-                             tableBody.AppendLine($"\t\t{{{{{table.LowerCaseSingularName}.{parentTable.LowerCaseSingularName}.{Helpers.GetLowerCaseString(column.Name)}}}}}");
-                         }
-                         tableBody.AppendLine("\t</td>");*/
-                    }
+                    tableBody.AppendLine(GenerateDropDownForParentSelection(parentTable));
                 }
 
                 tableBody.AppendLine("<input type=\"submit\" value=\"Add\">");

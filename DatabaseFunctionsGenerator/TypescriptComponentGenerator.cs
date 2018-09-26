@@ -28,8 +28,17 @@ namespace DatabaseFunctionsGenerator
                 functionBody.AppendLine($"let {table.LowerCaseSingularName} = {table.Name}.GetDefaultAccessLog();");
                 foreach (Column column in table.EditableColumns)
                 {
-                    functionBody.AppendLine($"{table.LowerCaseSingularName}.{Helpers.GetLowerCaseString(column.Name)} = target.querySelector('#{column.Name}').value;");
+                    functionBody.Append($"{table.LowerCaseSingularName}.{Helpers.GetLowerCaseString(column.Name)} = target.querySelector('");
+                    if (column.Type.IsForeignKey)
+                    {
+                        functionBody.Append($"#{column.Name}DropDown");
+                    }
+                    else
+                    {
+                        functionBody.Append($"#{column.Name}");
+                    }
 
+                    functionBody.AppendLine($"').value;");
                 }
 
                 foreach (Table parentTable in table.Parents)
@@ -54,6 +63,23 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
+        private string GenerateDropDownChangeEventHandler(Table table)
+        {
+            StringBuilder builder = new StringBuilder();
+            StringBuilder functionBody = new StringBuilder();
+
+            builder.AppendLine($"{table.LowerCaseSingularName}Changed(event)");
+            builder.AppendLine("{");
+            {
+                functionBody.AppendLine($"console.log(event);");
+
+                builder.AppendLine(Helpers.AddIndentation(functionBody.ToString(), 1));
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
 
         private string GenerateViewForTable(string path, Table table)
         {
@@ -63,6 +89,11 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine($"{table.LowerCaseSingularName}Controller : {table.Name};");
 
             builder.AppendLine(GenerateAddEventHandler(table));
+
+            foreach (Table parentTable in table.Parents)
+            {
+                builder.AppendLine(GenerateDropDownChangeEventHandler(parentTable));
+            }
 
             Helpers.WriteFile($"{path}\\{table.SingularName}.component.ts",
                 builder.ToString());
