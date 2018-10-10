@@ -15,6 +15,7 @@ namespace DatabaseFunctionsGenerator
         private TypescriptGenerator _typescriptGenerator;
         private PhpGenerator _phpGenerator;
         private NotificationSystem _notificationSystem;
+        private CSharpGenerator _cSharpGenerator;
 
         public Generator(Database database)
         {
@@ -24,6 +25,7 @@ namespace DatabaseFunctionsGenerator
             _phpGenerator = new PhpGenerator(_database);
             _typescriptGenerator = new TypescriptGenerator(_database);
             _notificationSystem = new NotificationSystem();
+            _cSharpGenerator = new CSharpGenerator(_database);
         }
 
         private void AddMissingFields()
@@ -95,11 +97,12 @@ namespace DatabaseFunctionsGenerator
             AddMissingFields();
             SetParentChildsFields();
 
-            _sqlGenerator.Generate(path);
-            _phpGenerator.Generate(path);
-            _typescriptGenerator.Generate(path);
+            //_sqlGenerator.Generate(path);
+            //_phpGenerator.Generate(path);
+            //_typescriptGenerator.Generate(path);
+            _cSharpGenerator.Generate(path);
 
-            foreach (string file in Directory.EnumerateFiles($"{path}\\Php"))
+            /*foreach (string file in Directory.EnumerateFiles($"{path}\\Php"))
             {
                 File.Copy(file, $"d:\\xampp\\htdocs\\generator\\Test\\{Path.GetFileName(file)}", true);
             }
@@ -107,7 +110,7 @@ namespace DatabaseFunctionsGenerator
             foreach (string file in Directory.EnumerateFiles($"{path}\\Php\\Models"))
             {
                 File.Copy(file, $"d:\\xampp\\htdocs\\generator\\Test\\Models\\{Path.GetFileName(file)}", true);
-            }
+            }*/
         }
     }
 }
