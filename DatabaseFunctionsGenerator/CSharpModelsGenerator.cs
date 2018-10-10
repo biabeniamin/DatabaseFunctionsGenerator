@@ -47,15 +47,22 @@ namespace DatabaseFunctionsGenerator
             foreach (Column column in table.Columns)
             {
                 //getter
-                builder.AppendLine($"function Get{column.Name}()");
+                builder.AppendLine($"public {column.Type.GetCSharpType()} {column.Name}()");
                 builder.AppendLine("{");
-                builder.AppendLine($"\treturn $this->{Helpers.GetLowerCaseString(column.Name)};");
-                builder.AppendLine("}");
+                builder.AppendLine("\tget");
+                builder.AppendLine("\t{");
+                {
+                    builder.AppendLine($"\t\treturn _{column.LowerCaseName};");
+                }
+                builder.AppendLine("\t}");
 
-                //setter
-                builder.AppendLine($"function Set{column.Name}($value)");
-                builder.AppendLine("{");
-                builder.AppendLine($"\t$this->{Helpers.GetLowerCaseString(column.Name)} = $value;");
+                //set
+                builder.AppendLine("\tset");
+                builder.AppendLine("\t{");
+                {
+                    builder.AppendLine($"\t\t_{column.LowerCaseName} = value;");
+                }
+                builder.AppendLine("\t}");
                 builder.AppendLine("}");
 
                 builder.AppendLine();
@@ -64,15 +71,22 @@ namespace DatabaseFunctionsGenerator
             foreach (Table parentTable in table.Parents)
             {
                 //getter
-                builder.AppendLine($"function Get{parentTable.SingularName}()");
+                builder.AppendLine($"public {parentTable.SingularName} {parentTable.SingularName}()");
                 builder.AppendLine("{");
-                builder.AppendLine($"\treturn $this->{parentTable.LowerCaseSingularName};");
-                builder.AppendLine("}");
+                builder.AppendLine("\tget");
+                builder.AppendLine("\t{");
+                {
+                    builder.AppendLine($"\t\treturn _{parentTable.SingularName};");
+                }
+                builder.AppendLine("\t}");
 
-                //setter
-                builder.AppendLine($"function Set{parentTable.SingularName}($value)");
-                builder.AppendLine("{");
-                builder.AppendLine($"\t$this->{parentTable.LowerCaseSingularName} = $value;");
+                //set
+                builder.AppendLine("\tset");
+                builder.AppendLine("\t{");
+                {
+                    builder.AppendLine($"\t\t_{parentTable.LowerCaseSingularName} = value;");
+                }
+                builder.AppendLine("\t}");
                 builder.AppendLine("}");
 
                 builder.AppendLine();
@@ -141,9 +155,8 @@ namespace DatabaseFunctionsGenerator
                 namespaceBuilder.AppendLine("{");
                 {
                     classBuilder.AppendLine(GenerateFields(table));
-                    /*classBuilder.AppendLine(Helpers.AddIndentation(GenerateGettersSetters(table),
-                        1));
-                    classBuilder.AppendLine(Helpers.AddIndentation(GenerateConstructor(table),
+                    classBuilder.AppendLine(GenerateGettersSetters(table));
+                    /*classBuilder.AppendLine(Helpers.AddIndentation(GenerateConstructor(table),
                         1));*/
 
                     namespaceBuilder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(), 
@@ -155,7 +168,7 @@ namespace DatabaseFunctionsGenerator
             }
             builder.AppendLine("}");
 
-            Helpers.WriteFile($"{path}\\{table.SingularName}.php", (builder.ToString()));
+            Helpers.WriteFile($"{path}\\{table.SingularName}.cs", (builder.ToString()));
 
             //return builder.ToString();
         }
