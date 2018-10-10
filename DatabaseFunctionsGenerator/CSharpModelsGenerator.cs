@@ -107,7 +107,7 @@ namespace DatabaseFunctionsGenerator
             //generate columnsCommaSeparated
             foreach (Column column in table.EditableColumns)
             {
-                columnsCommaSeparated.Append($"${column.Name}, ");
+                columnsCommaSeparated.Append($"{column.Type.GetCSharpType()} {column.LowerCaseName}, ");
             }
 
             if (1 < columnsCommaSeparated.Length)
@@ -115,14 +115,16 @@ namespace DatabaseFunctionsGenerator
                 columnsCommaSeparated = columnsCommaSeparated.Remove(columnsCommaSeparated.Length - 2, 2);
             }
 
-            builder.AppendLine($"function {table.SingularName}({columnsCommaSeparated.ToString()})");
+            builder.AppendLine($"public {table.SingularName}({columnsCommaSeparated.ToString()})");
             builder.AppendLine("{");
-
-            foreach (Column column in table.EditableColumns)
             {
-                builder.AppendLine($"\t$this->{Helpers.GetLowerCaseString(column.Name)} = ${column.Name};");
-            }
 
+                foreach (Column column in table.EditableColumns)
+                {
+                    builder.AppendLine($"\t_{column.LowerCaseName} = {column.LowerCaseName};");
+                }
+
+            }
             builder.AppendLine("}");
 
             return builder.ToString();
@@ -156,8 +158,7 @@ namespace DatabaseFunctionsGenerator
                 {
                     classBuilder.AppendLine(GenerateFields(table));
                     classBuilder.AppendLine(GenerateGettersSetters(table));
-                    /*classBuilder.AppendLine(Helpers.AddIndentation(GenerateConstructor(table),
-                        1));*/
+                    classBuilder.AppendLine(GenerateConstructor(table));
 
                     namespaceBuilder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(), 
                         1));
