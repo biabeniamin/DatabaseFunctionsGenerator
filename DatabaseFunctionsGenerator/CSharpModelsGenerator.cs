@@ -25,12 +25,12 @@ namespace DatabaseFunctionsGenerator
             //generate fields
             foreach (Column column in table.Columns)
             {
-                builder.AppendLine($"var ${Helpers.GetLowerCaseString(column.Name)};");
+                builder.AppendLine($"private {column.Type.GetCSharpType()} _{Helpers.GetLowerCaseString(column.Name)};");
             }
 
             foreach (Table parentTable in table.Parents)
             {
-                builder.AppendLine($"var ${parentTable.LowerCaseSingularName};");
+                builder.AppendLine($"private {parentTable.SingularName} _{parentTable.LowerCaseSingularName};");
             }
 
 
@@ -132,10 +132,6 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine("using System.Text;");
             builder.AppendLine("using System.Threading.Tasks; ");
 
-            foreach (Table parentTable in table.Parents)
-            {
-                builder.AppendLine($"require '{parentTable.SingularName}.php';");
-            }
 
             builder.AppendLine("namespace DatabaseFunctionsGenerator");
             builder.AppendLine("{");

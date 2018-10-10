@@ -112,6 +112,23 @@ namespace DatabaseFunctionsGenerator
             return "NOT_EXISTING";
         }
 
+        public string GetCSharpType()
+        {
+            switch (Type)
+            {
+                case Types.DateTime:
+                    return "Datetime";
+                case Types.Integer:
+                    return "int";
+                case Types.Text:
+                case Types.Varchar:
+                    return "string";
+                    break;
+            }
+
+            return "NOT_EXISTING";
+        }
+
         public override string ToString()
         {
             return _type.ToString();
