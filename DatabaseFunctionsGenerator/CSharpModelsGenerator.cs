@@ -47,7 +47,7 @@ namespace DatabaseFunctionsGenerator
             foreach (Column column in table.Columns)
             {
                 //getter
-                builder.AppendLine($"public {column.Type.GetCSharpType()} {column.Name}()");
+                builder.AppendLine($"public {column.Type.GetCSharpType()} {column.Name}");
                 builder.AppendLine("{");
                 builder.AppendLine("\tget");
                 builder.AppendLine("\t{");
