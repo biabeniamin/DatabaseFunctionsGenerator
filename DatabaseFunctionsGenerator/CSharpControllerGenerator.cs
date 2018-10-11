@@ -29,10 +29,32 @@ namespace DatabaseFunctionsGenerator
             {
                 //declaration
                 methodBody.AppendLine($"List<{table.SingularName}> {table.LowerCaseName};");
+                methodBody.AppendLine($"string data;");
                 methodBody.AppendLine();
-                
+
                 //initialization
                 methodBody.AppendLine($"{table.LowerCaseName} = new List<{table.SingularName}>();");
+                methodBody.AppendLine("data = \"\";");
+                methodBody.AppendLine();
+
+                //try
+                methodBody.AppendLine("try");
+                methodBody.AppendLine("{");
+                { 
+                //get data from server
+                    methodBody.AppendLine($"\tdata = await HttpRequestClient.GetRequest(\"get{table.Name}\");");
+                    methodBody.AppendLine($"\t{table.LowerCaseName} = JsonConvert.DeserializeObject<List<{table.SingularName}>>(data);");
+                }
+                methodBody.AppendLine("}");
+
+                //catch
+                methodBody.AppendLine("catch(Exception ee)");
+                methodBody.AppendLine("{");
+                {
+                    methodBody.AppendLine($"\tConsole.WriteLine(ee.Message);");
+                }
+                methodBody.AppendLine("}");
+
                 methodBody.AppendLine();
 
                 //return
@@ -62,7 +84,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine("using System.Linq;");
             builder.AppendLine("using System.Text;");
             builder.AppendLine("using System.Threading.Tasks; ");
-
+            builder.AppendLine("using Newtonsoft.Json;");
 
             builder.AppendLine("namespace DatabaseFunctionsGenerator");
             builder.AppendLine("{");
