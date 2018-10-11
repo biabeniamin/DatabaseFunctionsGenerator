@@ -130,6 +130,28 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
+        private string GenerateEmptyConstructor(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder columnsCommaSeparated;
+
+            builder = new StringBuilder();
+
+            builder.AppendLine($"public {table.SingularName}()");
+            builder.AppendLine("{");
+            {
+
+                foreach (Column column in table.EditableColumns)
+                {
+                    builder.AppendLine($"\t_{column.LowerCaseName} = null;");
+                }
+
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
         private string GenerateConstructorWithParents(Table table)
         {
             StringBuilder builder;
@@ -210,6 +232,7 @@ namespace DatabaseFunctionsGenerator
                     classBuilder.AppendLine(GenerateFields(table));
                     classBuilder.AppendLine(GenerateGettersSetters(table));
                     classBuilder.AppendLine(GenerateConstructor(table));
+                    classBuilder.AppendLine(GenerateEmptyConstructor(table));
 
                     if (0 < table.Parents.Count)
                     {
