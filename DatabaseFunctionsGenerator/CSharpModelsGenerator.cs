@@ -130,6 +130,57 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
+        private string GenerateConstructorWithParents(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder dataColumnsBuilder;
+            StringBuilder parametersCommaSeparated;
+
+            builder = new StringBuilder();
+            dataColumnsBuilder = new StringBuilder();
+            parametersCommaSeparated = new StringBuilder();
+
+            //generate columnsCommaSeparated
+            foreach (Column column in table.EditableColumns)
+            {
+                parametersCommaSeparated.Append($"{column.Type.GetCSharpType()} {column.LowerCaseName}, ");
+                dataColumnsBuilder.Append($"{column.LowerCaseName}, ");
+            }
+            if (1 < dataColumnsBuilder.Length)
+            {
+                dataColumnsBuilder = dataColumnsBuilder.Remove(dataColumnsBuilder.Length - 2, 2);
+            }
+
+            //add parents
+            foreach(Table parentTable in table.Parents)
+            {
+                parametersCommaSeparated.Append($"{parentTable.SingularName} {parentTable.LowerCaseSingularName}, ");
+            }
+            if (1 < parametersCommaSeparated.Length)
+            {
+                parametersCommaSeparated = parametersCommaSeparated.Remove(parametersCommaSeparated.Length - 2, 2);
+            }
+
+
+            builder.AppendLine($"public {table.SingularName}({parametersCommaSeparated.ToString()})");
+
+            //generate the call of main constructor
+            builder.AppendLine($"\t:this({dataColumnsBuilder.ToString()})");
+
+            builder.AppendLine("{");
+            {
+
+                foreach (Column column in table.EditableColumns)
+                {
+                    builder.AppendLine($"\t_{column.LowerCaseName} = {column.LowerCaseName};");
+                }
+
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
         private void GenerateModel(Table table, string path)
         {
             StringBuilder builder;
@@ -159,6 +210,11 @@ namespace DatabaseFunctionsGenerator
                     classBuilder.AppendLine(GenerateFields(table));
                     classBuilder.AppendLine(GenerateGettersSetters(table));
                     classBuilder.AppendLine(GenerateConstructor(table));
+
+                    if (0 < table.Parents.Count)
+                    {
+                        classBuilder.AppendLine(GenerateConstructorWithParents(table));
+                    }
 
                     namespaceBuilder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(), 
                         1));
