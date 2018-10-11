@@ -22,28 +22,11 @@ namespace DatabaseFunctionsGenerator
             StringBuilder columnsCommaSeparated;
 
             builder = new StringBuilder();
-            columnsCommaSeparated = new StringBuilder();
 
-            //generate columnsCommaSeparated
-            foreach (Column column in table.EditableColumns)
-            {
-                columnsCommaSeparated.Append($"{column.Type.GetCSharpType()} {column.LowerCaseName}, ");
-            }
-
-            if (1 < columnsCommaSeparated.Length)
-            {
-                columnsCommaSeparated = columnsCommaSeparated.Remove(columnsCommaSeparated.Length - 2, 2);
-            }
-
-            builder.AppendLine($"public {table.SingularName}({columnsCommaSeparated.ToString()})");
+            builder.AppendLine($"public static Get{table.Name}()");
             builder.AppendLine("{");
             {
-
-                foreach (Column column in table.EditableColumns)
-                {
-                    builder.AppendLine($"\t_{column.LowerCaseName} = {column.LowerCaseName};");
-                }
-
+                
             }
             builder.AppendLine("}");
 
