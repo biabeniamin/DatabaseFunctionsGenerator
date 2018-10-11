@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DatabaseFunctionsGenerator
 {
-    class TypescriptHelpersGenerator : IGenerator
+    public class CSharpHelpersGenerator : IGenerator
     {
         public void Generate(string path)
         {
@@ -15,7 +15,7 @@ namespace DatabaseFunctionsGenerator
             string helpers;
 
             builder = new StringBuilder();
-            serverUrl = Helpers.ReadFile("CodeHelpers\\ServerUrl.ts");
+            serverUrl = Helpers.ReadFile("CodeHelpers\\HttpClient.ts");
 
             Helpers.WriteFile($"{path}\\ServerUrl.ts", serverUrl);
         }

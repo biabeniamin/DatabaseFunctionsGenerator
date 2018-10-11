@@ -15,8 +15,8 @@ namespace DatabaseFunctionsGenerator
             string helpers;
 
             builder = new StringBuilder();
-            databaseOperations = Helpers.ReadFile("DatabaseOperations.php");
-            helpers = Helpers.ReadFile("Helpers.php");
+            databaseOperations = Helpers.ReadFile("CodeHelpers\\DatabaseOperations.php");
+            helpers = Helpers.ReadFile("CodeHelpers\\Helpers.php");
 
             Helpers.WriteFile($"{path}\\Php\\DatabaseOperations.php", databaseOperations);
             Helpers.WriteFile($"{path}\\Php\\Helpers.php", helpers);
