@@ -57,6 +57,7 @@ namespace DatabaseFunctionsGenerator
             Database.Tables.Add(new Table("AccessLogs"));
             Database.Tables.Add(new Table("Doors"));
             Database.Tables.Add(new Table("Pins"));
+            Database.Tables.Add(new Table("Empty"));
 
             //            Database.Tables[0].Columns.Add(new Column("Id", new ColumnType(Types.Integer, true, true)));
             Database.Tables[0].Columns.Add(new Column("Username", new ColumnType(Types.Varchar, 20)));
@@ -71,9 +72,11 @@ namespace DatabaseFunctionsGenerator
 
             Database.Tables[4].Columns.Add(new Column("Pin", new ColumnType(Types.Varchar, 20)));
 
+
             Database.Relations.Add(new Relation(Database.Tables[0], Database.Tables[2], RelationType.OneToMany));
             Database.Relations.Add(new Relation(Database.Tables[3], Database.Tables[2], RelationType.OneToMany));
             Database.Relations.Add(new Relation(Database.Tables[2], Database.Tables[4], RelationType.OneToMany));
+            Database.Relations.Add(new Relation(Database.Tables[4], Database.Tables[5], RelationType.OneToMany));
 
             SelectedTable = Database.Tables[0];
 
