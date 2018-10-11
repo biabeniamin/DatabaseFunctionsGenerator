@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DatabaseFunctionsGenerator
 {
-    public class CSharpControllerGenerator
+    public class CSharpControllerGenerator:IGenerator
     {
         private Database _database;
 
@@ -73,7 +73,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine("{");
             {
 
-                namespaceBuilder.AppendLine($"public class {table.SingularName}");
+                namespaceBuilder.AppendLine($"public static class {table.SingularName}");
                 namespaceBuilder.AppendLine("{");
                 {
                     classBuilder.AppendLine(GenerateGetMethod(table));

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DatabaseFunctionsGenerator
 {
-    public class CSharpModelsGenerator
+    public class CSharpModelsGenerator: IGenerator
     {
         private Database _database;
 
