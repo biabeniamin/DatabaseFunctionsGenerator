@@ -138,12 +138,27 @@ namespace DatabaseFunctionsGenerator
             builder = new StringBuilder();
 
             builder.AppendLine($"public {table.SingularName}()");
+
+            builder.AppendLine("\t :this(");
+            {
+                foreach (Column column in table.EditableColumns)
+                {
+                    builder.AppendLine($"\t\t{Helpers.GetDefaultCSharpColumnData(column.Type.Type)}, //{column.Name}");
+                }
+                if(builder.ToString().Contains(','))
+                {
+                    builder.Remove(builder.ToString().LastIndexOf(','),
+                        1);
+                }
+            }
+            builder.AppendLine("\t)");
+
             builder.AppendLine("{");
             {
 
-                foreach (Column column in table.EditableColumns)
+                foreach (Column column in table.NonEditableColumns)
                 {
-                    builder.AppendLine($"\t_{column.LowerCaseName} = null;");
+                    builder.AppendLine($"\t_{column.LowerCaseName} = {Helpers.GetDefaultCSharpColumnData(column.Type.Type)};");
                 }
 
             }
@@ -232,12 +247,13 @@ namespace DatabaseFunctionsGenerator
                     classBuilder.AppendLine(GenerateFields(table));
                     classBuilder.AppendLine(GenerateGettersSetters(table));
                     classBuilder.AppendLine(GenerateConstructor(table));
-                    classBuilder.AppendLine(GenerateEmptyConstructor(table));
 
                     if (0 < table.Parents.Count)
                     {
                         classBuilder.AppendLine(GenerateConstructorWithParents(table));
                     }
+
+                    classBuilder.AppendLine(GenerateEmptyConstructor(table));
 
                     namespaceBuilder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(), 
                         1));

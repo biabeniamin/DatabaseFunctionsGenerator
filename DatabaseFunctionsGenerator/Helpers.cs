@@ -103,10 +103,27 @@ namespace DatabaseFunctionsGenerator
                     return "0";
                     break;
                 case Types.Text:
-                    return "\'Test\'";
-                    break;
                 case Types.Varchar:
                     return "\'Test\'";
+                    break;
+                default:
+                    return "";
+            }
+        }
+
+        public static string GetDefaultCSharpColumnData(Types type)
+        {
+            switch (type)
+            {
+                case Types.DateTime:
+                    return "new DateTime(2000, 1, 1, 0, 0, 0)";
+                    break;
+                case Types.Integer:
+                    return "0";
+                    break;
+                case Types.Text:
+                case Types.Varchar:
+                    return "\"Test\"";
                     break;
                 default:
                     return "";
