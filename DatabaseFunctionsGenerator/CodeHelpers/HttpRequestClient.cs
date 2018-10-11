@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace roomSmartHouseHandler
 {
-    public static class HttpGetClient
+    public static class HttpRequestClient
     {
         public static async Task<string> GetRequest(string cmd)
         {

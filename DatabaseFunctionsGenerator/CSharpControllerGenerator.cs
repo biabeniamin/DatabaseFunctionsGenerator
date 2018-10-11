@@ -19,14 +19,26 @@ namespace DatabaseFunctionsGenerator
         private string GenerateGetMethod(Table table)
         {
             StringBuilder builder;
-            StringBuilder columnsCommaSeparated;
+            StringBuilder methodBody;
 
             builder = new StringBuilder();
+            methodBody = new StringBuilder();
 
-            builder.AppendLine($"public static Get{table.Name}()");
+            builder.AppendLine($"public static async Task<List<{table.SingularName}>> Get{table.Name}()");
             builder.AppendLine("{");
             {
+                //declaration
+                methodBody.AppendLine($"List<{table.SingularName}> {table.LowerCaseName};");
+                methodBody.AppendLine();
                 
+                //initialization
+                methodBody.AppendLine($"{table.LowerCaseName} = new List<{table.SingularName}>();");
+                methodBody.AppendLine();
+
+                //return
+                methodBody.AppendLine($"return {table.LowerCaseName};");
+                builder.AppendLine(Helpers.AddIndentation(methodBody.ToString(),
+                    1));
             }
             builder.AppendLine("}");
 
@@ -56,7 +68,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine("{");
             {
 
-                namespaceBuilder.AppendLine($"public static class {table.SingularName}");
+                namespaceBuilder.AppendLine($"public static class {table.Name}");
                 namespaceBuilder.AppendLine("{");
                 {
                     classBuilder.AppendLine(GenerateGetMethod(table));
@@ -70,7 +82,7 @@ namespace DatabaseFunctionsGenerator
             }
             builder.AppendLine("}");
 
-            Helpers.WriteFile($"{path}\\{table.SingularName}.cs", (builder.ToString()));
+            Helpers.WriteFile($"{path}\\{table.Name}.cs", (builder.ToString()));
 
             //return builder.ToString();
         }

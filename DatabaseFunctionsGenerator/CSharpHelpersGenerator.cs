@@ -11,13 +11,12 @@ namespace DatabaseFunctionsGenerator
         public void Generate(string path)
         {
             StringBuilder builder;
-            string serverUrl;
-            string helpers;
+            string httpRequestClient;
 
             builder = new StringBuilder();
-            serverUrl = Helpers.ReadFile("CodeHelpers\\HttpClient.ts");
+            httpRequestClient = Helpers.ReadFile("CodeHelpers\\HttpRequestClient.cs");
 
-            Helpers.WriteFile($"{path}\\ServerUrl.ts", serverUrl);
+            Helpers.WriteFile($"{path}\\Controllers\\HttpRequestClient.cs", httpRequestClient);
         }
     }
 }
