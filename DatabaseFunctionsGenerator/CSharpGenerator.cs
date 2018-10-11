@@ -12,6 +12,7 @@ namespace DatabaseFunctionsGenerator
 
         private CSharpModelsGenerator _cSharpModelsGenerator;
         private CSharpControllerGenerator _cSharpControllerGenerator;
+        private CSharpHelpersGenerator _cSharpHelpersGenerator;
 
         public CSharpGenerator(Database database)
         {
@@ -19,6 +20,7 @@ namespace DatabaseFunctionsGenerator
 
             _cSharpModelsGenerator = new CSharpModelsGenerator(_database);
             _cSharpControllerGenerator = new CSharpControllerGenerator(_database);
+            _cSharpHelpersGenerator = new CSharpHelpersGenerator();
         }
 
         public void Generate(string path)
@@ -29,6 +31,7 @@ namespace DatabaseFunctionsGenerator
 
             _cSharpModelsGenerator.Generate(cSharpPath);
             _cSharpControllerGenerator.Generate(cSharpPath);
+            _cSharpHelpersGenerator.Generate(cSharpPath);
 
         }
     }
