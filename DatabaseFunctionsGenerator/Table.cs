@@ -14,6 +14,14 @@ namespace DatabaseFunctionsGenerator
         private string _singularName;
         private ObservableCollection<Table> _parents;
         private ObservableCollection<Table> _childs;
+        private List<DedicatedGetRequest> _dedicatedGetRequests;
+
+        public List<DedicatedGetRequest> DedicatedGetRequests
+        {
+            get { return DedicatedGetRequests; }
+            set { DedicatedGetRequests = value; }
+        }
+
 
         public ObservableCollection<Table> Childs
         {
@@ -196,6 +204,7 @@ namespace DatabaseFunctionsGenerator
             _columns = new ObservableCollection<Column>(columns);
             _parents = new ObservableCollection<Table>();
             _childs = new ObservableCollection<Table>();
+            _dedicatedGetRequests = new List<DedicatedGetRequest>();
         }
 
         
