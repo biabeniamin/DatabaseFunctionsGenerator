@@ -64,6 +64,7 @@
     <Compile Include="CSharpHelpersGenerator.cs" />
     <Compile Include="CSharpModelsGenerator.cs" />
     <Compile Include="Database.cs" />
+    <Compile Include="DocumentationGenerator.cs" />
     <Compile Include="Generator.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="IGenerator.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="PhpHelpersGenerator.cs" />
     <Compile Include="PhpModelsGenerator.cs" />
     <Compile Include="Relation.cs" />
+    <Compile Include="RequestTextMenuGenerator.cs" />
     <Compile Include="SqlGenerator.cs" />
     <Compile Include="Table.cs" />
     <Compile Include="ColumnType.cs" />

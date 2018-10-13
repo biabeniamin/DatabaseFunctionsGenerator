@@ -16,6 +16,7 @@ namespace DatabaseFunctionsGenerator
         private PhpGenerator _phpGenerator;
         private NotificationSystem _notificationSystem;
         private CSharpGenerator _cSharpGenerator;
+        private DocumentationGenerator _documentationGenerator;
 
         public Generator(Database database)
         {
@@ -26,6 +27,7 @@ namespace DatabaseFunctionsGenerator
             _typescriptGenerator = new TypescriptGenerator(_database);
             _notificationSystem = new NotificationSystem();
             _cSharpGenerator = new CSharpGenerator(_database);
+            _documentationGenerator = new DocumentationGenerator(_database);
         }
 
         private void AddMissingFields()
@@ -101,6 +103,7 @@ namespace DatabaseFunctionsGenerator
             _phpGenerator.Generate(path);
             _typescriptGenerator.Generate(path);
             _cSharpGenerator.Generate(path);
+            _documentationGenerator.Generate(path);
 
             foreach (string file in Directory.EnumerateFiles($"{path}\\Php"))
             {
