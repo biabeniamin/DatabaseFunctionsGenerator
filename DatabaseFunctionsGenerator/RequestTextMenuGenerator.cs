@@ -34,8 +34,18 @@ namespace DatabaseFunctionsGenerator
             {
                 builder.Append($"&{column.LowerCaseName}={Helpers.GetDefaultColumnDataWithoutApostrophe(column.Type.Type)}");
             }
-            builder.AppendLine($" - GET request -add a new {table.SingularName} with specified data");
+            builder.AppendLine($" - GET request -add a new {table.SingularName} with specified data and return the item if was added");
 
+
+            //generate post request
+            builder.AppendLine();
+            builder.Append($"{serverUrl}{table.Name}.php?cmd=add{table.SingularName}");
+            builder.AppendLine($"- POST request with following parameters");
+            foreach (Column column in table.EditableColumns)
+            {
+                builder.AppendLine($"{column.LowerCaseName} : {column.Type.GetMysqlType()}");
+            }
+            builder.AppendLine($"add a new {table.SingularName} with specified data and returns a new {table.SingularName} if succeeded");
 
             return builder.ToString();
         }
