@@ -53,6 +53,16 @@ namespace DatabaseFunctionsGenerator
             Database = new Database();
 
             Database.Tables.Add(new Table("Users"));
+            Database.Tables.Add(new Table("CheckIns"));
+
+            Database.Tables[0].Columns.Add(new Column("Username", new ColumnType(Types.Varchar, 20)));
+            Database.Tables[0].Columns.Add(new Column("Password", new ColumnType(Types.Varchar, 20)));
+            Database.Tables[0].Columns.Add(new Column("Email", new ColumnType(Types.Varchar, 20)));
+
+            Database.Tables[1].Columns.Add(new Column("ScannerName", new ColumnType(Types.Varchar, 20)));
+
+            Database.Relations.Add(new Relation(Database.Tables[0], Database.Tables[1], RelationType.OneToMany));
+            /*Database.Tables.Add(new Table("Users"));
             Database.Tables.Add(new Table("Locations"));
             Database.Tables.Add(new Table("AccessLogs"));
             Database.Tables.Add(new Table("Doors"));
@@ -76,7 +86,7 @@ namespace DatabaseFunctionsGenerator
             Database.Relations.Add(new Relation(Database.Tables[0], Database.Tables[2], RelationType.OneToMany));
             Database.Relations.Add(new Relation(Database.Tables[3], Database.Tables[2], RelationType.OneToMany));
             Database.Relations.Add(new Relation(Database.Tables[2], Database.Tables[4], RelationType.OneToMany));
-            Database.Relations.Add(new Relation(Database.Tables[4], Database.Tables[5], RelationType.OneToMany));
+            Database.Relations.Add(new Relation(Database.Tables[4], Database.Tables[5], RelationType.OneToMany));*/
 
             SelectedTable = Database.Tables[0];
 

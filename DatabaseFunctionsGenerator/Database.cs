@@ -11,7 +11,7 @@ namespace DatabaseFunctionsGenerator
     {
         private ObservableCollection<Table> _tables;
         private ObservableCollection<Relation> _relations;
-        private string _serverUrl = "http://localhost/generator/test/";
+        private string _serverUrl = "http://codeforgood18.avramiancuturda.ro/";
 
         public string ServerUrl
         {
