@@ -22,9 +22,20 @@ namespace DatabaseFunctionsGenerator
 
             builder = new StringBuilder();
 
+            //get request to get data
             builder.AppendLine($"------------{table.Name}----------");
             builder.AppendLine($"{serverUrl}{table.Name}.php?cmd=get{table.Name} - GET request -return all {table.Name}");
             builder.AppendLine($"{serverUrl}{table.Name}.php?cmd=get{table.SingularName}ById=value - GET request -return one {table.SingularName} with specified id");
+
+            //get request to add data
+
+            builder.Append($"{serverUrl}{table.Name}.php?cmd=add{table.SingularName}");
+            foreach(Column column in table.EditableColumns)
+            {
+                builder.Append($"&{column.LowerCaseName}={Helpers.GetDefaultColumnDataWithoutApostrophe(column.Type.Type)}");
+            }
+            builder.AppendLine($" - GET request -add a new {table.SingularName} with specified data");
+
 
             return builder.ToString();
         }

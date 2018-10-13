@@ -111,6 +111,11 @@ namespace DatabaseFunctionsGenerator
             }
         }
 
+        public static string GetDefaultColumnDataWithoutApostrophe(Types type)
+        {
+            return GetDefaultColumnData(type).Replace("'", "");
+        }
+
         public static string GetDefaultCSharpColumnData(Types type)
         {
             switch (type)
