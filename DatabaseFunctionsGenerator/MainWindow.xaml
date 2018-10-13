@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DatabaseFunctionsGenerator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="597" Width="661">
     <Grid>
         <!--tables from database-->
-        <ListView x:Name="tablesListView" ItemsSource="{Binding Database.Tables}" SelectedItem="{Binding SelectedTable}" Margin="10,20,401,9">
+        <ListView x:Name="tablesListView" ItemsSource="{Binding Database.Tables}" SelectedItem="{Binding SelectedTable}" Margin="10,10,0,0" HorizontalAlignment="Left" Width="297" Height="142" VerticalAlignment="Top">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" />
@@ -17,10 +17,10 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        
+
         <!--columns from selected table-->
 
-        <ListView ItemsSource="{Binding SelectedItem.Columns, ElementName=tablesListView}" Margin="121,19,215,10">
+        <ListView ItemsSource="{Binding SelectedItem.Columns, ElementName=tablesListView}" Margin="312,10,0,0" HorizontalAlignment="Left" Width="297" Height="142" VerticalAlignment="Top">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" />
@@ -30,12 +30,30 @@
             </ListView.View>
         </ListView>
 
-        <ListView ItemsSource="{Binding Database.Relations}" Margin="331,19,5,10">
+        <ListView x:Name="dedicatedRequestsListView" ItemsSource="{Binding SelectedItem.DedicatedGetRequests, ElementName=tablesListView}" Margin="10,157,0,0" HorizontalAlignment="Left" Width="297" Height="177" VerticalAlignment="Top">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Columns" DisplayMemberBinding="{Binding}" />
+                    <GridViewColumn Header="Type" DisplayMemberBinding="{Binding Type}" />
+                    <GridViewColumn Header="Length" DisplayMemberBinding="{Binding Type.Length}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <ListView ItemsSource="{Binding Database.Relations}" Margin="10,339,0,0" HorizontalAlignment="Left" Width="297" Height="177" VerticalAlignment="Top">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Table1" DisplayMemberBinding="{Binding Table1}" />
                     <GridViewColumn Header="Table2" DisplayMemberBinding="{Binding Table2}" />
                     <GridViewColumn Header="Type" DisplayMemberBinding="{Binding Type}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <ListView ItemsSource="{Binding SelectedItem.Columns, ElementName=dedicatedRequestsListView}" Margin="312,157,0,0" HorizontalAlignment="Left" Width="297" Height="177" VerticalAlignment="Top">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="Type" DisplayMemberBinding="{Binding Type}" />
+                    <GridViewColumn Header="Length" DisplayMemberBinding="{Binding Type.Length}" />
                 </GridView>
             </ListView.View>
         </ListView>

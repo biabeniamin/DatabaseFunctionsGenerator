@@ -18,8 +18,8 @@ namespace DatabaseFunctionsGenerator
 
         public List<DedicatedGetRequest> DedicatedGetRequests
         {
-            get { return DedicatedGetRequests; }
-            set { DedicatedGetRequests = value; }
+            get { return _dedicatedGetRequests; }
+            set { _dedicatedGetRequests = value; }
         }
 
 
@@ -148,6 +148,21 @@ namespace DatabaseFunctionsGenerator
                 return 0 < _columns.Where((column) =>
                 {
                     return String.Equals(column.Name, "CreationTime");
+                }).Count();
+            }
+        }
+
+        public bool HasDedicatedGetRequestForPrimaryKey
+        {
+            get
+            {
+                return 0 < _dedicatedGetRequests.Where((dedicated) =>
+                {
+                    return 1 == dedicated.Columns.Count()
+                        & 0 == dedicated.Columns.Where((column) =>
+                            {
+                                return column.Type.IsPrimaryKey;
+                            }).Count();
                 }).Count();
             }
         }

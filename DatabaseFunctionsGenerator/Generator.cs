@@ -61,6 +61,16 @@ namespace DatabaseFunctionsGenerator
 
                     table.Columns.Add(column);
                 }
+
+                if(!table.HasDedicatedGetRequestForPrimaryKey)
+                {
+                    DedicatedGetRequest dedicatedRequest;
+
+                    dedicatedRequest = new DedicatedGetRequest();
+
+                    dedicatedRequest.Columns.Add(table.PrimaryKeyColumn);
+                    table.DedicatedGetRequests.Add(dedicatedRequest);
+                }
             }
         }
 
