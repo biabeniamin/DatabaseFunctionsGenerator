@@ -11,6 +11,14 @@ namespace DatabaseFunctionsGenerator
     {
         private ObservableCollection<Table> _tables;
         private ObservableCollection<Relation> _relations;
+        private string _serverUrl = "http://localhost/generator/test/";
+
+        public string ServerUrl
+        {
+            get { return _serverUrl; }
+            set { _serverUrl = value; }
+        }
+
 
         public ObservableCollection<Relation> Relations
         {
