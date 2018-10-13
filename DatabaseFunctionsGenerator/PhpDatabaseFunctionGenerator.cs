@@ -104,14 +104,25 @@ namespace DatabaseFunctionsGenerator
 
                 functionBody = new StringBuilder();
 
-                builder.AppendLine($"function Get{table.SingularName}By{dedicatedRequest.ToString("")}($database, ${table.LowerCaseSingularName}Id)");
+                builder.Append($"function Get{table.Name}By{dedicatedRequest.ToString("")}($database, ");
+
+                foreach (Column column in dedicatedRequest.Columns)
+                {
+                    builder.Append($"${column.LowerCaseName}, ");
+                }
+                if (builder.ToString().Contains(", "))
+                {
+                    builder.Remove(builder.ToString().LastIndexOf(", "), 2);
+                }
+
+                builder.AppendLine($")");
                 builder.AppendLine("{");
 
                 functionBody.Append($"$data = $database->ReadData(\"SELECT * FROM {table.Name} WHERE ");
 
                 foreach(Column column in dedicatedRequest.Columns)
                 {
-                    functionBody.Append($"{column.Name} = ${Helpers.ConvertToSql(column.Name, column.Type.Type)} and ");
+                    functionBody.Append($"{column.Name} = {Helpers.ConvertToSql("$",column.LowerCaseName, column.Type.Type)} and ");
                 }
                 if (functionBody.ToString().Contains(" and"))
                 {
@@ -133,7 +144,7 @@ namespace DatabaseFunctionsGenerator
                     functionBody.AppendLine($"${table.LowerCaseName}[0]->Set{parentTable.SingularName}(Get{parentTable.SingularName}ById($database, ${table.LowerCaseName}[0]->Get{parentTable.PrimaryKeyColumn.Name}()));");
                 }
 
-                functionBody.AppendLine($"return ${table.LowerCaseName}[0];");
+                functionBody.AppendLine($"return ${table.LowerCaseName};");
 
                 builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
                 builder.AppendLine("}");
@@ -373,10 +384,12 @@ namespace DatabaseFunctionsGenerator
 
         private string GenerateGetRequest(Table table)
         {
-            StringBuilder builder = new StringBuilder();
-            StringBuilder addBlock = new StringBuilder();
+            StringBuilder builder;
+            StringBuilder addBlock;
             string objectName;
 
+            builder = new StringBuilder();
+            addBlock = new StringBuilder();
             objectName = table.LowerCaseSingularName;
 
             builder.AppendLine("if(CheckGetParameters([\"cmd\"]))");
@@ -391,20 +404,51 @@ namespace DatabaseFunctionsGenerator
                 }
                 builder.AppendLine("\t}");
 
-                //to get data by id
+                //to get data by dedicated fields
 
-                builder.AppendLine($"\telse if(\"get{table.SingularName}ById\" == $_GET[\"cmd\"])");
-                builder.AppendLine("\t{");
+                foreach (DedicatedGetRequest dedicatedRequest in table.DedicatedGetRequests)
                 {
-                    builder.AppendLine($"\t\tif(CheckGetParameters([\"{table.SingularName}Id\"]))");
-                    builder.AppendLine("\t\t{");
+                    builder.AppendLine($"\telse if(\"get{table.SingularName}By{dedicatedRequest.ToString("")}\" == $_GET[\"cmd\"])");
+                    builder.AppendLine("\t{");
                     {
-                        builder.AppendLine($"\t\t\t$database = new DatabaseOperations();");
-                        builder.AppendLine($"\t\t\techo json_encode(Get{table.SingularName}ById($database, $_GET[\"{table.SingularName}Id\"]));");
+                        StringBuilder dedicatedBuilder;
+
+                        dedicatedBuilder = new StringBuilder();
+
+                        dedicatedBuilder.AppendLine("if(CheckGetParameters([");
+                        foreach (Column column in dedicatedRequest.Columns)
+                        {
+                            dedicatedBuilder.AppendLine($"\t\'{column.LowerCaseName}\',");
+                        }
+                        if (dedicatedBuilder.ToString().Contains(','))
+                        {
+                            dedicatedBuilder.Remove(dedicatedBuilder.ToString().LastIndexOf(','), 1);
+                        }
+
+                        dedicatedBuilder.AppendLine("\t]))");
+                        dedicatedBuilder.AppendLine("{");
+                        {
+                            dedicatedBuilder.AppendLine($"\t$database = new DatabaseOperations();");
+                            dedicatedBuilder.AppendLine($"\techo json_encode(Get{table.Name}By{dedicatedRequest.ToString("")}($database, ");
+
+                            foreach(Column column in dedicatedRequest.Columns)
+                            {
+                                dedicatedBuilder.AppendLine($"\t\t$_GET[\"{column.LowerCaseName}\"],");
+                            }
+
+                            if(dedicatedBuilder.ToString().Contains(","))
+                            {
+                                dedicatedBuilder.Remove(dedicatedBuilder.ToString().LastIndexOf(","), 1);
+                            }
+
+                            dedicatedBuilder.AppendLine($"\t));");
+                        }
+                        dedicatedBuilder.AppendLine("}");
+                        builder.AppendLine(Helpers.AddIndentation(dedicatedBuilder.ToString(),
+                            2));
                     }
-                    builder.AppendLine("\t\t}");
+                    builder.AppendLine("\t}");
                 }
-                builder.AppendLine("\t}");
 
                 //to add data
                 builder.AppendLine($"\telse if(\"add{table.SingularName}\" == $_GET[\"cmd\"])");

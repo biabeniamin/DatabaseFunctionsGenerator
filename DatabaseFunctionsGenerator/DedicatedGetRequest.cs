@@ -44,7 +44,10 @@ namespace DatabaseFunctionsGenerator
                 builder.Append($"{column.Name}{delimitator}");
             }
 
-            builder.Remove(builder.ToString().LastIndexOf(delimitator), delimitator.Length);
+            if (builder.ToString().Contains(delimitator))
+            {
+                builder.Remove(builder.ToString().LastIndexOf(delimitator), delimitator.Length);
+            }
 
             return builder.ToString();
         }

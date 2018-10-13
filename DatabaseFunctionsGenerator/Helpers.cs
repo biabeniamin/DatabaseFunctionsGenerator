@@ -158,16 +158,20 @@ namespace DatabaseFunctionsGenerator
 
         public static string ConvertToSql(string input, Types type)
         {
-            switch(type)
+            return ConvertToSql("", input, type);
+        }
+        public static string ConvertToSql(string startCharacter, string input, Types type)
+        {
+            switch (type)
             {
                 case Types.DateTime:
                 case Types.Text:
                 case Types.Varchar:
-                    return $"\'{input}\'";
+                    return $"\'{startCharacter}{input}\'";
                 case Types.Integer:
-                    return $"{input}";
+                    return $"{startCharacter}{input}";
             }
-            
+
             return "";
         }
     }
