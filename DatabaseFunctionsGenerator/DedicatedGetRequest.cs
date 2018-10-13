@@ -33,18 +33,26 @@ namespace DatabaseFunctionsGenerator
             _columns.Add(column2);
         }
 
-        public override string ToString()
+        public string ToString(string delimitator)
         {
             StringBuilder builder;
 
             builder = new StringBuilder();
 
-            foreach(Column column in _columns)
+            foreach (Column column in _columns)
             {
-                builder.Append($"{column.Name} ");
+                builder.Append($"{column.Name}{delimitator}");
             }
+
+            builder.Remove(builder.ToString().LastIndexOf(delimitator), delimitator.Length);
 
             return builder.ToString();
         }
+
+        public override string ToString()
+        {
+            return ToString(" ");
+        }
+
     }
 }

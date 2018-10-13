@@ -92,36 +92,52 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
-        private string GenerateGetByIdFunction(Table table)
+        private string GenerateDedicatedRequestFunctions(Table table)
         {
-            StringBuilder builder = new StringBuilder();
-            StringBuilder functionBody = new StringBuilder();
-            string objectName;
+            StringBuilder builder;
 
-            objectName = table.LowerCaseSingularName;
+            builder = new StringBuilder();
 
-            builder.AppendLine($"function Get{table.SingularName}ById($database, ${table.LowerCaseSingularName}Id)");
-            builder.AppendLine("{");
-
-            functionBody.AppendLine($"$data = $database->ReadData(\"SELECT * FROM {table.Name} WHERE {table.PrimaryKeyColumn.Name} = ${Helpers.ConvertToSql(table.LowerCaseSingularName, table.PrimaryKeyColumn.Type.Type)}Id\");");
-            functionBody.AppendLine($"${table.LowerCaseName} = ConvertListTo{table.Name}($data);");
-
-            functionBody.AppendLine($"if(0== count(${table.LowerCaseName}))");
-            functionBody.AppendLine("{");
+            foreach (DedicatedGetRequest dedicatedRequest in table.DedicatedGetRequests)
             {
-                functionBody.AppendLine($"\treturn GetEmpty{table.SingularName}();");
+                StringBuilder functionBody;
+
+                functionBody = new StringBuilder();
+
+                builder.AppendLine($"function Get{table.SingularName}By{dedicatedRequest.ToString("")}($database, ${table.LowerCaseSingularName}Id)");
+                builder.AppendLine("{");
+
+                functionBody.Append($"$data = $database->ReadData(\"SELECT * FROM {table.Name} WHERE ");
+
+                foreach(Column column in dedicatedRequest.Columns)
+                {
+                    functionBody.Append($"{column.Name} = ${Helpers.ConvertToSql(column.Name, column.Type.Type)} and ");
+                }
+                if (functionBody.ToString().Contains(" and"))
+                {
+                    functionBody.Remove(functionBody.ToString().LastIndexOf(" and"), 5);
+                }
+                functionBody.AppendLine($"\");");
+
+                functionBody.AppendLine($"${table.LowerCaseName} = ConvertListTo{table.Name}($data);");
+
+                functionBody.AppendLine($"if(0== count(${table.LowerCaseName}))");
+                functionBody.AppendLine("{");
+                {
+                    functionBody.AppendLine($"\treturn GetEmpty{table.SingularName}();");
+                }
+                functionBody.AppendLine("}");
+
+                foreach (Table parentTable in table.Parents)
+                {
+                    functionBody.AppendLine($"${table.LowerCaseName}[0]->Set{parentTable.SingularName}(Get{parentTable.SingularName}ById($database, ${table.LowerCaseName}[0]->Get{parentTable.PrimaryKeyColumn.Name}()));");
+                }
+
+                functionBody.AppendLine($"return ${table.LowerCaseName}[0];");
+
+                builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
+                builder.AppendLine("}");
             }
-            functionBody.AppendLine("}");
-
-            foreach (Table parentTable in table.Parents)
-            {
-                functionBody.AppendLine($"${table.LowerCaseName}[0]->Set{parentTable.SingularName}(Get{parentTable.SingularName}ById($database, ${table.LowerCaseName}[0]->Get{parentTable.PrimaryKeyColumn.Name}()));");
-            }
-
-            functionBody.AppendLine($"return ${table.LowerCaseName}[0];");
-
-            builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
-            builder.AppendLine("}");
 
             return builder.ToString();
         }
@@ -518,7 +534,7 @@ namespace DatabaseFunctionsGenerator
 
             builder.AppendLine(GenerateListToObjectFunction(table));
             builder.AppendLine(GenerateGetFunction(table));
-            builder.AppendLine(GenerateGetByIdFunction(table));
+            builder.AppendLine(GenerateDedicatedRequestFunctions(table));
             builder.AppendLine(GenerateGetParentFunction(table));
             builder.AppendLine(GenerateAddFunction(table));
             builder.AppendLine(GenerateTestAddFunction(table));
