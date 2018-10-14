@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DatabaseFunctionsGenerator.Java;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace DatabaseFunctionsGenerator
         private NotificationSystem _notificationSystem;
         private CSharpGenerator _cSharpGenerator;
         private DocumentationGenerator _documentationGenerator;
+        private JavaGenerator _javaGenerator;
 
         public Generator(Database database)
         {
@@ -28,6 +30,7 @@ namespace DatabaseFunctionsGenerator
             _notificationSystem = new NotificationSystem();
             _cSharpGenerator = new CSharpGenerator(_database);
             _documentationGenerator = new DocumentationGenerator(_database);
+            _javaGenerator = new JavaGenerator(_database);
         }
 
         private void AddMissingFields()
@@ -104,6 +107,7 @@ namespace DatabaseFunctionsGenerator
             Directory.CreateDirectory(path);
             Directory.CreateDirectory($"{path}\\Php");
             Directory.CreateDirectory($"{path}\\Typescript");
+            Directory.CreateDirectory($"{path}\\Java");
 
             //add missing fields
             AddMissingFields();
@@ -114,6 +118,7 @@ namespace DatabaseFunctionsGenerator
             _typescriptGenerator.Generate(path);
             _cSharpGenerator.Generate(path);
             _documentationGenerator.Generate(path);
+            _javaGenerator.Generate(path);
 
             foreach (string file in Directory.EnumerateFiles($"{path}\\Php"))
             {
