@@ -25,7 +25,7 @@ namespace DatabaseFunctionsGenerator.Java
             //generate fields
             foreach (Column column in table.Columns)
             {
-                builder.AppendLine($"private {column.Type.GetCSharpType()} {column.LowerCaseName};");
+                builder.AppendLine($"private {column.Type.GetJavaType()} {column.LowerCaseName};");
             }
 
             foreach (Table parentTable in table.Parents)
@@ -47,22 +47,21 @@ namespace DatabaseFunctionsGenerator.Java
             foreach (Column column in table.Columns)
             {
                 //getter
-                builder.AppendLine($"public {column.Type.GetCSharpType()} {column.Name}");
+                builder.AppendLine($"public {column.Type.GetJavaType()} get{column.Name}()");
                 builder.AppendLine("{");
-                builder.AppendLine("\tget");
-                builder.AppendLine("\t{");
                 {
-                    builder.AppendLine($"\t\treturn _{column.LowerCaseName};");
+                    builder.AppendLine($"\treturn this.{column.LowerCaseName};");
                 }
-                builder.AppendLine("\t}");
+                builder.AppendLine("}");
 
-                //set
-                builder.AppendLine("\tset");
-                builder.AppendLine("\t{");
+                builder.AppendLine();
+
+                //setter
+                builder.AppendLine($"public void set{column.Name}({column.Type.GetJavaType()} {column.LowerCaseName})");
+                builder.AppendLine("{");
                 {
-                    builder.AppendLine($"\t\t_{column.LowerCaseName} = value;");
+                    builder.AppendLine($"\tthis.{column.LowerCaseName} = {column.LowerCaseName};");
                 }
-                builder.AppendLine("\t}");
                 builder.AppendLine("}");
 
                 builder.AppendLine();
@@ -80,7 +79,7 @@ namespace DatabaseFunctionsGenerator.Java
                 }
                 builder.AppendLine("\t}");
 
-                //set
+                //setters
                 builder.AppendLine("\tset");
                 builder.AppendLine("\t{");
                 {
