@@ -70,22 +70,21 @@ namespace DatabaseFunctionsGenerator.Java
             foreach (Table parentTable in table.Parents)
             {
                 //getter
-                builder.AppendLine($"public {parentTable.SingularName} {parentTable.SingularName}");
+                builder.AppendLine($"public {parentTable.SingularName} get{parentTable.SingularName}()");
                 builder.AppendLine("{");
-                builder.AppendLine("\tget");
-                builder.AppendLine("\t{");
                 {
-                    builder.AppendLine($"\t\treturn _{parentTable.LowerCaseSingularName};");
+                    builder.AppendLine($"\treturn this.{parentTable.LowerCaseSingularName};");
                 }
-                builder.AppendLine("\t}");
+                builder.AppendLine("}");
 
-                //setters
-                builder.AppendLine("\tset");
-                builder.AppendLine("\t{");
+                builder.AppendLine();
+
+                //setter
+                builder.AppendLine($"public void set{parentTable.SingularName}({parentTable.SingularName} {parentTable.LowerCaseSingularName})");
+                builder.AppendLine("{");
                 {
-                    builder.AppendLine($"\t\t_{parentTable.LowerCaseSingularName} = value;");
+                    builder.AppendLine($"\tthis.{parentTable.LowerCaseSingularName} = {parentTable.LowerCaseSingularName};");
                 }
-                builder.AppendLine("\t}");
                 builder.AppendLine("}");
 
                 builder.AppendLine();
