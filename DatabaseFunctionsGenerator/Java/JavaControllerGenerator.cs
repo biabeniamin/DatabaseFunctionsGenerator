@@ -24,26 +24,28 @@ namespace DatabaseFunctionsGenerator.Java
             builder = new StringBuilder();
             methodBody = new StringBuilder();
 
-            builder.AppendLine($"public static async Task<List<{table.SingularName}>> Get{table.Name}()");
+            builder.AppendLine($"public static List<{table.SingularName}> get{table.Name}()");
             builder.AppendLine("{");
             {
                 //declaration
                 methodBody.AppendLine($"List<{table.SingularName}> {table.LowerCaseName};");
-                methodBody.AppendLine($"string data;");
+                methodBody.AppendLine($"{table.SingularName}Service service;");
+                methodBody.AppendLine($"Call<List<{table.SingularName}>> call;");
                 methodBody.AppendLine();
 
                 //initialization
-                methodBody.AppendLine($"{table.LowerCaseName} = new List<{table.SingularName}>();");
-                methodBody.AppendLine("data = \"\";");
+                methodBody.AppendLine($"{table.LowerCaseName} = null;");
                 methodBody.AppendLine();
+
+                methodBody.AppendLine($"service = RetrofitInstance.GetRetrofitInstance().create({table.SingularName}Service.class);");
 
                 //try
                 methodBody.AppendLine("try");
                 methodBody.AppendLine("{");
                 {
                     //get data from server
-                    methodBody.AppendLine($"\tdata = await HttpRequestClient.GetRequest(\"get{table.Name}\");");
-                    methodBody.AppendLine($"\t{table.LowerCaseName} = JsonConvert.DeserializeObject<List<{table.SingularName}>>(data);");
+                    methodBody.AppendLine($"\tcall = service.getUsers();");
+                    methodBody.AppendLine($"\t{table.LowerCaseName} = call.execute().body();");
                 }
                 methodBody.AppendLine("}");
 
@@ -51,7 +53,7 @@ namespace DatabaseFunctionsGenerator.Java
                 methodBody.AppendLine("catch(Exception ee)");
                 methodBody.AppendLine("{");
                 {
-                    methodBody.AppendLine($"\tConsole.WriteLine(ee.Message);");
+                    methodBody.AppendLine($"\tSystem.out.println(ee.getMessage());");
                 }
                 methodBody.AppendLine("}");
 
@@ -128,7 +130,7 @@ namespace DatabaseFunctionsGenerator.Java
 
             builder.AppendLine(GenerateApiInterface(table));
 
-            builder.AppendLine($"public static class {table.Name}");
+            builder.AppendLine($"public class {table.Name}");
             builder.AppendLine("{");
             {
                 classBuilder.AppendLine(GenerateGetMethod(table));
