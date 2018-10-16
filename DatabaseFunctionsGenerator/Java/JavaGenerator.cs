@@ -10,12 +10,14 @@ namespace DatabaseFunctionsGenerator.Java
     {
         private Database _database;
         private JavaModelsGenerator _javaModelsGenerator;
+        private JavaControllerGenerator _javaControllerGenerator;
 
         public JavaGenerator(Database database)
         {
             _database = database;
 
             _javaModelsGenerator = new JavaModelsGenerator(_database);
+            _javaControllerGenerator = new JavaControllerGenerator(_database);
         }
 
         public void Generate(string path)
@@ -25,6 +27,7 @@ namespace DatabaseFunctionsGenerator.Java
             javaPath = $"{path}\\Java";
 
             _javaModelsGenerator.Generate(javaPath);
+            _javaControllerGenerator.Generate(javaPath);
         }
     }
 }

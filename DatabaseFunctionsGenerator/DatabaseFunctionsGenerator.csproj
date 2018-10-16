@@ -66,6 +66,7 @@
     <Compile Include="Generator.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="IGenerator.cs" />
+    <Compile Include="Java\JavaControllerGenerator.cs" />
     <Compile Include="Java\JavaGenerator.cs" />
     <Compile Include="Java\JavaModelsGenerator.cs" />
     <Compile Include="Models\Column.cs" />
