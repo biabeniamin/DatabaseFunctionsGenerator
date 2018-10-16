@@ -70,41 +70,33 @@ namespace DatabaseFunctionsGenerator.Java
         private void GenerateController(Table table, string path)
         {
             StringBuilder builder;
-            StringBuilder namespaceBuilder;
             StringBuilder classBuilder;
 
             builder = new StringBuilder();
-            namespaceBuilder = new StringBuilder();
             classBuilder = new StringBuilder();
 
+            
             builder.AppendLine("//generated automatically");
-            builder.AppendLine("using System;");
-            builder.AppendLine("using System.Collections.Generic;");
-            builder.AppendLine("using System.Collections.ObjectModel;");
-            builder.AppendLine("using System.Linq;");
-            builder.AppendLine("using System.Text;");
-            builder.AppendLine("using System.Threading.Tasks; ");
-            builder.AppendLine("using Newtonsoft.Json;");
+            builder.AppendLine("import java.util.List;");
+            builder.AppendLine("import retrofit2.Call;");
+            builder.AppendLine("import retrofit2.Callback;");
+            builder.AppendLine("import retrofit2.Response;");
+            builder.AppendLine("import retrofit2.Retrofit;");
+            builder.AppendLine("import retrofit2.converter.gson.GsonConverterFactory;");
+            builder.AppendLine("import retrofit2.http.GET;");
+            builder.AppendLine("import retrofit2.http.Path;");
 
-            builder.AppendLine("namespace DatabaseFunctionsGenerator");
+            builder.AppendLine($"public static class {table.Name}");
             builder.AppendLine("{");
             {
+                classBuilder.AppendLine(GenerateGetMethod(table));
 
-                namespaceBuilder.AppendLine($"public static class {table.Name}");
-                namespaceBuilder.AppendLine("{");
-                {
-                    classBuilder.AppendLine(GenerateGetMethod(table));
-
-                    namespaceBuilder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(),
+                builder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(),
                         1));
-                }
-                namespaceBuilder.AppendLine("}");
-                builder.AppendLine(Helpers.AddIndentation(namespaceBuilder.ToString(),
-                    1));
             }
             builder.AppendLine("}");
 
-            Helpers.WriteFile($"{path}\\{table.Name}.cs", (builder.ToString()));
+            Helpers.WriteFile($"{path}\\{table.Name}.java", (builder.ToString()));
 
             //return builder.ToString();
         }
