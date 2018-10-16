@@ -67,6 +67,30 @@ namespace DatabaseFunctionsGenerator.Java
             return builder.ToString();
         }
 
+        private string GenerateApiInterface(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder interfaceBuilder;
+
+            builder = new StringBuilder();
+            interfaceBuilder = new StringBuilder();
+
+            builder.AppendLine($"interface {table.SingularName}Service");
+            builder.AppendLine("{");
+            {
+                //get all data
+                interfaceBuilder.AppendLine($"@GET(\"{table.Name}.php?cmd=get{table.Name}\")");
+                interfaceBuilder.AppendLine($"Call<List<{table.SingularName}>> get{table.Name}();");
+                interfaceBuilder.AppendLine();
+
+                builder.AppendLine(Helpers.AddIndentation(interfaceBuilder.ToString(),
+                    1));
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
         private void GenerateController(Table table, string path)
         {
             StringBuilder builder;
@@ -85,6 +109,8 @@ namespace DatabaseFunctionsGenerator.Java
             builder.AppendLine("import retrofit2.converter.gson.GsonConverterFactory;");
             builder.AppendLine("import retrofit2.http.GET;");
             builder.AppendLine("import retrofit2.http.Path;");
+
+            builder.AppendLine(GenerateApiInterface(table));
 
             builder.AppendLine($"public static class {table.Name}");
             builder.AppendLine("{");

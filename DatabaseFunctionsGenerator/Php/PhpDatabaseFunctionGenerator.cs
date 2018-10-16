@@ -408,7 +408,7 @@ namespace DatabaseFunctionsGenerator
 
                 foreach (DedicatedGetRequest dedicatedRequest in table.DedicatedGetRequests)
                 {
-                    builder.AppendLine($"\telse if(\"get{table.SingularName}By{dedicatedRequest.ToString("")}\" == $_GET[\"cmd\"])");
+                    builder.AppendLine($"\telse if(\"get{table.Name}By{dedicatedRequest.ToString("")}\" == $_GET[\"cmd\"])");
                     builder.AppendLine("\t{");
                     {
                         StringBuilder dedicatedBuilder;
