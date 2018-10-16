@@ -91,7 +91,7 @@ namespace DatabaseFunctionsGenerator.Java
 
                     foreach (Column column in dedicatedRequest.Columns)
                     {
-                        interfaceBuilder.Append($"{column.Type.GetJavaType()} {column.LowerCaseName}, ");
+                        interfaceBuilder.Append($"@Query(\"{column.LowerCaseName}\"){column.Type.GetJavaType()} {column.LowerCaseName}, ");
                     }
                     Helpers.RemoveLastApparition(interfaceBuilder, ", ");
 
