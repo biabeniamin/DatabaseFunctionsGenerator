@@ -129,6 +129,23 @@ namespace DatabaseFunctionsGenerator
             return "NOT_EXISTING";
         }
 
+        public string GetJavaType()
+        {
+            switch (Type)
+            {
+                case Types.DateTime:
+                    return "DateTime";
+                case Types.Integer:
+                    return "int";
+                case Types.Text:
+                case Types.Varchar:
+                    return "String";
+                    break;
+            }
+
+            return "NOT_EXISTING";
+        }
+
         public override string ToString()
         {
             return _type.ToString();

@@ -83,6 +83,22 @@ namespace DatabaseFunctionsGenerator.Java
                 interfaceBuilder.AppendLine($"Call<List<{table.SingularName}>> get{table.Name}();");
                 interfaceBuilder.AppendLine();
 
+                //dedicated request
+                foreach(DedicatedGetRequest dedicatedRequest in table.DedicatedGetRequests)
+                {
+                    interfaceBuilder.AppendLine($"@GET(\"{table.Name}.php?cmd=get{table.Name}By{dedicatedRequest.ToString("")}\")");
+                    interfaceBuilder.Append($"Call<List<{table.SingularName}>> get{table.Name}By{dedicatedRequest.ToString("")}(");
+
+                    foreach (Column column in dedicatedRequest.Columns)
+                    {
+                        interfaceBuilder.Append($"{column.Type.GetJavaType()} {column.LowerCaseName}, ");
+                    }
+                    Helpers.RemoveLastApparition(interfaceBuilder, ", ");
+
+                    interfaceBuilder.AppendLine(");");
+                    interfaceBuilder.AppendLine();
+                }
+
                 builder.AppendLine(Helpers.AddIndentation(interfaceBuilder.ToString(),
                     1));
             }
