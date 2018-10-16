@@ -55,9 +55,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="CodeHelpers\HttpRequestClient.cs">
+    <Content Include="CodeHelpers\HttpRequestClient.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
+    </Content>
     <Compile Include="CSharp\CSharpControllerGenerator.cs" />
     <Compile Include="CSharp\CSharpGenerator.cs" />
     <Compile Include="CSharp\CSharpHelpersGenerator.cs" />
@@ -68,6 +68,7 @@
     <Compile Include="IGenerator.cs" />
     <Compile Include="Java\JavaControllerGenerator.cs" />
     <Compile Include="Java\JavaGenerator.cs" />
+    <Compile Include="Java\JavaHelpersGenerator.cs" />
     <Compile Include="Java\JavaModelsGenerator.cs" />
     <Compile Include="Models\Column.cs" />
     <Compile Include="Models\ColumnType.cs" />
@@ -135,6 +136,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CodeHelpers\RetrofitInstace.java">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="CodeHelpers\ServerUrl.ts">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

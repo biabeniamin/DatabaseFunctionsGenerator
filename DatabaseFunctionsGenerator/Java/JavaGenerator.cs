@@ -9,8 +9,10 @@ namespace DatabaseFunctionsGenerator.Java
     class JavaGenerator : IGenerator
     {
         private Database _database;
+
         private JavaModelsGenerator _javaModelsGenerator;
         private JavaControllerGenerator _javaControllerGenerator;
+        private JavaHelpersGenerator _javaHelpersGenerator;
 
         public JavaGenerator(Database database)
         {
@@ -18,6 +20,7 @@ namespace DatabaseFunctionsGenerator.Java
 
             _javaModelsGenerator = new JavaModelsGenerator(_database);
             _javaControllerGenerator = new JavaControllerGenerator(_database);
+            _javaHelpersGenerator = new JavaHelpersGenerator(_database);
         }
 
         public void Generate(string path)
@@ -28,6 +31,7 @@ namespace DatabaseFunctionsGenerator.Java
 
             _javaModelsGenerator.Generate(javaPath);
             _javaControllerGenerator.Generate(javaPath);
+            _javaHelpersGenerator.Generate(javaPath);
         }
     }
 }

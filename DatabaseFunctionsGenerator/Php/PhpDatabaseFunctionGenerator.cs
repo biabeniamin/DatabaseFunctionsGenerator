@@ -135,7 +135,7 @@ namespace DatabaseFunctionsGenerator
                 functionBody.AppendLine($"if(0== count(${table.LowerCaseName}))");
                 functionBody.AppendLine("{");
                 {
-                    functionBody.AppendLine($"\treturn GetEmpty{table.SingularName}();");
+                    functionBody.AppendLine($"\treturn [GetEmpty{table.SingularName}()];");
                 }
                 functionBody.AppendLine("}");
 
