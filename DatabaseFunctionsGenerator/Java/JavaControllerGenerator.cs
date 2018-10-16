@@ -16,7 +16,7 @@ namespace DatabaseFunctionsGenerator.Java
             _database = database;
         }
 
-        private string GenerateGetMethod(Table table)
+        private string GenerateSyncGetMethod(Table table)
         {
             StringBuilder builder;
             StringBuilder methodBody;
@@ -24,6 +24,45 @@ namespace DatabaseFunctionsGenerator.Java
             builder = new StringBuilder();
             methodBody = new StringBuilder();
 
+            builder.AppendLine($"public static List<{table.SingularName}> get{table.Name}(Call<List<{table.SingularName}>> call)");
+            builder.AppendLine("{");
+            {
+                //declaration
+                methodBody.AppendLine($"List<{table.SingularName}> {table.LowerCaseName};");
+                methodBody.AppendLine();
+
+                //initialization
+                methodBody.AppendLine($"{table.LowerCaseName} = null;");
+                methodBody.AppendLine();
+
+                //try
+                methodBody.AppendLine("try");
+                methodBody.AppendLine("{");
+                {
+                    //get data from server
+                    methodBody.AppendLine($"\t{table.LowerCaseName} = call.execute().body();");
+                }
+                methodBody.AppendLine("}");
+
+                //catch
+                methodBody.AppendLine("catch(Exception ee)");
+                methodBody.AppendLine("{");
+                {
+                    methodBody.AppendLine($"\tSystem.out.println(ee.getMessage());");
+                }
+                methodBody.AppendLine("}");
+
+                methodBody.AppendLine();
+
+                //return
+                methodBody.AppendLine($"return {table.LowerCaseName};");
+                builder.AppendLine(Helpers.AddIndentation(methodBody.ToString(),
+                    1));
+            }
+            builder.AppendLine("}");
+            methodBody.Clear();
+
+            //generate the get to get all data
             builder.AppendLine($"public static List<{table.SingularName}> get{table.Name}()");
             builder.AppendLine("{");
             {
@@ -45,7 +84,7 @@ namespace DatabaseFunctionsGenerator.Java
                 {
                     //get data from server
                     methodBody.AppendLine($"\tcall = service.getUsers();");
-                    methodBody.AppendLine($"\t{table.LowerCaseName} = call.execute().body();");
+                    methodBody.AppendLine($"\t{table.LowerCaseName} = get{table.Name}(call);");
                 }
                 methodBody.AppendLine("}");
 
@@ -65,6 +104,80 @@ namespace DatabaseFunctionsGenerator.Java
                     1));
             }
             builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
+        private string GenerateSyncDedicatedGetMethod(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder methodBody;
+
+            builder = new StringBuilder();
+            methodBody = new StringBuilder();
+
+            foreach (DedicatedGetRequest dedicatedRequest in table.DedicatedGetRequests)
+            {
+                builder.Append($"public static List<{table.SingularName}> get{table.Name}By{dedicatedRequest.ToString("")}(");
+
+                foreach (Column column in dedicatedRequest.Columns)
+                {
+                    builder.Append($"{column.Type.GetJavaType()} {column.LowerCaseName}, ");
+                }
+                Helpers.RemoveLastApparition(builder, ", ");
+
+                builder.AppendLine($")");
+                builder.AppendLine("{");
+                {
+                    //declaration
+                    methodBody.AppendLine($"List<{table.SingularName}> {table.LowerCaseName};");
+                    methodBody.AppendLine($"{table.SingularName}Service service;");
+                    methodBody.AppendLine($"Call<List<{table.SingularName}>> call;");
+                    methodBody.AppendLine();
+
+                    //initialization
+                    methodBody.AppendLine($"{table.LowerCaseName} = null;");
+                    methodBody.AppendLine();
+
+                    methodBody.AppendLine($"service = RetrofitInstance.GetRetrofitInstance().create({table.SingularName}Service.class);");
+
+                    //try
+                    methodBody.AppendLine("try");
+                    methodBody.AppendLine("{");
+                    {
+                        //get data from server
+                        methodBody.Append($"\tcall = service.getUsersBy{dedicatedRequest.ToString("")}(");
+
+                        foreach (Column column in dedicatedRequest.Columns)
+                        {
+                            methodBody.Append($"{column.LowerCaseName}, ");
+                        }
+                        Helpers.RemoveLastApparition(methodBody, ", ");
+
+                        methodBody.AppendLine($");");
+                        methodBody.AppendLine($"\t{table.LowerCaseName} = get{table.Name}(call);");
+                    }
+                    methodBody.AppendLine("}");
+
+                    //catch
+                    methodBody.AppendLine("catch(Exception ee)");
+                    methodBody.AppendLine("{");
+                    {
+                        methodBody.AppendLine($"\tSystem.out.println(ee.getMessage());");
+                    }
+                    methodBody.AppendLine("}");
+
+                    methodBody.AppendLine();
+
+                    //return
+                    methodBody.AppendLine($"return {table.LowerCaseName};");
+                    builder.AppendLine(Helpers.AddIndentation(methodBody.ToString(),
+                        1));
+                }
+                builder.AppendLine("}");
+                builder.AppendLine();
+                methodBody.Clear();
+            }
 
             return builder.ToString();
         }
@@ -133,7 +246,8 @@ namespace DatabaseFunctionsGenerator.Java
             builder.AppendLine($"public class {table.Name}");
             builder.AppendLine("{");
             {
-                classBuilder.AppendLine(GenerateGetMethod(table));
+                classBuilder.AppendLine(GenerateSyncGetMethod(table));
+                classBuilder.AppendLine(GenerateSyncDedicatedGetMethod(table));
 
                 builder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(),
                         1));
