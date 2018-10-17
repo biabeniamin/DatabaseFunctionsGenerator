@@ -267,6 +267,82 @@ namespace DatabaseFunctionsGenerator.Java
             return builder.ToString();
         }
 
+        private string GenerateAsyncDedicatedGetMethod(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder methodBody;
+
+            builder = new StringBuilder();
+            methodBody = new StringBuilder();
+
+            foreach (DedicatedGetRequest dedicatedRequest in table.DedicatedGetRequests)
+            {
+                builder.Append($"public static void get{table.Name}By{dedicatedRequest.ToString("")}(");
+
+                foreach (Column column in dedicatedRequest.Columns)
+                {
+                    builder.Append($"{column.Type.GetJavaType()} {column.LowerCaseName}, ");
+                }
+
+                //add callback parameter
+                builder.Append($"Callback<List<{table.SingularName}>> callback, ");
+
+                Helpers.RemoveLastApparition(builder, ", ");
+
+                builder.AppendLine($")");
+                builder.AppendLine("{");
+                {
+                    //declaration
+                    methodBody.AppendLine($"List<{table.SingularName}> {table.LowerCaseName};");
+                    methodBody.AppendLine($"{table.SingularName}Service service;");
+                    methodBody.AppendLine($"Call<List<{table.SingularName}>> call;");
+                    methodBody.AppendLine();
+
+                    //initialization
+                    methodBody.AppendLine($"{table.LowerCaseName} = null;");
+                    methodBody.AppendLine();
+
+                    methodBody.AppendLine($"service = RetrofitInstance.GetRetrofitInstance().create({table.SingularName}Service.class);");
+
+                    //try
+                    methodBody.AppendLine("try");
+                    methodBody.AppendLine("{");
+                    {
+                        //get data from server
+                        methodBody.Append($"\tcall = service.getUsersBy{dedicatedRequest.ToString("")}(");
+
+                        foreach (Column column in dedicatedRequest.Columns)
+                        {
+                            methodBody.Append($"{column.LowerCaseName}, ");
+                        }
+                        Helpers.RemoveLastApparition(methodBody, ", ");
+
+                        methodBody.AppendLine($");");
+                        methodBody.AppendLine($"\tget{table.Name}(call, callback);");
+                    }
+                    methodBody.AppendLine("}");
+
+                    //catch
+                    methodBody.AppendLine("catch(Exception ee)");
+                    methodBody.AppendLine("{");
+                    {
+                        methodBody.AppendLine($"\tSystem.out.println(ee.getMessage());");
+                    }
+                    methodBody.AppendLine("}");
+
+                    methodBody.AppendLine();
+
+                    builder.AppendLine(Helpers.AddIndentation(methodBody.ToString(),
+                        1));
+                }
+                builder.AppendLine("}");
+                builder.AppendLine();
+                methodBody.Clear();
+            }
+
+            return builder.ToString();
+        }
+
         private string GenerateApiInterface(Table table)
         {
             StringBuilder builder;
@@ -334,6 +410,7 @@ namespace DatabaseFunctionsGenerator.Java
                 classBuilder.AppendLine(GenerateSyncGetMethod(table));
                 classBuilder.AppendLine(GenerateSyncDedicatedGetMethod(table));
                 classBuilder.AppendLine(GenerateAsyncGetMethod(table));
+                classBuilder.AppendLine(GenerateAsyncDedicatedGetMethod(table));
 
                 builder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(),
                         1));
