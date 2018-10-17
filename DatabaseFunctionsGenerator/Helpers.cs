@@ -174,6 +174,14 @@ namespace DatabaseFunctionsGenerator
 
             return "";
         }
+
+        public static void RemoveLastApparition(StringBuilder builder, string deleted)
+        {
+            if(builder.ToString().Contains(deleted))
+            {
+                builder.Remove(builder.ToString().LastIndexOf(deleted), deleted.Length);
+            }
+        }
     }
 
 }

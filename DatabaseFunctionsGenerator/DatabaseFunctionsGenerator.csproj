@@ -55,37 +55,42 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="CodeHelpers\HttpRequestClient.cs">
+    <Content Include="CodeHelpers\HttpRequestClient.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Column.cs" />
-    <Compile Include="CSharpControllerGenerator.cs" />
-    <Compile Include="CSharpGenerator.cs" />
-    <Compile Include="CSharpHelpersGenerator.cs" />
-    <Compile Include="CSharpModelsGenerator.cs" />
-    <Compile Include="Database.cs" />
-    <Compile Include="DedicatedGetRequest.cs" />
-    <Compile Include="DocumentationGenerator.cs" />
+    </Content>
+    <Compile Include="CSharp\CSharpControllerGenerator.cs" />
+    <Compile Include="CSharp\CSharpGenerator.cs" />
+    <Compile Include="CSharp\CSharpHelpersGenerator.cs" />
+    <Compile Include="CSharp\CSharpModelsGenerator.cs" />
+    <Compile Include="Documentation\DocumentationGenerator.cs" />
     <Compile Include="Generator.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="IGenerator.cs" />
+    <Compile Include="Java\JavaAdapterGenerator.cs" />
+    <Compile Include="Java\JavaControllerGenerator.cs" />
+    <Compile Include="Java\JavaGenerator.cs" />
+    <Compile Include="Java\JavaHelpersGenerator.cs" />
+    <Compile Include="Java\JavaModelsGenerator.cs" />
+    <Compile Include="Models\Column.cs" />
+    <Compile Include="Models\ColumnType.cs" />
+    <Compile Include="Models\Database.cs" />
+    <Compile Include="Models\DedicatedGetRequest.cs" />
+    <Compile Include="Models\Relation.cs" />
+    <Compile Include="Models\Table.cs" />
+    <Compile Include="Models\Types.cs" />
+    <Compile Include="Mysql\SqlGenerator.cs" />
     <Compile Include="NotificationSystem.cs" />
-    <Compile Include="PhpDatabaseFunctionGenerator.cs" />
-    <Compile Include="PhpGenerator.cs" />
-    <Compile Include="PhpHelpersGenerator.cs" />
-    <Compile Include="PhpModelsGenerator.cs" />
-    <Compile Include="Relation.cs" />
+    <Compile Include="Php\PhpDatabaseFunctionGenerator.cs" />
+    <Compile Include="Php\PhpGenerator.cs" />
+    <Compile Include="Php\PhpHelpersGenerator.cs" />
+    <Compile Include="Php\PhpModelsGenerator.cs" />
     <Compile Include="RequestTextMenuGenerator.cs" />
-    <Compile Include="SqlGenerator.cs" />
-    <Compile Include="Table.cs" />
-    <Compile Include="ColumnType.cs" />
-    <Compile Include="Types.cs" />
-    <Compile Include="TypescriptComponentGenerator.cs" />
-    <Compile Include="TypescriptGenerator.cs" />
-    <Compile Include="TypescriptGetDataGenerator.cs" />
-    <Compile Include="TypescriptHelpersGenerator.cs" />
-    <Compile Include="TypescriptModelsGenerator.cs" />
-    <Compile Include="TypescriptComponentViewGenerator.cs" />
+    <Compile Include="Typescript\TypescriptComponentGenerator.cs" />
+    <Compile Include="Typescript\TypescriptComponentViewGenerator.cs" />
+    <Compile Include="Typescript\TypescriptGenerator.cs" />
+    <Compile Include="Typescript\TypescriptGetDataGenerator.cs" />
+    <Compile Include="Typescript\TypescriptHelpersGenerator.cs" />
+    <Compile Include="Typescript\TypescriptModelsGenerator.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -132,6 +137,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CodeHelpers\RetrofitInstance.java">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="CodeHelpers\ServerUrl.ts">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

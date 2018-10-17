@@ -135,7 +135,7 @@ namespace DatabaseFunctionsGenerator
                 functionBody.AppendLine($"if(0== count(${table.LowerCaseName}))");
                 functionBody.AppendLine("{");
                 {
-                    functionBody.AppendLine($"\treturn GetEmpty{table.SingularName}();");
+                    functionBody.AppendLine($"\treturn [GetEmpty{table.SingularName}()];");
                 }
                 functionBody.AppendLine("}");
 
@@ -408,7 +408,7 @@ namespace DatabaseFunctionsGenerator
 
                 foreach (DedicatedGetRequest dedicatedRequest in table.DedicatedGetRequests)
                 {
-                    builder.AppendLine($"\telse if(\"get{table.SingularName}By{dedicatedRequest.ToString("")}\" == $_GET[\"cmd\"])");
+                    builder.AppendLine($"\telse if(\"get{table.Name}By{dedicatedRequest.ToString("")}\" == $_GET[\"cmd\"])");
                     builder.AppendLine("\t{");
                     {
                         StringBuilder dedicatedBuilder;
