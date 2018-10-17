@@ -66,6 +66,7 @@
     <Compile Include="Generator.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="IGenerator.cs" />
+    <Compile Include="Java\JavaAdapterGenerator.cs" />
     <Compile Include="Java\JavaControllerGenerator.cs" />
     <Compile Include="Java\JavaGenerator.cs" />
     <Compile Include="Java\JavaHelpersGenerator.cs" />
@@ -136,7 +137,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CodeHelpers\RetrofitInstace.java">
+    <Content Include="CodeHelpers\RetrofitInstance.java">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="CodeHelpers\ServerUrl.ts">
