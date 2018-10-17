@@ -25,6 +25,8 @@ namespace DatabaseFunctionsGenerator.Java
 
             //replace url
             retrofitInstace = retrofitInstace.Replace("!--url--!", _database.ServerUrl);
+            //replace package name
+            retrofitInstace = retrofitInstace.Replace("!--packageName--!", _database.JavaPackageName);
 
             Helpers.WriteFile($"{path}\\Controllers\\RetrofitInstace.java", retrofitInstace);
         }

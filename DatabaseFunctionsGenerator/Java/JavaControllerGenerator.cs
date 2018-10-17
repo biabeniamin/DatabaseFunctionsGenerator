@@ -489,7 +489,7 @@ namespace DatabaseFunctionsGenerator.Java
             return builder.ToString();
         }
 
-        private void GenerateController(Table table, string path)
+        private void GenerateController(Table table, string path, string packageName)
         {
             StringBuilder builder;
             StringBuilder classBuilder;
@@ -499,6 +499,7 @@ namespace DatabaseFunctionsGenerator.Java
 
             
             builder.AppendLine("//generated automatically");
+            builder.AppendLine($"package {packageName};");
             builder.AppendLine("import java.util.List;");
             builder.AppendLine("import retrofit2.Call;");
             builder.AppendLine("import retrofit2.Callback;");
@@ -542,7 +543,7 @@ namespace DatabaseFunctionsGenerator.Java
 
             foreach (Table table in _database.Tables)
             {
-                GenerateController(table, modelsPath);
+                GenerateController(table, modelsPath, _database.JavaPackageName);
             }
         }
     }
