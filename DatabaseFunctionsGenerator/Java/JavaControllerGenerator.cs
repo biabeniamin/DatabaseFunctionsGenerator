@@ -394,6 +394,53 @@ namespace DatabaseFunctionsGenerator.Java
             return builder.ToString();
         }
 
+        private string GenerateAsyncAddMethod(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder methodBody;
+
+            builder = new StringBuilder();
+            methodBody = new StringBuilder();
+
+            builder.AppendLine($"public static void add{table.SingularName}({table.SingularName} {table.LowerCaseSingularName}, Callback<{table.SingularName}> callback)");
+            builder.AppendLine("{");
+            {
+                //declaration
+                methodBody.AppendLine($"{table.SingularName}Service service;");
+                methodBody.AppendLine($"Call<{table.SingularName}> call;");
+                methodBody.AppendLine();
+
+                //initialization
+                methodBody.AppendLine();
+
+                methodBody.AppendLine($"service = RetrofitInstance.GetRetrofitInstance().create({table.SingularName}Service.class);");
+
+                //try
+                methodBody.AppendLine("try");
+                methodBody.AppendLine("{");
+                {
+                    //get data from server
+                    methodBody.AppendLine($"\tcall = service.add{table.SingularName}({table.LowerCaseSingularName});");
+                    methodBody.AppendLine($"\tcall.enqueue(callback);");
+                }
+                methodBody.AppendLine("}");
+
+                //catch
+                methodBody.AppendLine("catch(Exception ee)");
+                methodBody.AppendLine("{");
+                {
+                    methodBody.AppendLine($"\tSystem.out.println(ee.getMessage());");
+                }
+                methodBody.AppendLine("}");
+
+                builder.AppendLine(Helpers.AddIndentation(methodBody.ToString(),
+                    1));
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
 
         private string GenerateApiInterface(Table table)
         {
@@ -427,6 +474,13 @@ namespace DatabaseFunctionsGenerator.Java
                     interfaceBuilder.AppendLine();
                 }
 
+                //add metrhod
+                //@POST("Users.php?cmd=addUser")
+                //Call<User> addUser(@Body User user);
+                interfaceBuilder.AppendLine($"@POST(\"{table.Name}.php?cmd=add{table.SingularName}\")");
+                interfaceBuilder.Append($"Call<{table.SingularName}> add{table.SingularName}(@Body {table.SingularName} {table.LowerCaseSingularName});");
+                interfaceBuilder.AppendLine();
+
                 builder.AppendLine(Helpers.AddIndentation(interfaceBuilder.ToString(),
                     1));
             }
@@ -453,6 +507,8 @@ namespace DatabaseFunctionsGenerator.Java
             builder.AppendLine("import retrofit2.converter.gson.GsonConverterFactory;");
             builder.AppendLine("import retrofit2.http.GET;");
             builder.AppendLine("import retrofit2.http.Query;");
+            builder.AppendLine("import retrofit2.http.POST;");
+            builder.AppendLine("import retrofit2.http.Body;");
 
             builder.AppendLine(GenerateApiInterface(table));
 
@@ -464,6 +520,7 @@ namespace DatabaseFunctionsGenerator.Java
                 classBuilder.AppendLine(GenerateAsyncGetMethod(table));
                 classBuilder.AppendLine(GenerateAsyncDedicatedGetMethod(table));
                 classBuilder.AppendLine(GenerateSyncAddMethod(table));
+                classBuilder.AppendLine(GenerateAsyncAddMethod(table));
 
                 builder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(),
                         1));
