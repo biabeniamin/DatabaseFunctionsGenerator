@@ -343,6 +343,58 @@ namespace DatabaseFunctionsGenerator.Java
             return builder.ToString();
         }
 
+        private string GenerateSyncAddMethod(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder methodBody;
+
+            builder = new StringBuilder();
+            methodBody = new StringBuilder();
+
+            builder.AppendLine($"public static {table.SingularName} add{table.SingularName}({table.SingularName} {table.LowerCaseSingularName})");
+            builder.AppendLine("{");
+            {
+                //declaration
+                methodBody.AppendLine($"{table.SingularName}Service service;");
+                methodBody.AppendLine($"Call<{table.SingularName}> call;");
+                methodBody.AppendLine();
+
+                //initialization
+                methodBody.AppendLine();
+
+                methodBody.AppendLine($"service = RetrofitInstance.GetRetrofitInstance().create({table.SingularName}Service.class);");
+
+                //try
+                methodBody.AppendLine("try");
+                methodBody.AppendLine("{");
+                {
+                    //get data from server
+                    methodBody.AppendLine($"\tcall = service.add{table.SingularName}({table.LowerCaseSingularName});");
+                    methodBody.AppendLine($"\t{table.LowerCaseSingularName} = call.execute().body();");
+                }
+                methodBody.AppendLine("}");
+
+                //catch
+                methodBody.AppendLine("catch(Exception ee)");
+                methodBody.AppendLine("{");
+                {
+                    methodBody.AppendLine($"\tSystem.out.println(ee.getMessage());");
+                }
+                methodBody.AppendLine("}");
+
+                methodBody.AppendLine();
+
+                //return
+                methodBody.AppendLine($"return {table.LowerCaseSingularName};");
+                builder.AppendLine(Helpers.AddIndentation(methodBody.ToString(),
+                    1));
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
+
         private string GenerateApiInterface(Table table)
         {
             StringBuilder builder;
@@ -411,6 +463,7 @@ namespace DatabaseFunctionsGenerator.Java
                 classBuilder.AppendLine(GenerateSyncDedicatedGetMethod(table));
                 classBuilder.AppendLine(GenerateAsyncGetMethod(table));
                 classBuilder.AppendLine(GenerateAsyncDedicatedGetMethod(table));
+                classBuilder.AppendLine(GenerateSyncAddMethod(table));
 
                 builder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(),
                         1));
