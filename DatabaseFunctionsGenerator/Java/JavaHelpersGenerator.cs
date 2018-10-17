@@ -21,14 +21,14 @@ namespace DatabaseFunctionsGenerator.Java
             string retrofitInstace;
 
             builder = new StringBuilder();
-            retrofitInstace = Helpers.ReadFile("CodeHelpers\\RetrofitInstace.java");
+            retrofitInstace = Helpers.ReadFile("CodeHelpers\\RetrofitInstance.java");
 
             //replace url
             retrofitInstace = retrofitInstace.Replace("!--url--!", _database.ServerUrl);
             //replace package name
             retrofitInstace = retrofitInstace.Replace("!--packageName--!", _database.JavaPackageName);
 
-            Helpers.WriteFile($"{path}\\Controllers\\RetrofitInstace.java", retrofitInstace);
+            Helpers.WriteFile($"{path}\\Controllers\\RetrofitInstance.java", retrofitInstace);
         }
     }
 }
