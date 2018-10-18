@@ -216,7 +216,7 @@ namespace DatabaseFunctionsGenerator.Java
             return builder.ToString();
         }
 
-        private void GenerateModel(Table table, string path)
+        private void GenerateModel(Table table, string path, string packageName)
         {
             StringBuilder builder;
             StringBuilder namespaceBuilder;
@@ -227,12 +227,17 @@ namespace DatabaseFunctionsGenerator.Java
             classBuilder = new StringBuilder();
 
             builder.AppendLine("//generated automatically");
-            builder.AppendLine("using System;");
-            builder.AppendLine("using System.Collections.Generic;");
-            builder.AppendLine("using System.Collections.ObjectModel;");
-            builder.AppendLine("using System.Linq;");
-            builder.AppendLine("using System.Text;");
-            builder.AppendLine("using System.Threading.Tasks; ");
+            builder.AppendLine($"package {packageName};");
+            builder.AppendLine("import java.util.List;");
+            builder.AppendLine("import retrofit2.Call;");
+            builder.AppendLine("import retrofit2.Callback;");
+            builder.AppendLine("import retrofit2.Response;");
+            builder.AppendLine("import retrofit2.Retrofit;");
+            builder.AppendLine("import retrofit2.converter.gson.GsonConverterFactory;");
+            builder.AppendLine("import retrofit2.http.GET;");
+            builder.AppendLine("import retrofit2.http.Query;");
+            builder.AppendLine("import retrofit2.http.POST;");
+            builder.AppendLine("import retrofit2.http.Body;");
             builder.AppendLine();
 
             builder.AppendLine($"public class {table.SingularName}");
@@ -272,7 +277,7 @@ namespace DatabaseFunctionsGenerator.Java
 
             foreach (Table table in _database.Tables)
             {
-                GenerateModel(table, modelsPath);
+                GenerateModel(table, modelsPath, _database.JavaPackageName);
             }
         }
     }

@@ -13,6 +13,14 @@ namespace DatabaseFunctionsGenerator
         private ObservableCollection<Relation> _relations;
         private string _serverUrl = "http:/localhost/generator/test/";
 
+        public string JavaPackageName
+        {
+            get
+            {
+                return "com.example.biabe.testretrofit";
+            }
+        }
+
         public string ServerUrl
         {
             get { return _serverUrl; }
