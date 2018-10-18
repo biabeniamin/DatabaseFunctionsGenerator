@@ -131,32 +131,33 @@ namespace DatabaseFunctionsGenerator.Java
         private string GenerateEmptyConstructor(Table table)
         {
             StringBuilder builder;
+            StringBuilder constructorBuilder;
 
             builder = new StringBuilder();
+            constructorBuilder = new StringBuilder();
 
             builder.AppendLine($"public {table.SingularName}()");
 
-            builder.AppendLine("\t :this(");
-            {
-                foreach (Column column in table.EditableColumns)
-                {
-                    builder.AppendLine($"\t\t{Helpers.GetDefaultJavaColumnData(column.Type.Type)}, //{column.Name}");
-                }
-                if (builder.ToString().Contains(','))
-                {
-                    builder.Remove(builder.ToString().LastIndexOf(','),
-                        1);
-                }
-            }
-            builder.AppendLine("\t)");
+            
 
             builder.AppendLine("{");
             {
+                constructorBuilder.AppendLine("this(");
+                {
+                    foreach (Column column in table.EditableColumns)
+                    {
+                        constructorBuilder.AppendLine($"\t{Helpers.GetDefaultJavaColumnData(column.Type.Type)}, //{column.Name}");
+                    }
+                    Helpers.RemoveLastApparition(constructorBuilder, ",");
+                }
+                constructorBuilder.AppendLine(");");
 
                 foreach (Column column in table.NonEditableColumns)
                 {
-                    builder.AppendLine($"\tthis.{column.LowerCaseName} = {Helpers.GetDefaultJavaColumnData(column.Type.Type)};");
+                    constructorBuilder.AppendLine($"this.{column.LowerCaseName} = {Helpers.GetDefaultJavaColumnData(column.Type.Type)};");
                 }
+                builder.AppendLine(Helpers.AddIndentation(constructorBuilder.ToString(),
+                    1));
 
             }
             builder.AppendLine("}");
@@ -218,11 +219,9 @@ namespace DatabaseFunctionsGenerator.Java
         private void GenerateModel(Table table, string path, string packageName)
         {
             StringBuilder builder;
-            StringBuilder namespaceBuilder;
             StringBuilder classBuilder;
 
             builder = new StringBuilder();
-            namespaceBuilder = new StringBuilder();
             classBuilder = new StringBuilder();
 
             builder.AppendLine("//generated automatically");
@@ -256,9 +255,6 @@ namespace DatabaseFunctionsGenerator.Java
                 builder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(),
                         1));
             }
-            builder.AppendLine("}");
-            builder.AppendLine(Helpers.AddIndentation(namespaceBuilder.ToString(),
-                1));
             builder.AppendLine("}");
 
             Helpers.WriteFile($"{path}\\{table.SingularName}.cs", (builder.ToString()));
