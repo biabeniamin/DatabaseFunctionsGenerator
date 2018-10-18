@@ -16,7 +16,7 @@ namespace DatabaseFunctionsGenerator.Java
             _database = database;
         }
 
-        private string GenerateSyncGetMethod(Table table)
+        private string GenerateGetViewMethod(Table table)
         {
             StringBuilder builder;
             StringBuilder methodBody;
@@ -24,82 +24,48 @@ namespace DatabaseFunctionsGenerator.Java
             builder = new StringBuilder();
             methodBody = new StringBuilder();
 
-            builder.AppendLine($"public static List<{table.SingularName}> get{table.Name}(Call<List<{table.SingularName}>> call)");
+            builder.AppendLine("@Override");
+            builder.AppendLine($"public View getView(int position, View convertView, ViewGroup parent)");
             builder.AppendLine("{");
             {
                 //declaration
-                methodBody.AppendLine($"List<{table.SingularName}> {table.LowerCaseName};");
+                methodBody.AppendLine($"{table.SingularName} {table.LowerCaseSingularName};");
+                foreach(Column column in table.Columns)
+                {
+                    methodBody.AppendLine($"TextView {column.LowerCaseName}TextBox;");
+                }
                 methodBody.AppendLine();
 
                 //initialization
-                methodBody.AppendLine($"{table.LowerCaseName} = null;");
+                methodBody.AppendLine($"{table.LowerCaseName} = getItem(position);");
                 methodBody.AppendLine();
 
                 //try
-                methodBody.AppendLine("try");
+                methodBody.AppendLine("if(null == convertView)");
                 methodBody.AppendLine("{");
                 {
                     //get data from server
-                    methodBody.AppendLine($"\t{table.LowerCaseName} = call.execute().body();");
+                    methodBody.AppendLine($"\tconvertView = LayoutInflater.from(context).inflate(R.layout.user_view, parent, false);");
                 }
                 methodBody.AppendLine("}");
+                methodBody.AppendLine();
 
-                //catch
-                methodBody.AppendLine("catch(Exception ee)");
-                methodBody.AppendLine("{");
+                //get text boxes by id
+                foreach (Column column in table.Columns)
                 {
-                    methodBody.AppendLine($"\tSystem.out.println(ee.getMessage());");
+                    methodBody.AppendLine($"{column.LowerCaseName}TextBox = (TextView) convertView.findViewById(R.id.{column.LowerCaseName}TextBox);");
                 }
-                methodBody.AppendLine("}");
+                methodBody.AppendLine();
 
+                //populate text boxes
+                foreach (Column column in table.Columns)
+                {
+                    methodBody.AppendLine($"{column.LowerCaseName}TextBox.setText({table.LowerCaseSingularName}.get{column.Name}());");
+                }
                 methodBody.AppendLine();
 
                 //return
-                methodBody.AppendLine($"return {table.LowerCaseName};");
-                builder.AppendLine(Helpers.AddIndentation(methodBody.ToString(),
-                    1));
-            }
-            builder.AppendLine("}");
-            methodBody.Clear();
-
-            //generate the get to get all data
-            builder.AppendLine($"public static List<{table.SingularName}> get{table.Name}()");
-            builder.AppendLine("{");
-            {
-                //declaration
-                methodBody.AppendLine($"List<{table.SingularName}> {table.LowerCaseName};");
-                methodBody.AppendLine($"{table.SingularName}Service service;");
-                methodBody.AppendLine($"Call<List<{table.SingularName}>> call;");
-                methodBody.AppendLine();
-
-                //initialization
-                methodBody.AppendLine($"{table.LowerCaseName} = null;");
-                methodBody.AppendLine();
-
-                methodBody.AppendLine($"service = RetrofitInstance.GetRetrofitInstance().create({table.SingularName}Service.class);");
-
-                //try
-                methodBody.AppendLine("try");
-                methodBody.AppendLine("{");
-                {
-                    //get data from server
-                    methodBody.AppendLine($"\tcall = service.getUsers();");
-                    methodBody.AppendLine($"\t{table.LowerCaseName} = get{table.Name}(call);");
-                }
-                methodBody.AppendLine("}");
-
-                //catch
-                methodBody.AppendLine("catch(Exception ee)");
-                methodBody.AppendLine("{");
-                {
-                    methodBody.AppendLine($"\tSystem.out.println(ee.getMessage());");
-                }
-                methodBody.AppendLine("}");
-
-                methodBody.AppendLine();
-
-                //return
-                methodBody.AppendLine($"return {table.LowerCaseName};");
+                methodBody.AppendLine($"return convertView;");
                 builder.AppendLine(Helpers.AddIndentation(methodBody.ToString(),
                     1));
             }
@@ -131,7 +97,12 @@ namespace DatabaseFunctionsGenerator.Java
             builder.AppendLine($"public class {table.SingularName}Adapter extends BaseAdapter");
             builder.AppendLine("{");
             {
-                classBuilder.AppendLine(GenerateSyncGetMethod(table));
+                //declaration
+                classBuilder.AppendLine($"List<{table.SingularName}> {table.LowerCaseName};");
+                classBuilder.AppendLine($"Context context;");
+                classBuilder.AppendLine();
+
+                classBuilder.AppendLine(GenerateGetViewMethod(table));
 
                 builder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(),
                         1));
