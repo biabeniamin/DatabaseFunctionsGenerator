@@ -140,6 +140,27 @@ namespace DatabaseFunctionsGenerator.Java
             return builder.ToString();
         }
 
+        private string GenerateConstuctor(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder methodBody;
+
+            builder = new StringBuilder();
+            methodBody = new StringBuilder();
+
+            builder.AppendLine($"public {table.SingularName}Adapter(List<{table.SingularName}> {table.LowerCaseName}, Context context)");
+            builder.AppendLine("{");
+            {
+                //return
+                methodBody.AppendLine($"this.{table.LowerCaseName} = {table.LowerCaseName};");
+                methodBody.AppendLine($"this.context = context;");
+                builder.AppendLine(Helpers.AddIndentation(methodBody.ToString(),
+                    1));
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
 
         private void GenerateController(Table table, string path, string packageName)
         {
@@ -173,6 +194,7 @@ namespace DatabaseFunctionsGenerator.Java
                 classBuilder.AppendLine(GenerateGetViewMethod(table));
                 classBuilder.AppendLine(GenerateGetItemMethod(table));
                 classBuilder.AppendLine(GenerateGetItemIdMethod(table));
+                classBuilder.AppendLine(GenerateConstuctor(table));
 
                 builder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(),
                         1));
