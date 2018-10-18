@@ -14,6 +14,7 @@ namespace DatabaseFunctionsGenerator.Java
         private JavaControllerGenerator _javaControllerGenerator;
         private JavaHelpersGenerator _javaHelpersGenerator;
         private JavaAdapterGenerator _javaAdapterGenerator;
+        JavaListViewLayoutGenerator _javaListViewLayoutGenerator;
 
         public JavaGenerator(Database database)
         {
@@ -23,6 +24,7 @@ namespace DatabaseFunctionsGenerator.Java
             _javaControllerGenerator = new JavaControllerGenerator(_database);
             _javaHelpersGenerator = new JavaHelpersGenerator(_database);
             _javaAdapterGenerator = new JavaAdapterGenerator(_database);
+            _javaListViewLayoutGenerator = new JavaListViewLayoutGenerator(_database);
         }
 
         public void Generate(string path)
@@ -35,6 +37,7 @@ namespace DatabaseFunctionsGenerator.Java
             _javaControllerGenerator.Generate(javaPath);
             _javaHelpersGenerator.Generate(javaPath);
             _javaAdapterGenerator.Generate(javaPath);
+            _javaListViewLayoutGenerator.Generate(javaPath);
         }
     }
 }
