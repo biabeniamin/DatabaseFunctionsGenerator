@@ -16,6 +16,72 @@ namespace DatabaseFunctionsGenerator.Java
             _database = database;
         }
 
+        private string GenerateGetCountMethod(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder methodBody;
+
+            builder = new StringBuilder();
+            methodBody = new StringBuilder();
+
+            builder.AppendLine("@Override");
+            builder.AppendLine($"public View getCount()");
+            builder.AppendLine("{");
+            {
+                //return
+                methodBody.AppendLine($"return {table.LowerCaseName}.size();");
+                builder.AppendLine(Helpers.AddIndentation(methodBody.ToString(),
+                    1));
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
+        private string GenerateGetItemMethod(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder methodBody;
+
+            builder = new StringBuilder();
+            methodBody = new StringBuilder();
+
+            builder.AppendLine("@Override");
+            builder.AppendLine($"public View getItem(int position)");
+            builder.AppendLine("{");
+            {
+                //return
+                methodBody.AppendLine($"return {table.LowerCaseName}.get(position);");
+                builder.AppendLine(Helpers.AddIndentation(methodBody.ToString(),
+                    1));
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
+        private string GenerateGetItemIdMethod(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder methodBody;
+
+            builder = new StringBuilder();
+            methodBody = new StringBuilder();
+
+            builder.AppendLine("@Override");
+            builder.AppendLine($"public View getItemId(int position)");
+            builder.AppendLine("{");
+            {
+                //return
+                methodBody.AppendLine($"return {table.LowerCaseName}.get(position).get{table.PrimaryKeyColumn.Name}();");
+                builder.AppendLine(Helpers.AddIndentation(methodBody.ToString(),
+                    1));
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
         private string GenerateGetViewMethod(Table table)
         {
             StringBuilder builder;
@@ -30,7 +96,7 @@ namespace DatabaseFunctionsGenerator.Java
             {
                 //declaration
                 methodBody.AppendLine($"{table.SingularName} {table.LowerCaseSingularName};");
-                foreach(Column column in table.Columns)
+                foreach (Column column in table.Columns)
                 {
                     methodBody.AppendLine($"TextView {column.LowerCaseName}TextBox;");
                 }
@@ -74,6 +140,7 @@ namespace DatabaseFunctionsGenerator.Java
             return builder.ToString();
         }
 
+
         private void GenerateController(Table table, string path, string packageName)
         {
             StringBuilder builder;
@@ -102,7 +169,10 @@ namespace DatabaseFunctionsGenerator.Java
                 classBuilder.AppendLine($"Context context;");
                 classBuilder.AppendLine();
 
+                classBuilder.AppendLine(GenerateGetCountMethod(table));
                 classBuilder.AppendLine(GenerateGetViewMethod(table));
+                classBuilder.AppendLine(GenerateGetItemMethod(table));
+                classBuilder.AppendLine(GenerateGetItemIdMethod(table));
 
                 builder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(),
                         1));
