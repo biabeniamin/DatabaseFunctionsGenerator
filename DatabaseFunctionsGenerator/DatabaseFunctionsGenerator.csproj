@@ -70,6 +70,7 @@
     <Compile Include="Java\JavaControllerGenerator.cs" />
     <Compile Include="Java\JavaGenerator.cs" />
     <Compile Include="Java\JavaHelpersGenerator.cs" />
+    <Compile Include="Java\JavaListViewLayoutGenerator.cs" />
     <Compile Include="Java\JavaModelsGenerator.cs" />
     <Compile Include="Models\Column.cs" />
     <Compile Include="Models\ColumnType.cs" />
