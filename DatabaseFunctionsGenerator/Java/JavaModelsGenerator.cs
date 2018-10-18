@@ -168,22 +168,17 @@ namespace DatabaseFunctionsGenerator.Java
         private string GenerateConstructorWithParents(Table table)
         {
             StringBuilder builder;
-            StringBuilder dataColumnsBuilder;
             StringBuilder parametersCommaSeparated;
+            StringBuilder constructorBuilder;
 
             builder = new StringBuilder();
-            dataColumnsBuilder = new StringBuilder();
             parametersCommaSeparated = new StringBuilder();
+            constructorBuilder = new StringBuilder();
 
             //generate columnsCommaSeparated
             foreach (Column column in table.EditableColumns)
             {
                 parametersCommaSeparated.Append($"{column.Type.GetJavaType()} {column.LowerCaseName}, ");
-                dataColumnsBuilder.Append($"{column.LowerCaseName}, ");
-            }
-            if (1 < dataColumnsBuilder.Length)
-            {
-                dataColumnsBuilder = dataColumnsBuilder.Remove(dataColumnsBuilder.Length - 2, 2);
             }
 
             //add parents
@@ -198,18 +193,27 @@ namespace DatabaseFunctionsGenerator.Java
 
 
             builder.AppendLine($"public {table.SingularName}({parametersCommaSeparated.ToString()})");
-
-            //generate the call of main constructor
-            builder.AppendLine($"\t:this({dataColumnsBuilder.ToString()})");
-
             builder.AppendLine("{");
             {
 
-                foreach (Column column in table.EditableColumns)
+                //generate the call of main constructor
+                constructorBuilder.AppendLine("this(");
                 {
-                    builder.AppendLine($"\tthis.{column.LowerCaseName} = {column.LowerCaseName};");
+                    foreach (Column column in table.EditableColumns)
+                    {
+                        constructorBuilder.AppendLine($"\t{Helpers.GetDefaultJavaColumnData(column.Type.Type)}, //{column.Name}");
+                    }
+                    Helpers.RemoveLastApparition(constructorBuilder, ",");
+                }
+                constructorBuilder.AppendLine(");");
+
+                foreach (Table parentTable in table.Parents)
+                {
+                    constructorBuilder.AppendLine($"this.{parentTable.LowerCaseSingularName} = {parentTable.LowerCaseSingularName};");
                 }
 
+                builder.AppendLine(Helpers.AddIndentation(constructorBuilder.ToString(),
+                    1));
             }
             builder.AppendLine("}");
 
@@ -236,6 +240,7 @@ namespace DatabaseFunctionsGenerator.Java
             builder.AppendLine("import retrofit2.http.Query;");
             builder.AppendLine("import retrofit2.http.POST;");
             builder.AppendLine("import retrofit2.http.Body;");
+            builder.AppendLine("import java.util.Date;");
             builder.AppendLine();
 
             builder.AppendLine($"public class {table.SingularName}");
