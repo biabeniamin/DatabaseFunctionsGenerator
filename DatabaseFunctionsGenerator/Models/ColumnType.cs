@@ -134,9 +134,9 @@ namespace DatabaseFunctionsGenerator
             switch (Type)
             {
                 case Types.DateTime:
-                    return "DateTime";
+                    return "Date";
                 case Types.Integer:
-                    return "int";
+                    return "Integer ";
                 case Types.Text:
                 case Types.Varchar:
                     return "String";

@@ -105,7 +105,7 @@ namespace DatabaseFunctionsGenerator.Java
             //generate columnsCommaSeparated
             foreach (Column column in table.EditableColumns)
             {
-                columnsCommaSeparated.Append($"{column.Type.GetCSharpType()} {column.LowerCaseName}, ");
+                columnsCommaSeparated.Append($"{column.Type.GetJavaType()} {column.LowerCaseName}, ");
             }
 
             if (1 < columnsCommaSeparated.Length)
@@ -119,7 +119,7 @@ namespace DatabaseFunctionsGenerator.Java
 
                 foreach (Column column in table.EditableColumns)
                 {
-                    builder.AppendLine($"\t_{column.LowerCaseName} = {column.LowerCaseName};");
+                    builder.AppendLine($"\tthis.{column.LowerCaseName} = {column.LowerCaseName};");
                 }
 
             }
@@ -131,7 +131,6 @@ namespace DatabaseFunctionsGenerator.Java
         private string GenerateEmptyConstructor(Table table)
         {
             StringBuilder builder;
-            StringBuilder columnsCommaSeparated;
 
             builder = new StringBuilder();
 
@@ -141,7 +140,7 @@ namespace DatabaseFunctionsGenerator.Java
             {
                 foreach (Column column in table.EditableColumns)
                 {
-                    builder.AppendLine($"\t\t{Helpers.GetDefaultCSharpColumnData(column.Type.Type)}, //{column.Name}");
+                    builder.AppendLine($"\t\t{Helpers.GetDefaultJavaColumnData(column.Type.Type)}, //{column.Name}");
                 }
                 if (builder.ToString().Contains(','))
                 {
@@ -156,7 +155,7 @@ namespace DatabaseFunctionsGenerator.Java
 
                 foreach (Column column in table.NonEditableColumns)
                 {
-                    builder.AppendLine($"\t_{column.LowerCaseName} = {Helpers.GetDefaultCSharpColumnData(column.Type.Type)};");
+                    builder.AppendLine($"\tthis.{column.LowerCaseName} = {Helpers.GetDefaultJavaColumnData(column.Type.Type)};");
                 }
 
             }
@@ -178,7 +177,7 @@ namespace DatabaseFunctionsGenerator.Java
             //generate columnsCommaSeparated
             foreach (Column column in table.EditableColumns)
             {
-                parametersCommaSeparated.Append($"{column.Type.GetCSharpType()} {column.LowerCaseName}, ");
+                parametersCommaSeparated.Append($"{column.Type.GetJavaType()} {column.LowerCaseName}, ");
                 dataColumnsBuilder.Append($"{column.LowerCaseName}, ");
             }
             if (1 < dataColumnsBuilder.Length)
@@ -207,7 +206,7 @@ namespace DatabaseFunctionsGenerator.Java
 
                 foreach (Column column in table.EditableColumns)
                 {
-                    builder.AppendLine($"\t_{column.LowerCaseName} = {column.LowerCaseName};");
+                    builder.AppendLine($"\tthis.{column.LowerCaseName} = {column.LowerCaseName};");
                 }
 
             }
