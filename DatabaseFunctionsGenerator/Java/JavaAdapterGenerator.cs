@@ -25,7 +25,7 @@ namespace DatabaseFunctionsGenerator.Java
             methodBody = new StringBuilder();
 
             builder.AppendLine("@Override");
-            builder.AppendLine($"public View getCount()");
+            builder.AppendLine($"public int getCount()");
             builder.AppendLine("{");
             {
                 //return
@@ -47,7 +47,7 @@ namespace DatabaseFunctionsGenerator.Java
             methodBody = new StringBuilder();
 
             builder.AppendLine("@Override");
-            builder.AppendLine($"public View getItem(int position)");
+            builder.AppendLine($"public {table.SingularName} getItem(int position)");
             builder.AppendLine("{");
             {
                 //return
@@ -69,7 +69,7 @@ namespace DatabaseFunctionsGenerator.Java
             methodBody = new StringBuilder();
 
             builder.AppendLine("@Override");
-            builder.AppendLine($"public View getItemId(int position)");
+            builder.AppendLine($"public long getItemId(int position)");
             builder.AppendLine("{");
             {
                 //return
@@ -103,7 +103,7 @@ namespace DatabaseFunctionsGenerator.Java
                 methodBody.AppendLine();
 
                 //initialization
-                methodBody.AppendLine($"{table.LowerCaseName} = getItem(position);");
+                methodBody.AppendLine($"{table.LowerCaseSingularName} = getItem(position);");
                 methodBody.AppendLine();
 
                 //try
