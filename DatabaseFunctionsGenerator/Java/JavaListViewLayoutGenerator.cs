@@ -47,7 +47,6 @@ namespace DatabaseFunctionsGenerator.Java
             linearLayoutBuilder = new StringBuilder();
 
 
-            layoutBuilder.AppendLine("<!--generated automatically-->");
             layoutBuilder.AppendLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
             layoutBuilder.AppendLine("<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"");
             { 

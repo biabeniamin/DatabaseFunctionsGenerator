@@ -126,7 +126,14 @@ namespace DatabaseFunctionsGenerator.Java
                 //populate text boxes
                 foreach (Column column in table.Columns)
                 {
-                    methodBody.AppendLine($"{column.LowerCaseName}TextBox.setText({table.LowerCaseSingularName}.get{column.Name}());");
+                    if (Types.Integer == column.Type.Type)
+                    {
+                        methodBody.AppendLine($"{column.LowerCaseName}TextBox.setText({table.LowerCaseSingularName}.get{column.Name}().toString());");
+                    }
+                    else
+                    {
+                        methodBody.AppendLine($"{column.LowerCaseName}TextBox.setText({table.LowerCaseSingularName}.get{column.Name}());");
+                    }
                 }
                 methodBody.AppendLine();
 
