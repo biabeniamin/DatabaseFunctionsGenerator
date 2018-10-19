@@ -16,7 +16,7 @@ namespace DatabaseFunctionsGenerator.Java
             _database = database;
         }
 
-        private string GenerateSyncGetMethod(Table table)
+        private string GenerateGetCountMethod(Table table)
         {
             StringBuilder builder;
             StringBuilder methodBody;
@@ -24,82 +24,143 @@ namespace DatabaseFunctionsGenerator.Java
             builder = new StringBuilder();
             methodBody = new StringBuilder();
 
-            builder.AppendLine($"public static List<{table.SingularName}> get{table.Name}(Call<List<{table.SingularName}>> call)");
+            builder.AppendLine("@Override");
+            builder.AppendLine($"public int getCount()");
             builder.AppendLine("{");
             {
-                //declaration
-                methodBody.AppendLine($"List<{table.SingularName}> {table.LowerCaseName};");
-                methodBody.AppendLine();
-
-                //initialization
-                methodBody.AppendLine($"{table.LowerCaseName} = null;");
-                methodBody.AppendLine();
-
-                //try
-                methodBody.AppendLine("try");
-                methodBody.AppendLine("{");
-                {
-                    //get data from server
-                    methodBody.AppendLine($"\t{table.LowerCaseName} = call.execute().body();");
-                }
-                methodBody.AppendLine("}");
-
-                //catch
-                methodBody.AppendLine("catch(Exception ee)");
-                methodBody.AppendLine("{");
-                {
-                    methodBody.AppendLine($"\tSystem.out.println(ee.getMessage());");
-                }
-                methodBody.AppendLine("}");
-
-                methodBody.AppendLine();
-
                 //return
-                methodBody.AppendLine($"return {table.LowerCaseName};");
+                methodBody.AppendLine($"return {table.LowerCaseName}.size();");
                 builder.AppendLine(Helpers.AddIndentation(methodBody.ToString(),
                     1));
             }
             builder.AppendLine("}");
-            methodBody.Clear();
 
-            //generate the get to get all data
-            builder.AppendLine($"public static List<{table.SingularName}> get{table.Name}()");
+            return builder.ToString();
+        }
+
+        private string GenerateGetItemMethod(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder methodBody;
+
+            builder = new StringBuilder();
+            methodBody = new StringBuilder();
+
+            builder.AppendLine("@Override");
+            builder.AppendLine($"public {table.SingularName} getItem(int position)");
+            builder.AppendLine("{");
+            {
+                //return
+                methodBody.AppendLine($"return {table.LowerCaseName}.get(position);");
+                builder.AppendLine(Helpers.AddIndentation(methodBody.ToString(),
+                    1));
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
+        private string GenerateGetItemIdMethod(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder methodBody;
+
+            builder = new StringBuilder();
+            methodBody = new StringBuilder();
+
+            builder.AppendLine("@Override");
+            builder.AppendLine($"public long getItemId(int position)");
+            builder.AppendLine("{");
+            {
+                //return
+                methodBody.AppendLine($"return {table.LowerCaseName}.get(position).get{table.PrimaryKeyColumn.Name}();");
+                builder.AppendLine(Helpers.AddIndentation(methodBody.ToString(),
+                    1));
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
+        private string GenerateGetViewMethod(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder methodBody;
+
+            builder = new StringBuilder();
+            methodBody = new StringBuilder();
+
+            builder.AppendLine("@Override");
+            builder.AppendLine($"public View getView(int position, View convertView, ViewGroup parent)");
             builder.AppendLine("{");
             {
                 //declaration
-                methodBody.AppendLine($"List<{table.SingularName}> {table.LowerCaseName};");
-                methodBody.AppendLine($"{table.SingularName}Service service;");
-                methodBody.AppendLine($"Call<List<{table.SingularName}>> call;");
+                methodBody.AppendLine($"{table.SingularName} {table.LowerCaseSingularName};");
+                foreach (Column column in table.Columns)
+                {
+                    methodBody.AppendLine($"TextView {column.LowerCaseName}TextBox;");
+                }
                 methodBody.AppendLine();
 
                 //initialization
-                methodBody.AppendLine($"{table.LowerCaseName} = null;");
+                methodBody.AppendLine($"{table.LowerCaseSingularName} = getItem(position);");
                 methodBody.AppendLine();
 
-                methodBody.AppendLine($"service = RetrofitInstance.GetRetrofitInstance().create({table.SingularName}Service.class);");
-
                 //try
-                methodBody.AppendLine("try");
+                methodBody.AppendLine("if(null == convertView)");
                 methodBody.AppendLine("{");
                 {
                     //get data from server
-                    methodBody.AppendLine($"\tcall = service.getUsers();");
-                    methodBody.AppendLine($"\t{table.LowerCaseName} = get{table.Name}(call);");
+                    methodBody.AppendLine($"\tconvertView = LayoutInflater.from(context).inflate(R.layout.user_view, parent, false);");
                 }
                 methodBody.AppendLine("}");
+                methodBody.AppendLine();
 
-                //catch
-                methodBody.AppendLine("catch(Exception ee)");
-                methodBody.AppendLine("{");
+                //get text boxes by id
+                foreach (Column column in table.Columns)
                 {
-                    methodBody.AppendLine($"\tSystem.out.println(ee.getMessage());");
+                    methodBody.AppendLine($"{column.LowerCaseName}TextBox = (TextView) convertView.findViewById(R.id.{column.LowerCaseName}TextBox);");
                 }
-                methodBody.AppendLine("}");
+                methodBody.AppendLine();
 
+                //populate text boxes
+                foreach (Column column in table.Columns)
+                {
+                    if (Types.Integer == column.Type.Type)
+                    {
+                        methodBody.AppendLine($"{column.LowerCaseName}TextBox.setText({table.LowerCaseSingularName}.get{column.Name}().toString());");
+                    }
+                    else
+                    {
+                        methodBody.AppendLine($"{column.LowerCaseName}TextBox.setText({table.LowerCaseSingularName}.get{column.Name}());");
+                    }
+                }
                 methodBody.AppendLine();
 
                 //return
-                methodBody.AppendLine($"return {table.LowerCaseName};");
+                methodBody.AppendLine($"return convertView;");
+                builder.AppendLine(Helpers.AddIndentation(methodBody.ToString(),
+                    1));
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
+        private string GenerateConstuctor(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder methodBody;
+
+            builder = new StringBuilder();
+            methodBody = new StringBuilder();
+
+            builder.AppendLine($"public {table.SingularName}Adapter(List<{table.SingularName}> {table.LowerCaseName}, Context context)");
+            builder.AppendLine("{");
+            {
+                //return
+                methodBody.AppendLine($"this.{table.LowerCaseName} = {table.LowerCaseName};");
+                methodBody.AppendLine($"this.context = context;");
                 builder.AppendLine(Helpers.AddIndentation(methodBody.ToString(),
                     1));
             }
@@ -131,7 +192,16 @@ namespace DatabaseFunctionsGenerator.Java
             builder.AppendLine($"public class {table.SingularName}Adapter extends BaseAdapter");
             builder.AppendLine("{");
             {
-                classBuilder.AppendLine(GenerateSyncGetMethod(table));
+                //declaration
+                classBuilder.AppendLine($"List<{table.SingularName}> {table.LowerCaseName};");
+                classBuilder.AppendLine($"Context context;");
+                classBuilder.AppendLine();
+
+                classBuilder.AppendLine(GenerateGetCountMethod(table));
+                classBuilder.AppendLine(GenerateGetViewMethod(table));
+                classBuilder.AppendLine(GenerateGetItemMethod(table));
+                classBuilder.AppendLine(GenerateGetItemIdMethod(table));
+                classBuilder.AppendLine(GenerateConstuctor(table));
 
                 builder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(),
                         1));
