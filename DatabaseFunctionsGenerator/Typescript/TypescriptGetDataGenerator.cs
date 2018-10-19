@@ -42,6 +42,33 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
+        private string GenerateDedicatedGetRequestsFunction(Table table)
+        {
+            StringBuilder builder = new StringBuilder();
+            StringBuilder functionBody = new StringBuilder();
+
+            foreach (DedicatedGetRequest request in table.DedicatedGetRequests)
+            {
+                builder.AppendLine($"Get{table.Name}By{request.ToString("")}()");
+                builder.AppendLine("{");
+                {
+
+                    functionBody.AppendLine($"return this.http.get<{table.SingularName}[]>(ServerUrl.GetUrl()  + \"{table.Name}.php?cmd=get{table.Name}By{request.ToString("")}\").subscribe(data =>");
+                    functionBody.AppendLine("{");
+                    {
+                        functionBody.AppendLine($"\tthis.{table.LowerCaseName} = data;");
+                    }
+                    functionBody.AppendLine("});");
+
+                    builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
+                }
+                builder.AppendLine("}");
+                functionBody.Clear();
+            }
+
+            return builder.ToString();
+        }
+
         private string GenerateGetDefaultValueFunction(Table table)
         {
             StringBuilder builder = new StringBuilder();
@@ -156,6 +183,7 @@ namespace DatabaseFunctionsGenerator
                 classBody.AppendLine($"public {table.LowerCaseName} : {table.SingularName}[];");
 
                 classBody.AppendLine(GenerateGetFunction(table));
+                classBody.AppendLine(GenerateDedicatedGetRequestsFunction(table));
                 classBody.AppendLine(GenerateGetDefaultValueFunction(table));
                 classBody.AppendLine(GenerateConstructor(table));
                 classBody.AppendLine(GenerateAddFunction(table));
