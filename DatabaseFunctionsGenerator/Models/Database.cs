@@ -20,7 +20,6 @@ namespace DatabaseFunctionsGenerator
             set { _javaPackageName = value; }
         }
 
-
         public string ServerUrl
         {
             get { return _serverUrl; }

@@ -121,7 +121,26 @@ namespace DatabaseFunctionsGenerator
             switch (type)
             {
                 case Types.DateTime:
-                    return "new DateTime(2000, 1, 1, 0, 0, 0)";
+                    return "new DateTime(1970, 1, 1, 0, 0, 0)";
+                    break;
+                case Types.Integer:
+                    return "0";
+                    break;
+                case Types.Text:
+                case Types.Varchar:
+                    return "\"Test\"";
+                    break;
+                default:
+                    return "";
+            }
+        }
+
+        public static string GetDefaultJavaColumnData(Types type)
+        {
+            switch (type)
+            {
+                case Types.DateTime:
+                    return "new Date(0)";
                     break;
                 case Types.Integer:
                     return "0";
@@ -177,7 +196,7 @@ namespace DatabaseFunctionsGenerator
 
         public static void RemoveLastApparition(StringBuilder builder, string deleted)
         {
-            if(builder.ToString().Contains(deleted))
+            if (builder.ToString().Contains(deleted))
             {
                 builder.Remove(builder.ToString().LastIndexOf(deleted), deleted.Length);
             }
