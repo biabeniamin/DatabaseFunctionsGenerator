@@ -22,7 +22,7 @@ namespace DatabaseFunctionsGenerator
 
             _typescriptModelsGenerator = new TypescriptModelsGenerator(_database);
             _typescriptGetDataGenerator = new TypescriptGetDataGenerator(_database);
-            _typescriptHelpersGenerator = new TypescriptHelpersGenerator();
+            _typescriptHelpersGenerator = new TypescriptHelpersGenerator(_database);
             _typescriptViewGenerator = new TypescriptComponentViewGenerator(_database);
             _typescriptComponentGenerator = new TypescriptComponentGenerator(_database);
         }

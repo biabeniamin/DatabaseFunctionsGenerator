@@ -8,6 +8,11 @@ namespace DatabaseFunctionsGenerator
 {
     class TypescriptHelpersGenerator : IGenerator
     {
+        private Database _database;
+        public TypescriptHelpersGenerator(Database database)
+        {
+            _database = database;
+        }
         public void Generate(string path)
         {
             StringBuilder builder;
@@ -16,6 +21,9 @@ namespace DatabaseFunctionsGenerator
 
             builder = new StringBuilder();
             serverUrl = Helpers.ReadFile("CodeHelpers\\ServerUrl.ts");
+
+            //replace url
+            serverUrl = serverUrl.Replace("!--url--!", _database.ServerUrl);
 
             Helpers.WriteFile($"{path}\\ServerUrl.ts", serverUrl);
         }
