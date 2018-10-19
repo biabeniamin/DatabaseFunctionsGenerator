@@ -67,7 +67,7 @@ namespace DatabaseFunctionsGenerator.Java
             }
             layoutBuilder.AppendLine("</LinearLayout>");  
 
-            Helpers.WriteFile($"{path}\\{table.SingularName}View.xml", (layoutBuilder.ToString()));
+            Helpers.WriteFile($"{path}\\{table.LowerCaseSingularName.ToLower()}_view.xml", (layoutBuilder.ToString()));
 
             //return builder.ToString();
         }

@@ -111,7 +111,7 @@ namespace DatabaseFunctionsGenerator.Java
                 methodBody.AppendLine("{");
                 {
                     //get data from server
-                    methodBody.AppendLine($"\tconvertView = LayoutInflater.from(context).inflate(R.layout.user_view, parent, false);");
+                    methodBody.AppendLine($"\tconvertView = LayoutInflater.from(context).inflate(R.layout.{table.LowerCaseSingularName.ToLower()}_view, parent, false);");
                 }
                 methodBody.AppendLine("}");
                 methodBody.AppendLine();
@@ -126,13 +126,14 @@ namespace DatabaseFunctionsGenerator.Java
                 //populate text boxes
                 foreach (Column column in table.Columns)
                 {
-                    if (Types.Integer == column.Type.Type)
+                    if (Types.Text == column.Type.Type
+                        || Types.Varchar == column.Type.Type)
                     {
-                        methodBody.AppendLine($"{column.LowerCaseName}TextBox.setText({table.LowerCaseSingularName}.get{column.Name}().toString());");
+                        methodBody.AppendLine($"{column.LowerCaseName}TextBox.setText({table.LowerCaseSingularName}.get{column.Name}());");
                     }
                     else
                     {
-                        methodBody.AppendLine($"{column.LowerCaseName}TextBox.setText({table.LowerCaseSingularName}.get{column.Name}());");
+                        methodBody.AppendLine($"{column.LowerCaseName}TextBox.setText({table.LowerCaseSingularName}.get{column.Name}().toString());");
                     }
                 }
                 methodBody.AppendLine();

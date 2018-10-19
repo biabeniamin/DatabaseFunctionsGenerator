@@ -83,7 +83,7 @@ namespace DatabaseFunctionsGenerator.Java
                 methodBody.AppendLine("{");
                 {
                     //get data from server
-                    methodBody.AppendLine($"\tcall = service.getUsers();");
+                    methodBody.AppendLine($"\tcall = service.get{table.Name}();");
                     methodBody.AppendLine($"\t{table.LowerCaseName} = get{table.Name}(call);");
                 }
                 methodBody.AppendLine("}");
@@ -146,7 +146,7 @@ namespace DatabaseFunctionsGenerator.Java
                     methodBody.AppendLine("{");
                     {
                         //get data from server
-                        methodBody.Append($"\tcall = service.getUsersBy{dedicatedRequest.ToString("")}(");
+                        methodBody.Append($"\tcall = service.get{table.Name}By{dedicatedRequest.ToString("")}(");
 
                         foreach (Column column in dedicatedRequest.Columns)
                         {
@@ -244,7 +244,7 @@ namespace DatabaseFunctionsGenerator.Java
                 methodBody.AppendLine("{");
                 {
                     //get data from server
-                    methodBody.AppendLine($"\tcall = service.getUsers();");
+                    methodBody.AppendLine($"\tcall = service.get{table.Name}();");
                     methodBody.AppendLine($"\tget{table.Name}(call, callback);");
                 }
                 methodBody.AppendLine("}");
@@ -309,7 +309,7 @@ namespace DatabaseFunctionsGenerator.Java
                     methodBody.AppendLine("{");
                     {
                         //get data from server
-                        methodBody.Append($"\tcall = service.getUsersBy{dedicatedRequest.ToString("")}(");
+                        methodBody.Append($"\tcall = service.get{table.Name}By{dedicatedRequest.ToString("")}(");
 
                         foreach (Column column in dedicatedRequest.Columns)
                         {
