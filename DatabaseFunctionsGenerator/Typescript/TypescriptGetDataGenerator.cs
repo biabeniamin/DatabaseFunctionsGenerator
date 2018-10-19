@@ -15,54 +15,6 @@ namespace DatabaseFunctionsGenerator
             _database = database;
         }
 
-        private string GenerateListToObjectFunction(Table table)
-        {
-            StringBuilder builder = new StringBuilder();
-            StringBuilder functionBody = new StringBuilder();
-            string objectName;
-
-            objectName = table.LowerCaseSingularName;
-
-            builder.AppendLine($"function ConvertListTo{table.Name}($data)");
-            builder.AppendLine("{");
-
-            functionBody.AppendLine($"${table.LowerCaseName} = [];");
-            functionBody.AppendLine();
-
-            functionBody.AppendLine("foreach($data as $row)");
-            functionBody.AppendLine("{");
-            functionBody.AppendLine($"\t${objectName} = new {table.SingularName}(");
-            foreach (Column column in table.EditableColumns)
-            {
-                functionBody.AppendLine($"\t$row[\"{column.Name}\"], ");
-            }
-            //to remove , \r\n
-            if (functionBody.ToString().Contains(','))
-                functionBody.Remove(functionBody.ToString().LastIndexOf(','), 1);
-
-            functionBody.AppendLine("\t);");
-            functionBody.AppendLine();
-
-            foreach (Column column in table.NonEditableColumns)
-            {
-                functionBody.AppendLine($"\t${objectName}->Set{column.Name}($row[\"{column.Name}\"]);");
-            }
-            functionBody.AppendLine();
-
-
-            functionBody.AppendLine($"\t${table.LowerCaseName}[count(${table.LowerCaseName})] = ${table.LowerCaseSingularName};");
-
-
-            functionBody.AppendLine("}");
-            functionBody.AppendLine();
-
-            functionBody.AppendLine($"return ${table.LowerCaseName};");
-
-            builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
-            builder.AppendLine("}");
-
-            return builder.ToString();
-        }
 
         private string GenerateGetFunction(Table table)
         {
@@ -111,7 +63,7 @@ namespace DatabaseFunctionsGenerator
 
                 foreach (Table parentTable in table.Parents)
                 {
-                    functionBody.AppendLine($"{parentTable.LowerCaseSingularName} : {parentTable.Name}.GetDefault{parentTable.SingularName}(),");
+                    functionBody.AppendLine($"{parentTable.LowerCaseSingularName} : {parentTable.SingularName}Service.GetDefault{parentTable.SingularName}(),");
                 }
 
                 functionBody.AppendLine("};");
@@ -138,7 +90,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine($"constructor(private http:HttpClient)");
             builder.AppendLine("{");
             {
-                functionBody.AppendLine($"this.{table.LowerCaseName} = [{table.Name}.GetDefault{table.SingularName}()];");
+                functionBody.AppendLine($"this.{table.LowerCaseName} = [{table.SingularName}Service.GetDefault{table.SingularName}()];");
                 functionBody.AppendLine($"this.Get{table.Name}();");
             }
             builder.AppendLine(Helpers.AddIndentation(functionBody.ToString(), 1));
@@ -193,30 +145,25 @@ namespace DatabaseFunctionsGenerator
             foreach (Table parentTable in table.Parents)
             {
                 builder.AppendLine($"import {{ {parentTable.SingularName} }} from '../app/Models/{parentTable.SingularName}'");
-                builder.AppendLine($"import {{ {parentTable.Name} }} from './{parentTable.Name}'");
+                builder.AppendLine($"import {{ {parentTable.SingularName}Service }} from './{parentTable.SingularName}Service'");
             }
 
-            builder.AppendLine($"export class {table.Name}");
+            builder.AppendLine($"export class {table.SingularName}Service");
             builder.AppendLine("{");
             {
 
 
                 classBody.AppendLine($"public {table.LowerCaseName} : {table.SingularName}[];");
 
-                //builder.AppendLine(GenerateListToObjectFunction(table));
                 classBody.AppendLine(GenerateGetFunction(table));
                 classBody.AppendLine(GenerateGetDefaultValueFunction(table));
                 classBody.AppendLine(GenerateConstructor(table));
-                //builder.AppendLine(GenerateGetByIdFunction(table));
-                //builder.AppendLine(GenerateGetParentFunction(table));
                 classBody.AppendLine(GenerateAddFunction(table));
-                //builder.AppendLine(GenerateTestAddFunction(table));
-                //builder.AppendLine(GenerateGetRequest(table));
             }
             builder.AppendLine(Helpers.AddIndentation(classBody.ToString(), 1));
             builder.AppendLine("}");
 
-            Helpers.WriteFile($"{path}\\{table.Name}.ts",
+            Helpers.WriteFile($"{path}\\{table.SingularName}Service.ts",
                 builder.ToString());
 
             return builder.ToString();

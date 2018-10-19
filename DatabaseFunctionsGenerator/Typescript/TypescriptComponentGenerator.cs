@@ -25,7 +25,7 @@ namespace DatabaseFunctionsGenerator
             {
                 functionBody.AppendLine("event.preventDefault();");
                 functionBody.AppendLine("const target = event.target;");
-                functionBody.AppendLine($"let {table.LowerCaseSingularName} = {table.Name}.GetDefaultAccessLog();");
+                functionBody.AppendLine($"let {table.LowerCaseSingularName} = {table.SingularName}Service.GetDefault{table.SingularName}();");
                 foreach (Column column in table.EditableColumns)
                 {
                     functionBody.Append($"{table.LowerCaseSingularName}.{Helpers.GetLowerCaseString(column.Name)} = target.querySelector('");
@@ -54,7 +54,7 @@ namespace DatabaseFunctionsGenerator
                 }
 
                 functionBody.AppendLine($"console.log({table.LowerCaseSingularName});");
-                functionBody.AppendLine($"this.{table.LowerCaseSingularName}Controller.Add{table.SingularName}({table.LowerCaseSingularName});");
+                functionBody.AppendLine($"this.{table.LowerCaseSingularName}Service.Add{table.SingularName}({table.LowerCaseSingularName});");
 
                 builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
             }
@@ -86,7 +86,7 @@ namespace DatabaseFunctionsGenerator
             StringBuilder builder = new StringBuilder();
 
             builder.AppendLine($"import {{ {table.Name} }} from '../app/{table.Name}'");
-            builder.AppendLine($"{table.LowerCaseSingularName}Controller : {table.Name};");
+            builder.AppendLine($"import {{ {table.SingularName}Service }} from './{table.SingularName}Service'");
 
             builder.AppendLine(GenerateAddEventHandler(table));
 

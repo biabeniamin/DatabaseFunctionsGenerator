@@ -49,7 +49,7 @@ namespace DatabaseFunctionsGenerator
                 tableBody.AppendLine("</tr>");
 
                 //generate data
-                tableBody.AppendLine($"<tr *ngFor=\"let {table.LowerCaseSingularName} of {table.LowerCaseSingularName}Controller.{table.LowerCaseName}; let i = index\">");
+                tableBody.AppendLine($"<tr *ngFor=\"let {table.LowerCaseSingularName} of {table.LowerCaseSingularName}Service.{table.LowerCaseName}; let i = index\">");
                 {
                     foreach (Column column in table.Columns)
                     {
@@ -88,7 +88,7 @@ namespace DatabaseFunctionsGenerator
 
             builder.AppendLine($"<select id={table.PrimaryKeyColumn.Name}DropDown (change)=\"{table.LowerCaseSingularName}Changed($event.target.value)\">");
             {
-                optionBody.AppendLine($"<option [value]=\"{table.LowerCaseSingularName}.{table.PrimaryKeyColumn.LowerCaseName}\" *ngFor= \"let {table.LowerCaseSingularName} of {table.LowerCaseSingularName}Controller.{table.LowerCaseName}\" >");
+                optionBody.AppendLine($"<option [value]=\"{table.LowerCaseSingularName}.{table.PrimaryKeyColumn.LowerCaseName}\" *ngFor= \"let {table.LowerCaseSingularName} of {table.LowerCaseSingularName}Service.{table.LowerCaseName}\" >");
                 {
                     optionBody.AppendLine($"{{{{{table.LowerCaseSingularName}.{table.PrimaryKeyColumn.LowerCaseName}}}}}");
                     foreach (Column column in table.EditableColumns)
