@@ -141,7 +141,7 @@ namespace DatabaseFunctionsGenerator
 
                 foreach (Table parentTable in table.Parents)
                 {
-                    functionBody.AppendLine($"${table.LowerCaseName}[0]->Set{parentTable.SingularName}(Get{parentTable.SingularName}ById($database, ${table.LowerCaseName}[0]->Get{parentTable.PrimaryKeyColumn.Name}()));");
+                    functionBody.AppendLine($"${table.LowerCaseName}[0]->Set{parentTable.SingularName}(Get{parentTable.SingularName}By{parentTable.GetDedicatedRequestById}($database, ${table.LowerCaseName}[0]->Get{parentTable.PrimaryKeyColumn.Name}()));");
                 }
 
                 functionBody.AppendLine($"return ${table.LowerCaseName};");
@@ -296,7 +296,7 @@ namespace DatabaseFunctionsGenerator
 
             foreach(Table parentTable in table.Parents)
             {
-                functionBody.AppendLine($"${parameter}->Set{parentTable.SingularName}(Get{parentTable.SingularName}ById($database, ${parameter}->Get{parentTable.PrimaryKeyColumn.Name}()));");
+                functionBody.AppendLine($"${parameter}->Set{parentTable.SingularName}(Get{parentTable.Name}By{parentTable.GetDedicatedRequestById}($database, ${parameter}->Get{parentTable.PrimaryKeyColumn.Name}()));");
             }
 
             functionBody.AppendLine($"return ${parameter};");

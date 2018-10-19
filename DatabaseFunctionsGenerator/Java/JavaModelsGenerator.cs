@@ -262,7 +262,7 @@ namespace DatabaseFunctionsGenerator.Java
             }
             builder.AppendLine("}");
 
-            Helpers.WriteFile($"{path}\\{table.SingularName}.cs", (builder.ToString()));
+            Helpers.WriteFile($"{path}\\{table.SingularName}.java", (builder.ToString()));
 
             //return builder.ToString();
         }

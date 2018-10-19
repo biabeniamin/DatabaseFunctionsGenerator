@@ -35,9 +35,6 @@ namespace DatabaseFunctionsGenerator
             set { _parents = value; }
         }
 
-
-        
-
         public ObservableCollection<Column> Columns
         {
             get { return _columns; }
@@ -204,6 +201,30 @@ namespace DatabaseFunctionsGenerator
                 if (null != _parents)
                     return true;
                 return false;
+            }
+        }
+
+        public DedicatedGetRequest GetDedicatedRequestById
+        {
+            get
+            {
+                IEnumerable<DedicatedGetRequest> requests;
+
+                requests = _dedicatedGetRequests.Where((req) => {
+                    if(1 != req.Columns.Count)
+                    {
+                        return false;
+                    }
+
+                    return PrimaryKeyColumn == req.Columns[0];
+                });
+
+                if (0 == requests.Count())
+                {
+                    return null;
+                }
+
+                return requests.ElementAt(0);
             }
         }
 
