@@ -25,7 +25,20 @@ namespace DatabaseFunctionsGenerator
             //get request to get data
             builder.AppendLine($"------------{table.Name}----------");
             builder.AppendLine($"{serverUrl}{table.Name}.php?cmd=get{table.Name} - GET request -return all {table.Name}");
-            builder.AppendLine($"{serverUrl}{table.Name}.php?cmd=get{table.SingularName}ById=value - GET request -return one {table.SingularName} with specified id");
+
+            //dedicated get requests
+
+            foreach(DedicatedGetRequest request in table.DedicatedGetRequests)
+            {
+                builder.Append($"{serverUrl}{table.Name}.php?cmd=get{table.SingularName}By{request.ToString("")}");
+
+                foreach (Column column in request.Columns)
+                {
+                    builder.Append($"&{column.LowerCaseName}=value");
+                }
+
+                builder.AppendLine($" - GET request -return {table.Name} with specified criteria");
+            }
 
             //get request to add data
 

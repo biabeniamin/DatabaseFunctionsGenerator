@@ -85,7 +85,7 @@
     <Compile Include="Php\PhpGenerator.cs" />
     <Compile Include="Php\PhpHelpersGenerator.cs" />
     <Compile Include="Php\PhpModelsGenerator.cs" />
-    <Compile Include="RequestTextMenuGenerator.cs" />
+    <Compile Include="Documentation\RequestTextMenuGenerator.cs" />
     <Compile Include="Typescript\TypescriptComponentGenerator.cs" />
     <Compile Include="Typescript\TypescriptComponentViewGenerator.cs" />
     <Compile Include="Typescript\TypescriptGenerator.cs" />
