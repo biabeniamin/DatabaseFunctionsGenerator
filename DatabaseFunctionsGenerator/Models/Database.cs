@@ -11,7 +11,7 @@ namespace DatabaseFunctionsGenerator
     {
         private ObservableCollection<Table> _tables;
         private ObservableCollection<Relation> _relations;
-        private string _serverUrl = "http:/192.168.0.100/generator/test/";
+        private string _serverUrl = "http:/codeforgood18.avramiancuturda.ro/";
         private string _javaPackageName= "com.example.biabe.testretrofit";
 
         public string JavaPackageName

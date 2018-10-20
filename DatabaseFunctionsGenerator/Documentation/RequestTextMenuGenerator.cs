@@ -30,7 +30,7 @@ namespace DatabaseFunctionsGenerator
 
             foreach(DedicatedGetRequest request in table.DedicatedGetRequests)
             {
-                builder.Append($"{serverUrl}{table.Name}.php?cmd=get{table.SingularName}By{request.ToString("")}");
+                builder.Append($"{serverUrl}{table.Name}.php?cmd=get{table.Name}By{request.ToString("")}");
 
                 foreach (Column column in request.Columns)
                 {
