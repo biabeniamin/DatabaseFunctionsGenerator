@@ -26,6 +26,8 @@
                     <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" />
                     <GridViewColumn Header="Type" DisplayMemberBinding="{Binding Type}" />
                     <GridViewColumn Header="Length" DisplayMemberBinding="{Binding Type.Length}" />
+                    <GridViewColumn Header="Is Prim key" DisplayMemberBinding="{Binding Type.IsPrimaryKey}" />
+                    <GridViewColumn Header="AutoIncrement" DisplayMemberBinding="{Binding Type.AutoIncrement}" />
                 </GridView>
             </ListView.View>
         </ListView>
