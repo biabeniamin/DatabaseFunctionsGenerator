@@ -46,6 +46,9 @@ namespace DatabaseFunctionsGenerator
             //generate getters and setters
             foreach (Column column in table.Columns)
             {
+                //set json property name
+                builder.AppendLine($"[JsonProperty(PropertyName = \"{column.LowerCaseName}\")]");
+
                 //getter
                 builder.AppendLine($"public {column.Type.GetCSharpType()} {column.Name}");
                 builder.AppendLine("{");
