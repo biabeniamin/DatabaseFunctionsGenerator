@@ -73,6 +73,8 @@ namespace DatabaseFunctionsGenerator
 
             foreach (Table parentTable in table.Parents)
             {
+                //set json property name
+                builder.AppendLine($"[JsonProperty(PropertyName = \"{parentTable.LowerCaseSingularName}\")]");
                 //getter
                 builder.AppendLine($"public {parentTable.SingularName} {parentTable.SingularName}");
                 builder.AppendLine("{");
@@ -232,6 +234,7 @@ namespace DatabaseFunctionsGenerator
             classBuilder = new StringBuilder();
 
             builder.AppendLine("//generated automatically");
+            builder.AppendLine("using Newtonsoft.Json;");
             builder.AppendLine("using System;");
             builder.AppendLine("using System.Collections.Generic;");
             builder.AppendLine("using System.Collections.ObjectModel;");
