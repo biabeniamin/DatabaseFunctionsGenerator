@@ -296,7 +296,7 @@ namespace DatabaseFunctionsGenerator
 
             foreach(Table parentTable in table.Parents)
             {
-                functionBody.AppendLine($"${parameter}->Set{parentTable.SingularName}(Get{parentTable.Name}By{parentTable.GetDedicatedRequestById}($database, ${parameter}->Get{parentTable.PrimaryKeyColumn.Name}()));");
+                functionBody.AppendLine($"${parameter}->Set{parentTable.SingularName}(Get{parentTable.Name}By{parentTable.GetDedicatedRequestById}($database, ${parameter}->Get{parentTable.PrimaryKeyColumn.Name}())[0]);");
             }
 
             functionBody.AppendLine($"return ${parameter};");
