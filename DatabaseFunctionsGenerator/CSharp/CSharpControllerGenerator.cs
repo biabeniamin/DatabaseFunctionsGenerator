@@ -40,9 +40,9 @@ namespace DatabaseFunctionsGenerator
                 //try
                 methodBody.AppendLine("try");
                 methodBody.AppendLine("{");
-                { 
-                //get data from server
-                    methodBody.AppendLine($"\tdata = await HttpRequestClient.GetRequest(\"get{table.Name}\");");
+                {
+                    //get data from server
+                    methodBody.AppendLine($"\tdata = await HttpRequestClient.GetRequest(\"{table.Name}.php?cmd=get{table.Name}\");");
                     methodBody.AppendLine($"\t{table.LowerCaseName} = JsonConvert.DeserializeObject<List<{table.SingularName}>>(data);");
                 }
                 methodBody.AppendLine("}");
@@ -59,6 +59,55 @@ namespace DatabaseFunctionsGenerator
 
                 //return
                 methodBody.AppendLine($"return {table.LowerCaseName};");
+                builder.AppendLine(Helpers.AddIndentation(methodBody.ToString(),
+                    1));
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
+        private string GenerateAddMethod(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder methodBody;
+
+            builder = new StringBuilder();
+            methodBody = new StringBuilder();
+
+            builder.AppendLine($"public static async Task<{table.SingularName}> Add{table.SingularName}({table.SingularName} {table.LowerCaseSingularName})");
+            builder.AppendLine("{");
+            {
+                //declaration
+                methodBody.AppendLine($"string data;");
+                methodBody.AppendLine();
+
+                //initialization
+                methodBody.AppendLine("data = \"\";");
+                methodBody.AppendLine();
+
+                //try
+                methodBody.AppendLine("try");
+                methodBody.AppendLine("{");
+                {
+                    //get data from server
+                    methodBody.AppendLine($"\tdata = await HttpRequestClient.PostRequest(\"{table.Name}.php?cmd=add{table.SingularName}\", {table.LowerCaseSingularName});");
+                    methodBody.AppendLine($"\t{table.LowerCaseSingularName} = JsonConvert.DeserializeObject<{table.SingularName}>(data);");
+                }
+                methodBody.AppendLine("}");
+
+                //catch
+                methodBody.AppendLine("catch(Exception ee)");
+                methodBody.AppendLine("{");
+                {
+                    methodBody.AppendLine($"\tConsole.WriteLine(ee.Message);");
+                }
+                methodBody.AppendLine("}");
+
+                methodBody.AppendLine();
+
+                //return
+                methodBody.AppendLine($"return {table.LowerCaseSingularName};");
                 builder.AppendLine(Helpers.AddIndentation(methodBody.ToString(),
                     1));
             }
@@ -94,6 +143,7 @@ namespace DatabaseFunctionsGenerator
                 namespaceBuilder.AppendLine("{");
                 {
                     classBuilder.AppendLine(GenerateGetMethod(table));
+                    classBuilder.AppendLine(GenerateAddMethod(table));
 
                     namespaceBuilder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(),
                         1));
