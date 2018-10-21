@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace DatabaseFunctionsGenerator.CodeHelpers
 {
-    public class JsonSerializer : JsonConverter
+    public class JsonLowerSerializer : JsonConverter
     {
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, object value, JsonLowerSerializer serializer)
         {
             var name = value as User;
             writer.WriteStartObject();
@@ -38,7 +38,7 @@ namespace DatabaseFunctionsGenerator.CodeHelpers
             writer.WriteEndObject();
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonLowerSerializer serializer)
         {
             JObject jsonObject = JObject.Load(reader);
             var name = new User();
