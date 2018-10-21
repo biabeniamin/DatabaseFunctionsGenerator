@@ -10,6 +10,13 @@ namespace DatabaseFunctionsGenerator
 {
     public static class HttpRequestClient
     {
+        public static string ServerUrl
+        {
+            get
+            {
+                return "http://codeforgood18.avramiancuturda.ro/";
+            }
+        }
         public static async Task<string> GetRequest(string url)
         {
             var httpClient = new HttpClient();
@@ -17,7 +24,7 @@ namespace DatabaseFunctionsGenerator
 
             try
             {
-                var uri = new Uri(url);
+                var uri = new Uri(ServerUrl + url);
                 Console.WriteLine($"Attempting to fetch data from {uri.AbsoluteUri}");
                 response = await httpClient.GetStringAsync(uri);
                 Console.WriteLine($"Data from {uri.AbsoluteUri} {response}");
@@ -36,7 +43,7 @@ namespace DatabaseFunctionsGenerator
         public static async Task<string> PostRequest(string url, object jsonObject)
         {
             String responseString;
-            var request = (HttpWebRequest)WebRequest.Create(url);
+            var request = (HttpWebRequest)WebRequest.Create(ServerUrl + url);
 
             var postData = JsonConvert.SerializeObject(jsonObject);
             var data = Encoding.ASCII.GetBytes(postData);

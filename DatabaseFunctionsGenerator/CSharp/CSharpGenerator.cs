@@ -20,7 +20,7 @@ namespace DatabaseFunctionsGenerator
 
             _cSharpModelsGenerator = new CSharpModelsGenerator(_database);
             _cSharpControllerGenerator = new CSharpControllerGenerator(_database);
-            _cSharpHelpersGenerator = new CSharpHelpersGenerator();
+            _cSharpHelpersGenerator = new CSharpHelpersGenerator(_database);
         }
 
         public void Generate(string path)
