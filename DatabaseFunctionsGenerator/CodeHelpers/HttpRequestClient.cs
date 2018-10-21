@@ -10,18 +10,14 @@ namespace DatabaseFunctionsGenerator
 {
     public static class HttpRequestClient
     {
-        public static async Task<string> GetRequest(string cmd)
-        {
-            return await GetRequest("http://localhost/generator/test/AccessLogs.php?cmd", cmd);
-        }
-        public static async Task<string> GetRequest(string url, string cmd)
+        public static async Task<string> GetRequest(string url)
         {
             var httpClient = new HttpClient();
             string response = "null";
 
             try
             {
-                var uri = new Uri($"{url}={cmd}");
+                var uri = new Uri(url);
                 Console.WriteLine($"Attempting to fetch data from {uri.AbsoluteUri}");
                 response = await httpClient.GetStringAsync(uri);
                 Console.WriteLine($"Data from {uri.AbsoluteUri} {response}");
