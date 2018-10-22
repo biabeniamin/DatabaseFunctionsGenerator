@@ -24,6 +24,13 @@ namespace DatabaseFunctionsGenerator
     {
         private Database _database;
         private Table _selectedTable;
+        private DelegateCommand _generateDelegateCommand;   
+
+        public DelegateCommand GenerateDelegateCommand
+        {
+            get { return _generateDelegateCommand; }
+            set { _generateDelegateCommand = value; }
+        }
 
         public Table SelectedTable
         {
@@ -95,7 +102,15 @@ namespace DatabaseFunctionsGenerator
 
             Generator generator = new Generator(_database);
             generator.Generate();
+
+            _generateDelegateCommand = new DelegateCommand(GenerateCommand);
             
+        }
+
+        private void GenerateCommand()
+        {
+            Generator generator = new Generator(_database);
+            generator.Generate();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
