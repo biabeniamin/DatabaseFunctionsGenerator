@@ -141,7 +141,7 @@ namespace DatabaseFunctionsGenerator
 
                 foreach (Table parentTable in table.Parents)
                 {
-                    functionBody.AppendLine($"${table.LowerCaseName}[0]->Set{parentTable.SingularName}(Get{parentTable.SingularName}By{parentTable.GetDedicatedRequestById}($database, ${table.LowerCaseName}[0]->Get{parentTable.PrimaryKeyColumn.Name}()));");
+                    functionBody.AppendLine($"Complete{parentTable.Name}($database, ${table.LowerCaseName});");
                 }
 
                 functionBody.AppendLine($"return ${table.LowerCaseName};");
