@@ -29,11 +29,35 @@
         <ListView ItemsSource="{Binding SelectedItem.Columns, ElementName=tablesListView}" Margin="312,10,0,0" HorizontalAlignment="Left" Width="297" Height="142" VerticalAlignment="Top">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="Name">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                     <GridViewColumn Header="Type" DisplayMemberBinding="{Binding Type}" />
-                    <GridViewColumn Header="Length" DisplayMemberBinding="{Binding Type.Length}" />
-                    <GridViewColumn Header="Is Prim key" DisplayMemberBinding="{Binding Type.IsPrimaryKey}" />
-                    <GridViewColumn Header="AutoIncrement" DisplayMemberBinding="{Binding Type.AutoIncrement}" />
+                    <GridViewColumn Header="Length">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding Type.Length}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Is Prim key">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding Type.IsPrimaryKey}"></CheckBox>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="AutoIncrement">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding Type.AutoIncrement}"></CheckBox>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
