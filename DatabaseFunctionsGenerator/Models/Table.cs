@@ -156,7 +156,7 @@ namespace DatabaseFunctionsGenerator
                 return 0 < _dedicatedGetRequests.Where((dedicated) =>
                 {
                     return 1 == dedicated.Columns.Count()
-                        & 0 == dedicated.Columns.Where((column) =>
+                        && 0 < dedicated.Columns.Where((column) =>
                             {
                                 return column.Type.IsPrimaryKey;
                             }).Count();

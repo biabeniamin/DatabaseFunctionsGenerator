@@ -64,6 +64,7 @@ namespace DatabaseFunctionsGenerator
             Database.Relations.Add(new Relation(Database.Tables[0], Database.Tables[1], RelationType.OneToMany));
 
             Database.Tables[0].DedicatedGetRequests.Add(new DedicatedGetRequest(Database.Tables[0].Columns[0], Database.Tables[0].Columns[1]));
+            Database.Tables[1].DedicatedGetRequests.Add(new DedicatedGetRequest(Database.Tables[1].Columns[0]));
             /*Database.Tables.Add(new Table("Users"));
             Database.Tables.Add(new Table("Locations"));
             Database.Tables.Add(new Table("AccessLogs"));
