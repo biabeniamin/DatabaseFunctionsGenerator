@@ -1,5 +1,7 @@
-﻿using System;
+﻿using DatabaseFunctionsGenerator.Typescript;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -105,7 +107,14 @@ namespace DatabaseFunctionsGenerator
         {
             foreach (Table table in _database.Tables)
             {
+                string tableComponentPath;
+
+                tableComponentPath = $"{path}\\{table.LowerCaseSingularName}";
+
+                Directory.CreateDirectory(tableComponentPath);
+
                 GenerateViewForTable(path, table);
+                TypescriptComponentSpecGenerator.GenerateComponentSpec(table, tableComponentPath);
             }
         }
     }

@@ -13,11 +13,12 @@ namespace DatabaseFunctionsGenerator
         {
             _database = database;
         }
+
+
         public void Generate(string path)
         {
             StringBuilder builder;
             string serverUrl;
-            string helpers;
 
             builder = new StringBuilder();
             serverUrl = Helpers.ReadFile("CodeHelpers\\ServerUrl.ts");

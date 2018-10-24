@@ -88,11 +88,15 @@
     <Compile Include="Php\PhpModelsGenerator.cs" />
     <Compile Include="Documentation\RequestTextMenuGenerator.cs" />
     <Compile Include="Typescript\TypescriptComponentGenerator.cs" />
+    <Compile Include="Typescript\TypescriptComponentSpecGenerator.cs" />
     <Compile Include="Typescript\TypescriptComponentViewGenerator.cs" />
     <Compile Include="Typescript\TypescriptGenerator.cs" />
     <Compile Include="Typescript\TypescriptGetDataGenerator.cs" />
     <Compile Include="Typescript\TypescriptHelpersGenerator.cs" />
     <Compile Include="Typescript\TypescriptModelsGenerator.cs" />
+    <Content Include="CodeHelpers\TypescriptComponentSpec.ts">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
