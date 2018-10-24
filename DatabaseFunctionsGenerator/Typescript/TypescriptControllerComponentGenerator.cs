@@ -101,6 +101,22 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
+        private static string GenerateNgOnInit(Table table)
+        {
+            StringBuilder builder = new StringBuilder();
+            StringBuilder methodBody = new StringBuilder();
+
+            builder.AppendLine($"ngOnInit()");
+            builder.AppendLine("{");
+            {
+
+                builder.AppendLine(Helpers.AddIndentation(methodBody.ToString(), 1));
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
         private static string GenerateClass(Table table)
         {
             StringBuilder builder;
@@ -114,6 +130,7 @@ namespace DatabaseFunctionsGenerator
             {
                 classBuilder.AppendLine(GenerateFields(table));
                 classBuilder.AppendLine(GenerateConstructor(table));
+                classBuilder.AppendLine(GenerateNgOnInit(table));
                 classBuilder.AppendLine(GenerateAddEventHandler(table));
 
                 foreach (Table parentTable in table.Parents)
@@ -134,8 +151,7 @@ namespace DatabaseFunctionsGenerator
             StringBuilder builder = new StringBuilder();
 
             builder.AppendLine("import { Component, OnInit } from '@angular/core';");
-            builder.AppendLine($"import {{ {table.Name} }} from '../app/{table.Name}'");
-            builder.AppendLine($"import {{ {table.SingularName}Service }} from './{table.SingularName}Service'");
+            builder.AppendLine($"import {{ {table.SingularName}Service }} from '../{table.SingularName}Service'");
             builder.AppendLine("import {HttpClient} from '@angular/common/http';");
             builder.AppendLine("import { FormControl, FormGroup } from '@angular/forms';");
             builder.AppendLine();
@@ -150,7 +166,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine("})");
             builder.AppendLine(GenerateClass(table));
 
-            Helpers.WriteFile($"{path}\\{table.SingularName}.component.ts",
+            Helpers.WriteFile($"{path}\\{table.LowerCaseSingularName}.component.ts",
                 builder.ToString());
 
             return builder.ToString();
