@@ -25,7 +25,7 @@ namespace DatabaseFunctionsGenerator
 
             Directory.CreateDirectory(tableComponentPath);
 
-            TypescriptControllerComponentGenerator.GenerateControllerComponentForTable(table, path);
+            TypescriptControllerComponentGenerator.GenerateControllerComponentForTable(table, tableComponentPath);
             TypescriptComponentSpecGenerator.GenerateComponentSpec(table, tableComponentPath);
         }
 
