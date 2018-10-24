@@ -75,7 +75,50 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
+        private static string GenerateConstructor(Table table)
+        {
+            StringBuilder builder = new StringBuilder();
+            StringBuilder methodBody = new StringBuilder();
 
+            builder.AppendLine($"constructor(private http:HttpClient)");
+            builder.AppendLine("{");
+            {
+                methodBody.AppendLine($"this.{table.LowerCaseSingularName}Service = new {table.SingularName}Service(http);");
+
+                builder.AppendLine(Helpers.AddIndentation(methodBody.ToString(), 1));
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
+        private static string GenerateClass(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder classBuilder;
+
+            builder = new StringBuilder();
+            classBuilder = new StringBuilder();
+
+            builder.AppendLine($"export class {table.SingularName}Component implements OnInit");
+            builder.AppendLine("{");
+            {
+                classBuilder.AppendLine(GenerateAddEventHandler(table));
+
+                foreach (Table parentTable in table.Parents)
+                {
+                    classBuilder.AppendLine(GenerateDropDownChangeEventHandler(parentTable));
+                }
+
+                classBuilder.AppendLine(GenerateConstructor(table));
+
+                builder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(),
+                    1));
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
         public static string GenerateControllerComponentForTable(Table table, string path)
         {
             StringBuilder builder = new StringBuilder();
@@ -83,6 +126,8 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine("import { Component, OnInit } from '@angular/core';");
             builder.AppendLine($"import {{ {table.Name} }} from '../app/{table.Name}'");
             builder.AppendLine($"import {{ {table.SingularName}Service }} from './{table.SingularName}Service'");
+            builder.AppendLine("import {HttpClient} from '@angular/common/http';");
+            builder.AppendLine("import { FormControl, FormGroup } from '@angular/forms';");
             builder.AppendLine();
 
             //generate component
@@ -93,13 +138,7 @@ namespace DatabaseFunctionsGenerator
                 builder.AppendLine($"styleUrls: ['./{table.LowerCaseSingularName}.component.css']");
             }
             builder.AppendLine("})");
-
-            builder.AppendLine(GenerateAddEventHandler(table));
-
-            foreach (Table parentTable in table.Parents)
-            {
-                builder.AppendLine(GenerateDropDownChangeEventHandler(parentTable));
-            }
+            builder.AppendLine(GenerateClass(table));
 
             Helpers.WriteFile($"{path}\\{table.SingularName}.component.ts",
                 builder.ToString());
