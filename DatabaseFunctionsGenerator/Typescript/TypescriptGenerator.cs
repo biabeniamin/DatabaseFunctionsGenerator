@@ -13,7 +13,6 @@ namespace DatabaseFunctionsGenerator
         private TypescriptModelsGenerator _typescriptModelsGenerator;
         private TypescriptGetDataGenerator _typescriptGetDataGenerator;
         private TypescriptHelpersGenerator _typescriptHelpersGenerator;
-        private TypescriptComponentViewGenerator _typescriptViewGenerator;
         private TypescriptComponentGenerator _typescriptComponentGenerator;
 
         public TypescriptGenerator(Database database)
@@ -23,7 +22,6 @@ namespace DatabaseFunctionsGenerator
             _typescriptModelsGenerator = new TypescriptModelsGenerator(_database);
             _typescriptGetDataGenerator = new TypescriptGetDataGenerator(_database);
             _typescriptHelpersGenerator = new TypescriptHelpersGenerator(_database);
-            _typescriptViewGenerator = new TypescriptComponentViewGenerator(_database);
             _typescriptComponentGenerator = new TypescriptComponentGenerator(_database);
         }
 
@@ -36,7 +34,6 @@ namespace DatabaseFunctionsGenerator
             _typescriptModelsGenerator.Generate(typescriptPath);
             _typescriptGetDataGenerator.Generate(typescriptPath);
             _typescriptHelpersGenerator.Generate(typescriptPath);
-            _typescriptViewGenerator.Generate(typescriptPath);
             _typescriptComponentGenerator.Generate(typescriptPath);
         }
     }

@@ -8,14 +8,7 @@ namespace DatabaseFunctionsGenerator
 {
     public class TypescriptComponentViewGenerator
     {
-        private Database _database;
-
-        public TypescriptComponentViewGenerator(Database database)
-        {
-            _database = database;
-        }
-
-        private string GenerateListView(Table table)
+        private static string GenerateListView(Table table)
         {
             StringBuilder builder = new StringBuilder();
             StringBuilder tableBody = new StringBuilder();
@@ -81,7 +74,7 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
-        private string GenerateDropDownForParentSelection(Table table)
+        private static string GenerateDropDownForParentSelection(Table table)
         {
             StringBuilder builder = new StringBuilder();
             StringBuilder optionBody = new StringBuilder();
@@ -106,7 +99,7 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
-        private string GenerateAddForm(Table table)
+        private static string GenerateAddForm(Table table)
         {
             StringBuilder builder = new StringBuilder();
             StringBuilder tableBody = new StringBuilder();
@@ -135,7 +128,7 @@ namespace DatabaseFunctionsGenerator
         }
 
 
-        private string GenerateViewForTable(string path, Table table)
+        public static string GenerateViewForTable(Table table, string path)
         {
             StringBuilder builder = new StringBuilder();
 
@@ -146,14 +139,6 @@ namespace DatabaseFunctionsGenerator
                 builder.ToString());
 
             return builder.ToString();
-        }
-
-        public void Generate(string path)
-        {
-            foreach (Table table in _database.Tables)
-            {
-                GenerateViewForTable(path, table);
-            }
         }
     }
 }

@@ -19,21 +19,22 @@ namespace DatabaseFunctionsGenerator
 
         private void GenerateComponentForTable(Table table, string path)
         {
-            string tableComponentPath;
 
-            tableComponentPath = $"{path}\\{table.LowerCaseSingularName}";
-
-            Directory.CreateDirectory(tableComponentPath);
-
-            TypescriptControllerComponentGenerator.GenerateControllerComponentForTable(table, tableComponentPath);
-            TypescriptComponentSpecGenerator.GenerateComponentSpec(table, tableComponentPath);
+            TypescriptControllerComponentGenerator.GenerateControllerComponentForTable(table, path);
+            TypescriptComponentSpecGenerator.GenerateComponentSpec(table, path);
+            TypescriptComponentViewGenerator.GenerateViewForTable(table, path);
         }
 
         public void Generate(string path)
         {
             foreach (Table table in _database.Tables)
             {
-                GenerateComponentForTable(table, path);
+                string tableComponentPath;
+
+                tableComponentPath = $"{path}\\{table.LowerCaseSingularName}";
+
+                Directory.CreateDirectory(tableComponentPath);
+                GenerateComponentForTable(table, tableComponentPath);
             }
         }
     }
