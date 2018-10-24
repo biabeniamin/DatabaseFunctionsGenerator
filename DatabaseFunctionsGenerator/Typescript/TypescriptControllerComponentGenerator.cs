@@ -75,6 +75,15 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
+        private static string GenerateFields(Table table)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            builder.AppendLine($"{table.LowerCaseSingularName}Service : {table.SingularName}Service;");
+
+            return builder.ToString();
+        }
+
         private static string GenerateConstructor(Table table)
         {
             StringBuilder builder = new StringBuilder();
@@ -103,6 +112,8 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine($"export class {table.SingularName}Component implements OnInit");
             builder.AppendLine("{");
             {
+                classBuilder.AppendLine(GenerateFields(table));
+                classBuilder.AppendLine(GenerateConstructor(table));
                 classBuilder.AppendLine(GenerateAddEventHandler(table));
 
                 foreach (Table parentTable in table.Parents)
@@ -110,7 +121,6 @@ namespace DatabaseFunctionsGenerator
                     classBuilder.AppendLine(GenerateDropDownChangeEventHandler(parentTable));
                 }
 
-                classBuilder.AppendLine(GenerateConstructor(table));
 
                 builder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(),
                     1));
