@@ -80,8 +80,19 @@ namespace DatabaseFunctionsGenerator
         {
             StringBuilder builder = new StringBuilder();
 
+            builder.AppendLine("import { Component, OnInit } from '@angular/core';");
             builder.AppendLine($"import {{ {table.Name} }} from '../app/{table.Name}'");
             builder.AppendLine($"import {{ {table.SingularName}Service }} from './{table.SingularName}Service'");
+            builder.AppendLine();
+
+            //generate component
+            builder.AppendLine("@Component({");
+            {
+                builder.AppendLine($"selector: 'app-{table.LowerCaseSingularName}',");
+                builder.AppendLine($"templateUrl: './{table.LowerCaseSingularName}.component.html',");
+                builder.AppendLine($"styleUrls: ['./{table.LowerCaseSingularName}.component.css']");
+            }
+            builder.AppendLine("})");
 
             builder.AppendLine(GenerateAddEventHandler(table));
 
