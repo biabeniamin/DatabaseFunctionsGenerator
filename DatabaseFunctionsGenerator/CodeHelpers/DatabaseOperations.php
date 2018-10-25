@@ -37,13 +37,10 @@ class DatabaseOperations
     {
         if ($this->connection->query($Sql) === TRUE)
         {
-			
-            return $this->GetLastInsertedId();
+            return 1;
         } 
         return 0;
     }
-
-	function ExecuteSqlWithoutWarning($Sql)
 	
 	function GetLastInsertedId()
 	{

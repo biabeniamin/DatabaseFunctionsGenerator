@@ -290,7 +290,8 @@ namespace DatabaseFunctionsGenerator
             functionBody.AppendLine($"$query = \"INSERT INTO {table.Name}({columnsCommaSeparated.ToString()}) VALUES(\";");
             functionBody.AppendLine(dataColumnsCommaSeparated.ToString());
             functionBody.AppendLine($"$query = $query . \");\";");
-            functionBody.AppendLine($"$id = $database->ExecuteSqlWithoutWarning($query);");
+            functionBody.AppendLine($"$database->ExecuteSqlWithoutWarning($query);");
+            functionBody.AppendLine($"$id = $database->GetLastInsertedId();");
 
             functionBody.AppendLine($"${parameter}->Set{table.PrimaryKeyColumn.Name}($id);");
             functionBody.AppendLine($"${parameter}->Set{table.CreationTimeColumn.Name}(date('Y-m-d H:i:s'));");
