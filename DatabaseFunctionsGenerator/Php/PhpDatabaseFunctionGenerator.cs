@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DatabaseFunctionsGenerator.Php;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -382,182 +383,7 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
-        private string GenerateGetRequest(Table table)
-        {
-            StringBuilder builder;
-            StringBuilder addBlock;
-            string objectName;
-
-            builder = new StringBuilder();
-            addBlock = new StringBuilder();
-            objectName = table.LowerCaseSingularName;
-
-            builder.AppendLine("if(CheckGetParameters([\"cmd\"]))");
-            builder.AppendLine("{");
-            {
-                //to get data
-                builder.AppendLine($"\tif(\"get{table.Name}\" == $_GET[\"cmd\"])");
-                builder.AppendLine("\t{");
-                {
-                    builder.AppendLine($"\t\t$database = new DatabaseOperations();");
-                    builder.AppendLine($"\t\techo json_encode(Get{table.Name}($database));");
-                }
-                builder.AppendLine("\t}");
-
-                //to get data by dedicated fields
-
-                foreach (DedicatedGetRequest dedicatedRequest in table.DedicatedGetRequests)
-                {
-                    builder.AppendLine($"\telse if(\"get{table.Name}By{dedicatedRequest.ToString("")}\" == $_GET[\"cmd\"])");
-                    builder.AppendLine("\t{");
-                    {
-                        StringBuilder dedicatedBuilder;
-
-                        dedicatedBuilder = new StringBuilder();
-
-                        dedicatedBuilder.AppendLine("if(CheckGetParameters([");
-                        foreach (Column column in dedicatedRequest.Columns)
-                        {
-                            dedicatedBuilder.AppendLine($"\t\'{column.LowerCaseName}\',");
-                        }
-                        if (dedicatedBuilder.ToString().Contains(','))
-                        {
-                            dedicatedBuilder.Remove(dedicatedBuilder.ToString().LastIndexOf(','), 1);
-                        }
-
-                        dedicatedBuilder.AppendLine("\t]))");
-                        dedicatedBuilder.AppendLine("{");
-                        {
-                            dedicatedBuilder.AppendLine($"\t$database = new DatabaseOperations();");
-                            dedicatedBuilder.AppendLine($"\techo json_encode(Get{table.Name}By{dedicatedRequest.ToString("")}($database, ");
-
-                            foreach(Column column in dedicatedRequest.Columns)
-                            {
-                                dedicatedBuilder.AppendLine($"\t\t$_GET[\"{column.LowerCaseName}\"],");
-                            }
-
-                            if(dedicatedBuilder.ToString().Contains(","))
-                            {
-                                dedicatedBuilder.Remove(dedicatedBuilder.ToString().LastIndexOf(","), 1);
-                            }
-
-                            dedicatedBuilder.AppendLine($"\t));");
-                        }
-                        dedicatedBuilder.AppendLine("}");
-                        builder.AppendLine(Helpers.AddIndentation(dedicatedBuilder.ToString(),
-                            2));
-                    }
-                    builder.AppendLine("\t}");
-                }
-
-                //to add data
-                builder.AppendLine($"\telse if(\"add{table.SingularName}\" == $_GET[\"cmd\"])");
-                builder.AppendLine("\t{");
-                {
-
-                    addBlock.AppendLine("\tif(CheckGetParameters([");
-                    foreach (Column column in table.EditableColumns)
-                    {
-                        addBlock.AppendLine($"\t\t\'{column.LowerCaseName}\',");
-                    }
-                    if (addBlock.ToString().Contains(','))
-                    {
-                        addBlock.Remove(addBlock.ToString().LastIndexOf(','), 1);
-                    }
-
-                    addBlock.AppendLine("\t]))");
-                    addBlock.AppendLine("\t{");
-                    {
-
-                        addBlock.AppendLine($"\t\t$database = new DatabaseOperations();");
-                        addBlock.AppendLine($"\t\t${objectName} = new {table.SingularName}(");
-
-                        foreach (Column column in table.EditableColumns)
-                        {
-                            addBlock.AppendLine($"\t\t\t$_GET[\'{column.LowerCaseName}\'],");
-                        }
-
-                        if (addBlock.ToString().Contains(','))
-                        {
-                            addBlock.Remove(addBlock.ToString().LastIndexOf(','), 1);
-                        }
-
-                        addBlock.AppendLine($"\t\t);");
-                        addBlock.AppendLine();
-
-                        addBlock.AppendLine($"\t\techo json_encode(Add{table.SingularName}($database, ${objectName}));");
-
-                    }
-                    addBlock.AppendLine($"\t}}");
-                    builder.AppendLine(Helpers.AddIndentation(addBlock.ToString(), 1));
-
-                }
-                builder.AppendLine("\t}");
-            }
-            builder.AppendLine("}");
-
-            return builder.ToString();
-        }
-
-        private string GeneratePostRequest(Table table)
-        {
-            StringBuilder builder = new StringBuilder();
-            StringBuilder addBlock = new StringBuilder();
-            string objectName;
-
-            objectName = table.LowerCaseSingularName;
-
-            builder.AppendLine("if(CheckGetParameters([\"cmd\"]))");
-            builder.AppendLine("{");
-            {
-                //to add data
-                builder.AppendLine($"\tif(\"add{table.SingularName}\" == $_GET[\"cmd\"])");
-                builder.AppendLine("\t{");
-                {
-
-                    addBlock.AppendLine("\tif(CheckPostParameters([");
-                    foreach (Column column in table.EditableColumns)
-                    {
-                        addBlock.AppendLine($"\t\t\'{column.LowerCaseName}\',");
-                    }
-                    if (addBlock.ToString().Contains(','))
-                    {
-                        addBlock.Remove(addBlock.ToString().LastIndexOf(','), 1);
-                    }
-
-                    addBlock.AppendLine("\t]))");
-                    addBlock.AppendLine("\t{");
-                    {
-
-                        addBlock.AppendLine($"\t\t$database = new DatabaseOperations();");
-                        addBlock.AppendLine($"\t\t${objectName} = new {table.SingularName}(");
-
-                        foreach (Column column in table.EditableColumns)
-                        {
-                            addBlock.AppendLine($"\t\t\t$_POST[\'{column.LowerCaseName}\'],");
-                        }
-
-                        if (addBlock.ToString().Contains(','))
-                        {
-                            addBlock.Remove(addBlock.ToString().LastIndexOf(','), 1);
-                        }
-
-                        addBlock.AppendLine($"\t\t);");
-                        addBlock.AppendLine();
-
-                        addBlock.AppendLine($"\t\techo json_encode(Add{table.SingularName}($database, ${objectName}));");
-
-                    }
-                    addBlock.AppendLine($"\t}}");
-                    builder.AppendLine(Helpers.AddIndentation(addBlock.ToString(), 1));
-
-                }
-                builder.AppendLine("\t}");
-            }
-            builder.AppendLine("}");
-
-            return builder.ToString();
-        }
+        
 
         private string GenerateFunctionsForTable(string path, Table table)
         {
@@ -566,6 +392,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine($"<?php");
             builder.AppendLine("header('Access-Control-Allow-Origin: *'); ");
             builder.AppendLine("header('Access-Control-Allow-Headers: *'); ");
+            builder.AppendLine("header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');");
             builder.AppendLine("$_POST = json_decode(file_get_contents('php://input'), true);");
             builder.AppendLine($"require_once \'Models/{table.SingularName}.php\';");
             builder.AppendLine($"require_once \'DatabaseOperations.php\';");
@@ -583,8 +410,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine(GenerateAddFunction(table));
             builder.AppendLine(GenerateTestAddFunction(table));
             builder.AppendLine(GenerateGetEmptyEntryFunction(table));
-            builder.AppendLine(GenerateGetRequest(table));
-            builder.AppendLine(GeneratePostRequest(table));
+            builder.AppendLine(PhpRequestsGenerator.GenerateRequests(table));
             builder.AppendLine($"?>");
 
             Helpers.WriteFile($"{path}\\Php\\{table.Name}.php",
