@@ -243,6 +243,10 @@ namespace DatabaseFunctionsGenerator.Php
                     Helpers.RemoveLastApparition(requestBody, ",");
 
                     requestBody.AppendLine($");");
+                    foreach (Column column in table.NonEditableColumns)
+                    {
+                        requestBody.AppendLine($"${table.LowerCaseSingularName}->Set{column.Name}($_POST['{column.LowerCaseName}']);");
+                    }
                     requestBody.AppendLine();
 
                     requestBody.AppendLine($"${table.LowerCaseSingularName} = Update{table.SingularName}($database, ${table.LowerCaseSingularName});");

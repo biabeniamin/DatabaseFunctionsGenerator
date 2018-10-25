@@ -327,7 +327,7 @@ namespace DatabaseFunctionsGenerator
             //generate columnsCommaSeparated and columnsCommaSeparated with data
             foreach (Column column in table.Columns)
             {
-                if (column.Type.IsPrimaryKey)
+                if (column.Type.IsPrimaryKey || column.IsCreationTimeColumn)
                     continue;
 
                 dataColumnsCommaSeparated.Append($"$query = $query . ");
@@ -371,7 +371,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine($"function Update{table.SingularName}($database, ${parameter})");
             builder.AppendLine("{");
 
-            functionBody.AppendLine($"$query = \"UPDATE {table.Name} SET\";");
+            functionBody.AppendLine($"$query = \"UPDATE {table.Name} SET \";");
             functionBody.AppendLine(dataColumnsCommaSeparated.ToString());
             functionBody.AppendLine();
 

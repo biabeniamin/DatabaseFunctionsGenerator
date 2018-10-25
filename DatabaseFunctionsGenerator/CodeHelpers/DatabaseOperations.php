@@ -29,7 +29,7 @@ class DatabaseOperations
             echo "New record created successfully<br>";
             return $this->GetLastInsertedId();
         } else {
-            echo "Error: " . $sql . "<br>" . $this->connection->error;
+            echo "Error: " . $Sql . "<br>" . $this->connection->error;
         }
     }
     
@@ -37,10 +37,13 @@ class DatabaseOperations
     {
         if ($this->connection->query($Sql) === TRUE)
         {
+			
             return $this->GetLastInsertedId();
         } 
         return 0;
     }
+
+	function ExecuteSqlWithoutWarning($Sql)
 	
 	function GetLastInsertedId()
 	{
