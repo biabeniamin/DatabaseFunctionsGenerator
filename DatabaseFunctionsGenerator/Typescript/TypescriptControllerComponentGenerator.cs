@@ -80,6 +80,10 @@ namespace DatabaseFunctionsGenerator
             StringBuilder builder = new StringBuilder();
 
             builder.AppendLine($"{table.LowerCaseSingularName}Service : {table.SingularName}Service;");
+            foreach (Table parentTable in table.Parents)
+            {
+                builder.AppendLine($"{parentTable.LowerCaseSingularName}Service : {parentTable.SingularName}Service;");
+            }
 
             return builder.ToString();
         }
