@@ -133,6 +133,7 @@ namespace DatabaseFunctionsGenerator.Php
             return builder.ToString();
         }
 
+
         private static string GenerateGetRequest(Table table)
         {
             StringBuilder builder;
@@ -197,10 +198,7 @@ namespace DatabaseFunctionsGenerator.Php
                             addBlock.AppendLine($"\t\t\t$_POST[\'{column.LowerCaseName}\'],");
                         }
 
-                        if (addBlock.ToString().Contains(','))
-                        {
-                            addBlock.Remove(addBlock.ToString().LastIndexOf(','), 1);
-                        }
+                        Helpers.RemoveLastApparition(addBlock, ",");
 
                         addBlock.AppendLine($"\t\t);");
                         addBlock.AppendLine();
@@ -219,6 +217,46 @@ namespace DatabaseFunctionsGenerator.Php
             return builder.ToString();
         }
 
+        private static string GeneratePutRequest(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder requestBody;
+
+            builder = new StringBuilder();
+            requestBody = new StringBuilder();
+
+            builder.AppendLine("if(CheckGetParameters([\"cmd\"]))");
+            builder.AppendLine("{");
+            {
+                builder.AppendLine($"\tif(\"update{table.SingularName}\" == $_GET[\"cmd\"])");
+                builder.AppendLine("\t{");
+                {
+                    requestBody.AppendLine($"$database = new DatabaseOperations();");
+
+                    requestBody.AppendLine($"${table.LowerCaseSingularName} = new {table.SingularName}(");
+
+                    foreach (Column column in table.EditableColumns)
+                    {
+                        requestBody.AppendLine($"\t$_POST[\'{column.LowerCaseName}\'],");
+                    }
+
+                    Helpers.RemoveLastApparition(requestBody, ",");
+
+                    requestBody.AppendLine($");");
+                    requestBody.AppendLine();
+
+                    requestBody.AppendLine($"echo json_encode(${table.LowerCaseSingularName});");
+
+                    builder.AppendLine(Helpers.AddIndentation(requestBody,
+                        2));
+                }
+                builder.AppendLine("\t}");
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
         public static string GenerateRequests(Table table)
         {
             StringBuilder builder;
@@ -227,6 +265,8 @@ namespace DatabaseFunctionsGenerator.Php
 
             builder.AppendLine(GenerateGetRequest(table));
             builder.AppendLine(GeneratePostRequest(table));
+            builder.AppendLine(GeneratePutRequest(table));
+
 
             return builder.ToString();
         }

@@ -59,6 +59,12 @@ namespace DatabaseFunctionsGenerator
 
             return builder.ToString();
         }
+
+        public static string AddIndentation(StringBuilder textBuilder, int indentation)
+        {
+            return AddIndentation(textBuilder.ToString(), indentation);
+        }
+
         public static string GetSingular(string plural)
         {
             string singular;
