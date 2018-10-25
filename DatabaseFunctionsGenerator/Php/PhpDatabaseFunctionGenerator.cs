@@ -295,10 +295,95 @@ namespace DatabaseFunctionsGenerator
             functionBody.AppendLine($"${parameter}->Set{table.PrimaryKeyColumn.Name}($id);");
             functionBody.AppendLine($"${parameter}->Set{table.CreationTimeColumn.Name}(date('Y-m-d H:i:s'));");
 
-            foreach(Table parentTable in table.Parents)
+            foreach (Table parentTable in table.Parents)
             {
                 functionBody.AppendLine($"${parameter}->Set{parentTable.SingularName}(Get{parentTable.Name}By{parentTable.GetDedicatedRequestById}($database, ${parameter}->Get{parentTable.PrimaryKeyColumn.Name}())[0]);");
             }
+
+            functionBody.AppendLine($"return ${parameter};");
+            functionBody.AppendLine();
+
+
+
+            builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
+        private string GenerateUpdateFunction(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder functionBody;
+            StringBuilder dataColumnsCommaSeparated;
+            String parameter;
+
+            builder = new StringBuilder();
+            functionBody = new StringBuilder();
+            dataColumnsCommaSeparated = new StringBuilder();
+
+            parameter = table.LowerCaseSingularName;
+
+            //generate columnsCommaSeparated and columnsCommaSeparated with data
+            foreach (Column column in table.Columns)
+            {
+                if (column.Type.IsPrimaryKey)
+                    continue;
+
+                dataColumnsCommaSeparated.Append($"$query = $query . ");
+                dataColumnsCommaSeparated.Append($"\"{column.Name}=");
+
+                if (Types.Integer != column.Type.Type
+                    && !column.IsCreationTimeColumn)
+                {
+                    dataColumnsCommaSeparated.Append("'\" . ");
+                }
+
+                if (column.IsCreationTimeColumn)
+                {
+                    dataColumnsCommaSeparated.Append($"NOW()\"");
+                }
+                else
+                {
+                    dataColumnsCommaSeparated.Append($"${parameter}->Get{column.Name}()");
+                }
+
+                if (Types.Integer != column.Type.Type
+                    && !column.IsCreationTimeColumn)
+                {
+                    dataColumnsCommaSeparated.AppendLine(" . \"', \";");
+                }
+                else
+                {
+                    dataColumnsCommaSeparated.AppendLine(".\", \";");
+                }
+            }
+
+
+            if (1 < dataColumnsCommaSeparated.Length)
+            {
+                dataColumnsCommaSeparated = dataColumnsCommaSeparated.Remove(dataColumnsCommaSeparated.Length - 6, 2);
+            }
+
+            dataColumnsCommaSeparated.Append($"$query = $query . \" WHERE {table.PrimaryKeyColumn.Name}=${table.LowerCaseSingularName}->get{table.PrimaryKeyColumn.Name}()\";");
+
+
+            builder.AppendLine($"function Update{table.SingularName}($database, ${parameter})");
+            builder.AppendLine("{");
+
+            functionBody.AppendLine($"$query = \"UPDATE {table.Name} SET\";");
+            functionBody.AppendLine(dataColumnsCommaSeparated.ToString());
+            functionBody.AppendLine();
+
+            functionBody.AppendLine($"$result = $database->ExecuteSqlWithoutWarning($query);");
+
+            functionBody.AppendLine("if(0 == $result)");
+            functionBody.AppendLine("{");
+            {
+                functionBody.AppendLine($"\t${parameter}->Set{table.PrimaryKeyColumn.Name}(0);");
+            }
+            functionBody.AppendLine("}");
+
 
             functionBody.AppendLine($"return ${parameter};");
             functionBody.AppendLine();
@@ -411,6 +496,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine(GenerateTestAddFunction(table));
             builder.AppendLine(GenerateGetEmptyEntryFunction(table));
             builder.AppendLine(PhpRequestsGenerator.GenerateRequests(table));
+            builder.AppendLine(GenerateUpdateFunction(table));
             builder.AppendLine($"?>");
 
             Helpers.WriteFile($"{path}\\Php\\{table.Name}.php",
