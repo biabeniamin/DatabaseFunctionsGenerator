@@ -365,7 +365,7 @@ namespace DatabaseFunctionsGenerator
                 dataColumnsCommaSeparated = dataColumnsCommaSeparated.Remove(dataColumnsCommaSeparated.Length - 6, 2);
             }
 
-            dataColumnsCommaSeparated.Append($"$query = $query . \" WHERE {table.PrimaryKeyColumn.Name}=${table.LowerCaseSingularName}->get{table.PrimaryKeyColumn.Name}()\";");
+            dataColumnsCommaSeparated.Append($"$query = $query . \" WHERE {table.PrimaryKeyColumn.Name}=\" . ${table.LowerCaseSingularName}->Get{table.PrimaryKeyColumn.Name}();");
 
 
             builder.AppendLine($"function Update{table.SingularName}($database, ${parameter})");

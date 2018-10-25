@@ -245,6 +245,7 @@ namespace DatabaseFunctionsGenerator.Php
                     requestBody.AppendLine($");");
                     requestBody.AppendLine();
 
+                    requestBody.AppendLine($"${table.LowerCaseSingularName} = Update{table.SingularName}($database, ${table.LowerCaseSingularName});");
                     requestBody.AppendLine($"echo json_encode(${table.LowerCaseSingularName});");
 
                     builder.AppendLine(Helpers.AddIndentation(requestBody,
