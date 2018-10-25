@@ -94,6 +94,11 @@ namespace DatabaseFunctionsGenerator
             {
                 methodBody.AppendLine($"this.{table.LowerCaseSingularName}Service = new {table.SingularName}Service(http);");
 
+                foreach(Table parentTable in table.Parents)
+                {
+                    methodBody.AppendLine($"this.{parentTable.LowerCaseSingularName}Service = new {parentTable.SingularName}Service(http);");
+                }
+
                 builder.AppendLine(Helpers.AddIndentation(methodBody.ToString(), 1));
             }
             builder.AppendLine("}");
@@ -154,6 +159,12 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine($"import {{ {table.SingularName}Service }} from '../{table.SingularName}Service'");
             builder.AppendLine("import {HttpClient} from '@angular/common/http';");
             builder.AppendLine("import { FormControl, FormGroup } from '@angular/forms';");
+
+            foreach(Table parentTable in table.Parents)
+            {
+                builder.AppendLine($"import {{ {parentTable.SingularName}Service }} from '../{parentTable.SingularName}Service'");
+            }
+
             builder.AppendLine();
 
             //generate component
