@@ -397,6 +397,44 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
+        private string GenerateDeleteFunction(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder functionBody;
+
+            builder = new StringBuilder();
+            functionBody = new StringBuilder();
+
+            builder.AppendLine($"function Delete{table.SingularName}($database, ${table.LowerCaseSingularName})");
+            builder.AppendLine("{");
+
+            functionBody.AppendLine($"$query = \"DELETE {table.Name} WHERE {table.PrimaryKeyColumn.Name}=\";");
+            functionBody.AppendLine($"$query = $query . ${table.LowerCaseSingularName}->Get{table.PrimaryKeyColumn.Name}();");
+            functionBody.AppendLine();
+
+            functionBody.AppendLine($"$result = $database->ExecuteSqlWithoutWarning($query);");
+            functionBody.AppendLine();
+
+            functionBody.AppendLine("if(0 != $result)");
+            functionBody.AppendLine("{");
+            {
+                functionBody.AppendLine($"\t${table.LowerCaseSingularName}->Set{table.PrimaryKeyColumn.Name}(0);");
+            }
+            functionBody.AppendLine("}");
+            functionBody.AppendLine();
+
+
+            functionBody.AppendLine($"return ${table.LowerCaseSingularName};");
+            functionBody.AppendLine();
+
+
+
+            builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
         private string GenerateTestAddFunction(Table table)
         {
             StringBuilder builder;
@@ -494,10 +532,11 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine(GenerateDedicatedRequestFunctions(table));
             builder.AppendLine(GenerateGetParentFunction(table));
             builder.AppendLine(GenerateAddFunction(table));
+            builder.AppendLine(GenerateUpdateFunction(table));
             builder.AppendLine(GenerateTestAddFunction(table));
             builder.AppendLine(GenerateGetEmptyEntryFunction(table));
             builder.AppendLine(PhpRequestsGenerator.GenerateRequests(table));
-            builder.AppendLine(GenerateUpdateFunction(table));
+            builder.AppendLine(GenerateDeleteFunction(table));
             builder.AppendLine($"?>");
 
             Helpers.WriteFile($"{path}\\Php\\{table.Name}.php",
