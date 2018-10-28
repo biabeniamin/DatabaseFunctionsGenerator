@@ -270,7 +270,8 @@ namespace DatabaseFunctionsGenerator.Php
             builder = new StringBuilder();
             requestBody = new StringBuilder();
 
-            builder.AppendLine("if(CheckGetParameters([\"cmd\"]))");
+            builder.AppendLine("if(\"DELETE\" == $_SERVER['REQUEST_METHOD']" +
+                "\n\t&& CheckGetParameters([\"cmd\"]))");
             builder.AppendLine("{");
             {
                 builder.AppendLine($"\tif(\"delete{table.SingularName}\" == $_GET[\"cmd\"])");
