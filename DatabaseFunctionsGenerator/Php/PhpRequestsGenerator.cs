@@ -262,6 +262,38 @@ namespace DatabaseFunctionsGenerator.Php
             return builder.ToString();
         }
 
+        private static string GenerateDeleteRequest(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder requestBody;
+
+            builder = new StringBuilder();
+            requestBody = new StringBuilder();
+
+            builder.AppendLine("if(CheckGetParameters([\"cmd\"]))");
+            builder.AppendLine("{");
+            {
+                builder.AppendLine($"\tif(\"delete{table.SingularName}\" == $_GET[\"cmd\"])");
+                builder.AppendLine("\t{");
+                {
+                    requestBody.AppendLine($"$database = new DatabaseOperations();");
+
+                    requestBody.AppendLine($"${table.PrimaryKeyColumn.LowerCaseName} = $_GET['{table.PrimaryKeyColumn.LowerCaseName}'];");
+                    requestBody.AppendLine();
+
+                    requestBody.AppendLine($"${table.LowerCaseSingularName} = Delete{table.SingularName}($database, ${table.PrimaryKeyColumn.LowerCaseName});");
+                    requestBody.AppendLine($"echo json_encode(${table.LowerCaseSingularName});");
+
+                    builder.AppendLine(Helpers.AddIndentation(requestBody,
+                        2));
+                }
+                builder.AppendLine("\t}");
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
         public static string GenerateRequests(Table table)
         {
             StringBuilder builder;
@@ -271,6 +303,7 @@ namespace DatabaseFunctionsGenerator.Php
             builder.AppendLine(GenerateGetRequest(table));
             builder.AppendLine(GeneratePostRequest(table));
             builder.AppendLine(GeneratePutRequest(table));
+            builder.AppendLine(GenerateDeleteRequest(table));
 
 
             return builder.ToString();
