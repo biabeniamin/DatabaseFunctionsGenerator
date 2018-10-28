@@ -408,7 +408,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine($"function Delete{table.SingularName}($database, ${table.LowerCaseSingularName})");
             builder.AppendLine("{");
 
-            functionBody.AppendLine($"$query = \"DELETE {table.Name} WHERE {table.PrimaryKeyColumn.Name}=\";");
+            functionBody.AppendLine($"$query = \"DELETE FROM {table.Name} WHERE {table.PrimaryKeyColumn.Name}=\";");
             functionBody.AppendLine($"$query = $query . ${table.LowerCaseSingularName}->Get{table.PrimaryKeyColumn.Name}();");
             functionBody.AppendLine();
 
