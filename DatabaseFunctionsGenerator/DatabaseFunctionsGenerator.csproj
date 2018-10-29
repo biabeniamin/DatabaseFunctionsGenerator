@@ -88,6 +88,7 @@
     <Compile Include="Php\PhpModelsGenerator.cs" />
     <Compile Include="Documentation\RequestTextMenuGenerator.cs" />
     <Compile Include="Php\PhpRequestsGenerator.cs" />
+    <Compile Include="Python\PythonGenerator.cs" />
     <Compile Include="Typescript\TypescriptComponentGenerator.cs" />
     <Compile Include="Typescript\TypescriptComponentStyleGenerator.cs" />
     <Compile Include="Typescript\TypescriptControllerComponentGenerator.cs" />
