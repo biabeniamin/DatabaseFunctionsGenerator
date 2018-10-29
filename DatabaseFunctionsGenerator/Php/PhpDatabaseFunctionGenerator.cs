@@ -405,11 +405,13 @@ namespace DatabaseFunctionsGenerator
             builder = new StringBuilder();
             functionBody = new StringBuilder();
 
-            builder.AppendLine($"function Delete{table.SingularName}($database, ${table.LowerCaseSingularName})");
+            builder.AppendLine($"function Delete{table.SingularName}($database, ${table.PrimaryKeyColumn.LowerCaseName})");
             builder.AppendLine("{");
 
-            functionBody.AppendLine($"$query = \"DELETE {table.Name} WHERE {table.PrimaryKeyColumn.Name}=\";");
-            functionBody.AppendLine($"$query = $query . ${table.LowerCaseSingularName}->Get{table.PrimaryKeyColumn.Name}();");
+            functionBody.AppendLine($"${table.LowerCaseSingularName} = Get{table.Name}By{table.PrimaryKeyColumn.Name}($database, ${table.PrimaryKeyColumn.LowerCaseName})[0];");
+            functionBody.AppendLine();
+
+            functionBody.AppendLine($"$query = \"DELETE FROM {table.Name} WHERE {table.PrimaryKeyColumn.Name}=${table.PrimaryKeyColumn.LowerCaseName}\";");
             functionBody.AppendLine();
 
             functionBody.AppendLine($"$result = $database->ExecuteSqlWithoutWarning($query);");

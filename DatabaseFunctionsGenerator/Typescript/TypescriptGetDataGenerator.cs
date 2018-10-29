@@ -186,6 +186,33 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
+        private string GenerateDeleteFunction(Table table)
+        {
+            StringBuilder builder = new StringBuilder();
+            StringBuilder functionBody = new StringBuilder();
+            string objectName;
+
+            objectName = Helpers.GetLowerCaseString(table.SingularName);
+
+            builder.AppendLine($"Delete{table.SingularName}({table.LowerCaseSingularName})");
+            builder.AppendLine("{");
+            {
+
+                functionBody.AppendLine($"return this.http.delete<{table.SingularName}>(ServerUrl.GetUrl()  + \"{table.Name}.php?cmd=delete{table.SingularName}&{table.PrimaryKeyColumn.LowerCaseName}=\" +  {table.LowerCaseSingularName}.{table.PrimaryKeyColumn.LowerCaseName}, ).subscribe({table.LowerCaseSingularName} =>");
+                functionBody.AppendLine("{");
+                {
+                    functionBody.AppendLine($"\tconsole.log({table.LowerCaseSingularName});");
+                    functionBody.AppendLine($"\treturn {table.LowerCaseSingularName};");
+                }
+                functionBody.AppendLine("});");
+
+                builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
 
         private string GenerateFunctionsForTable(string path, Table table)
         {
@@ -215,6 +242,7 @@ namespace DatabaseFunctionsGenerator
                 classBody.AppendLine(GenerateConstructor(table));
                 classBody.AppendLine(GenerateAddFunction(table));
                 classBody.AppendLine(GenerateUpdateFunction(table));
+                classBody.AppendLine(GenerateDeleteFunction(table));
             }
             builder.AppendLine(Helpers.AddIndentation(classBody.ToString(), 1));
             builder.AppendLine("}");
