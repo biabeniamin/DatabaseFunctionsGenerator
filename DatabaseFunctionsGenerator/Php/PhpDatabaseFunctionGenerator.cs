@@ -337,8 +337,9 @@ namespace DatabaseFunctionsGenerator
                 if (Types.Integer != column.Type.Type
                     && !column.IsCreationTimeColumn)
                 {
-                    dataColumnsCommaSeparated.Append("'\" . ");
+                    dataColumnsCommaSeparated.Append("'");
                 }
+                dataColumnsCommaSeparated.Append("\" . ");
 
                 if (column.IsCreationTimeColumn)
                 {
