@@ -60,7 +60,7 @@ namespace DatabaseFunctionsGenerator
             Database = new Database();
 
             Database.Tables.Add(new Table("Users"));
-            Database.Tables.Add(new Table("VitalData"));
+            Database.Tables.Add(new Table("VitalSigns"));
             Database.Tables.Add(new Table("Locations"));
 
 
@@ -76,9 +76,9 @@ namespace DatabaseFunctionsGenerator
             Database.Tables[1].Columns.Add(new Column("Pulse", new ColumnType(Types.Integer)));
             Database.Tables[1].Columns.Add(new Column("BodyTemperature", new ColumnType(Types.Integer)));
 
-            Database.Tables[1].Columns.Add(new Column("DeviceName", new ColumnType(Types.Varchar, 20)));
-            Database.Tables[1].Columns.Add(new Column("X", new ColumnType(Types.Integer)));
-            Database.Tables[1].Columns.Add(new Column("Y", new ColumnType(Types.Integer)));
+            Database.Tables[2].Columns.Add(new Column("DeviceName", new ColumnType(Types.Varchar, 20)));
+            Database.Tables[2].Columns.Add(new Column("X", new ColumnType(Types.Integer)));
+            Database.Tables[2].Columns.Add(new Column("Y", new ColumnType(Types.Integer)));
 
 
             Database.Relations.Add(new Relation(Database.Tables[0], Database.Tables[1], RelationType.OneToMany));
