@@ -36,7 +36,7 @@ namespace DatabaseFunctionsGenerator.Python
 
                 //setter
                 builder.AppendLine($"@{column.LowerCaseName}.setter");
-                builder.AppendLine($"def {column.LowerCaseName}(self {column.LowerCaseName})");
+                builder.AppendLine($"def {column.LowerCaseName}(self, {column.LowerCaseName}):");
                 {
                     builder.AppendLine($"\tself._{column.LowerCaseName} = {column.LowerCaseName};");
                 }
