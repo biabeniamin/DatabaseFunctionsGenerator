@@ -90,6 +90,7 @@
     <Compile Include="Php\PhpRequestsGenerator.cs" />
     <Compile Include="Python\PythonGenerator.cs" />
     <Compile Include="Python\PythonModelsGenerator.cs" />
+    <Compile Include="Python\PythonServicesGenerator.cs" />
     <Compile Include="Typescript\TypescriptComponentGenerator.cs" />
     <Compile Include="Typescript\TypescriptComponentStyleGenerator.cs" />
     <Compile Include="Typescript\TypescriptControllerComponentGenerator.cs" />
