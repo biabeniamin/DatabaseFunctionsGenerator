@@ -16,27 +16,6 @@ namespace DatabaseFunctionsGenerator.Python
             _database = database;
         }
 
-        private string GenerateFields(Table table)
-        {
-            StringBuilder builder;
-
-            builder = new StringBuilder();
-
-            //generate fields
-            foreach (Column column in table.Columns)
-            {
-                builder.AppendLine($"private {column.Type.GetJavaType()} {column.LowerCaseName};");
-            }
-
-            foreach (Table parentTable in table.Parents)
-            {
-                builder.AppendLine($"private {parentTable.SingularName} {parentTable.LowerCaseSingularName};");
-            }
-
-
-            return builder.ToString();
-        }
-
         private string GenerateGettersSetters(Table table)
         {
             StringBuilder builder;
@@ -103,7 +82,7 @@ namespace DatabaseFunctionsGenerator.Python
             //generate columnsCommaSeparated
             foreach (Column column in table.EditableColumns)
             {
-                columnsCommaSeparated.Append($"{column.Type.GetJavaType()} {column.LowerCaseName}, ");
+                columnsCommaSeparated.Append($"{column.LowerCaseName}, ");
             }
 
             if (1 < columnsCommaSeparated.Length)
@@ -111,17 +90,15 @@ namespace DatabaseFunctionsGenerator.Python
                 columnsCommaSeparated = columnsCommaSeparated.Remove(columnsCommaSeparated.Length - 2, 2);
             }
 
-            builder.AppendLine($"public {table.SingularName}({columnsCommaSeparated.ToString()})");
-            builder.AppendLine("{");
+            builder.AppendLine($"def __init__(self, {columnsCommaSeparated.ToString()}):");
             {
 
                 foreach (Column column in table.EditableColumns)
                 {
-                    builder.AppendLine($"\tthis.{column.LowerCaseName} = {column.LowerCaseName};");
+                    builder.AppendLine($"\tself._{column.LowerCaseName} = {column.LowerCaseName};");
                 }
 
             }
-            builder.AppendLine("}");
 
             return builder.ToString();
         }
@@ -232,9 +209,8 @@ namespace DatabaseFunctionsGenerator.Python
 
             builder.AppendLine($"class {table.SingularName}:");
             {
-                //classBuilder.AppendLine(GenerateFields(table));
                 classBuilder.AppendLine(GenerateGettersSetters(table));
-                //classBuilder.AppendLine(GenerateConstructor(table));
+                classBuilder.AppendLine(GenerateConstructor(table));
 
                 if (0 < table.Parents.Count)
                 {
