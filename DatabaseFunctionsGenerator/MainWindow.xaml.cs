@@ -60,17 +60,32 @@ namespace DatabaseFunctionsGenerator
             Database = new Database();
 
             Database.Tables.Add(new Table("Users"));
-            Database.Tables.Add(new Table("CheckIns"));
+            Database.Tables.Add(new Table("VitalData"));
+            Database.Tables.Add(new Table("Locations"));
+
 
             Database.Tables[0].Columns.Add(new Column("Username", new ColumnType(Types.Varchar, 20)));
             Database.Tables[0].Columns.Add(new Column("Password", new ColumnType(Types.Varchar, 20)));
             Database.Tables[0].Columns.Add(new Column("Email", new ColumnType(Types.Varchar, 20)));
+            Database.Tables[0].Columns.Add(new Column("Age", new ColumnType(Types.Integer)));
+            Database.Tables[0].Columns.Add(new Column("Description", new ColumnType(Types.Text)));
+            Database.Tables[0].Columns.Add(new Column("CNP", new ColumnType(Types.Varchar, 20)));
+            Database.Tables[0].Columns.Add(new Column("DateOfBirth", new ColumnType(Types.DateTime)));
 
-            Database.Tables[1].Columns.Add(new Column("ScannerName", new ColumnType(Types.Varchar, 20)));
+            Database.Tables[1].Columns.Add(new Column("DeviceName", new ColumnType(Types.Varchar, 20)));
+            Database.Tables[1].Columns.Add(new Column("Pulse", new ColumnType(Types.Integer)));
+            Database.Tables[1].Columns.Add(new Column("BodyTemperature", new ColumnType(Types.Integer)));
+
+            Database.Tables[1].Columns.Add(new Column("DeviceName", new ColumnType(Types.Varchar, 20)));
+            Database.Tables[1].Columns.Add(new Column("X", new ColumnType(Types.Integer)));
+            Database.Tables[1].Columns.Add(new Column("Y", new ColumnType(Types.Integer)));
+
 
             Database.Relations.Add(new Relation(Database.Tables[0], Database.Tables[1], RelationType.OneToMany));
+            Database.Relations.Add(new Relation(Database.Tables[0], Database.Tables[2], RelationType.OneToMany));
 
             Database.Tables[0].DedicatedGetRequests.Add(new DedicatedGetRequest(Database.Tables[0].Columns[0], Database.Tables[0].Columns[1]));
+            Database.Tables[0].DedicatedGetRequests.Add(new DedicatedGetRequest(Database.Tables[0].Columns[2]));
             Database.Tables[1].DedicatedGetRequests.Add(new DedicatedGetRequest(Database.Tables[1].Columns[0]));
             /*Database.Tables.Add(new Table("Users"));
             Database.Tables.Add(new Table("Locations"));
