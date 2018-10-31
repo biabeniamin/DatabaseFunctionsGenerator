@@ -82,7 +82,7 @@ namespace DatabaseFunctionsGenerator.Python
             //generate columnsCommaSeparated
             foreach (Column column in table.EditableColumns)
             {
-                columnsCommaSeparated.Append($"{column.LowerCaseName}, ");
+                columnsCommaSeparated.Append($"{column.LowerCaseName} = {Helpers.GetDefaultPythonColumnData(column.Type.Type)}, ");
             }
 
             if (1 < columnsCommaSeparated.Length)
@@ -99,43 +99,6 @@ namespace DatabaseFunctionsGenerator.Python
                 }
 
             }
-
-            return builder.ToString();
-        }
-
-        private string GenerateEmptyConstructor(Table table)
-        {
-            StringBuilder builder;
-            StringBuilder constructorBuilder;
-
-            builder = new StringBuilder();
-            constructorBuilder = new StringBuilder();
-
-            builder.AppendLine($"public {table.SingularName}()");
-
-
-
-            builder.AppendLine("{");
-            {
-                constructorBuilder.AppendLine("this(");
-                {
-                    foreach (Column column in table.EditableColumns)
-                    {
-                        constructorBuilder.AppendLine($"\t{Helpers.GetDefaultJavaColumnData(column.Type.Type)}, //{column.Name}");
-                    }
-                    Helpers.RemoveLastApparition(constructorBuilder, ",");
-                }
-                constructorBuilder.AppendLine(");");
-
-                foreach (Column column in table.NonEditableColumns)
-                {
-                    constructorBuilder.AppendLine($"this.{column.LowerCaseName} = {Helpers.GetDefaultJavaColumnData(column.Type.Type)};");
-                }
-                builder.AppendLine(Helpers.AddIndentation(constructorBuilder.ToString(),
-                    1));
-
-            }
-            builder.AppendLine("}");
 
             return builder.ToString();
         }
@@ -216,8 +179,6 @@ namespace DatabaseFunctionsGenerator.Python
                 {
                     //classBuilder.AppendLine(GenerateConstructorWithParents(table));
                 }
-
-                //classBuilder.AppendLine(GenerateEmptyConstructor(table));
 
                 builder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(),
                         1));
