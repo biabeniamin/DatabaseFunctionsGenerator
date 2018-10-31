@@ -106,7 +106,7 @@ namespace DatabaseFunctionsGenerator
 
             builder.AppendLine($"<form (submit)=\"add{table.SingularName}($event)\">");
             {
-                foreach (Column column in table.EditableColumns)
+                foreach (Column column in table.EditableColumns.Where(col => { return false == col.Type.IsForeignKey; }))
                 {
                     tableBody.AppendLine($"{column.Name}");
                     tableBody.AppendLine($"<input type=\"text\" id=\"{column.Name}\"><br>");
