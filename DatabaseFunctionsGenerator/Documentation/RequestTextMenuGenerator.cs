@@ -89,6 +89,47 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
+        private string GenerateUpdateData(Table table, string serverUrl)
+        {
+            StringBuilder builder;
+
+            builder = new StringBuilder();
+
+            //generate post request
+            builder.AppendLine();
+            builder.Append($"{serverUrl}{table.Name}.php?cmd=update{table.SingularName}");
+            builder.AppendLine($"- PUT request with following parameters");
+            //add primary key
+            builder.AppendLine($"{table.PrimaryKeyColumn.LowerCaseName} : {table.PrimaryKeyColumn.Type.GetMysqlType()}");
+
+            foreach (Column column in table.EditableColumns)
+            {
+                builder.AppendLine($"{column.LowerCaseName} : {column.Type.GetMysqlType()}");
+            }
+            builder.AppendLine($"update a {table.SingularName} by id and returns the {table.SingularName} with id != 0 if succeeded");
+
+            return builder.ToString();
+        }
+
+        private string GenerateDeleteData(Table table, string serverUrl)
+        {
+            StringBuilder builder;
+
+            builder = new StringBuilder();
+
+            //generate post request
+            builder.AppendLine();
+            builder.Append($"{serverUrl}{table.Name}.php?cmd=update{table.SingularName}&{table.PrimaryKeyColumn.LowerCaseName}={Helpers.GetDefaultColumnDataWithoutApostrophe(table.PrimaryKeyColumn.Type.Type)}");
+            builder.AppendLine($"- DELETE request with following parameters");
+            foreach (Column column in table.EditableColumns)
+            {
+                builder.AppendLine($"{column.LowerCaseName} : {column.Type.GetMysqlType()}");
+            }
+            builder.AppendLine($"update a {table.SingularName} by id and returns the {table.SingularName} with id != 0 if succeeded");
+
+            return builder.ToString();
+        }
+
         private string GenerateRequestMenu(Table table, string serverUrl)
         {
             StringBuilder builder;
@@ -101,6 +142,8 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine(GenerateDedicatedRequests(table, serverUrl));
             builder.AppendLine(GenerateGetAddData(table, serverUrl));
             builder.AppendLine(GeneratePostAddData(table, serverUrl));
+            builder.AppendLine(GenerateUpdateData(table, serverUrl));
+            builder.AppendLine(GenerateDeleteData(table, serverUrl));
 
             return builder.ToString();
         }
