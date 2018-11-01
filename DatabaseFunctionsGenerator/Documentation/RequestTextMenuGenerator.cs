@@ -16,19 +16,27 @@ namespace DatabaseFunctionsGenerator
             _database = database;
         }
 
-        private string GenerateRequestMenu(Table table, string serverUrl)
+        private string GenerateGetAllData(Table table, string serverUrl)
         {
             StringBuilder builder;
 
             builder = new StringBuilder();
 
             //get request to get data
-            builder.AppendLine($"------------{table.Name}----------");
             builder.AppendLine($"{serverUrl}{table.Name}.php?cmd=get{table.Name} - GET request -return all {table.Name}");
+
+            return builder.ToString();
+        }
+
+        private string GenerateDedicatedRequests(Table table, string serverUrl)
+        {
+            StringBuilder builder;
+
+            builder = new StringBuilder();
 
             //dedicated get requests
 
-            foreach(DedicatedGetRequest request in table.DedicatedGetRequests)
+            foreach (DedicatedGetRequest request in table.DedicatedGetRequests)
             {
                 builder.Append($"{serverUrl}{table.Name}.php?cmd=get{table.Name}By{request.ToString("")}");
 
@@ -38,17 +46,35 @@ namespace DatabaseFunctionsGenerator
                 }
 
                 builder.AppendLine($" - GET request -return {table.Name} filtered by {request.ToString(", ")}");
+                builder.AppendLine();
             }
+
+            return builder.ToString();
+        }
+
+        private string GenerateGetAddData(Table table, string serverUrl)
+        {
+            StringBuilder builder;
+
+            builder = new StringBuilder();
 
             //get request to add data
 
             builder.Append($"{serverUrl}{table.Name}.php?cmd=add{table.SingularName}");
-            foreach(Column column in table.EditableColumns)
+            foreach (Column column in table.EditableColumns)
             {
                 builder.Append($"&{column.LowerCaseName}={Helpers.GetDefaultColumnDataWithoutApostrophe(column.Type.Type)}");
             }
             builder.AppendLine($" - GET request -add a new {table.SingularName} with specified data and return the item with id != 0 if was added");
 
+            return builder.ToString();
+        }
+
+        private string GeneratePostAddData(Table table, string serverUrl)
+        {
+            StringBuilder builder;
+
+            builder = new StringBuilder();
 
             //generate post request
             builder.AppendLine();
@@ -59,6 +85,22 @@ namespace DatabaseFunctionsGenerator
                 builder.AppendLine($"{column.LowerCaseName} : {column.Type.GetMysqlType()}");
             }
             builder.AppendLine($"add a new {table.SingularName} with specified data and returns the {table.SingularName} with id != 0 if succeeded");
+
+            return builder.ToString();
+        }
+
+        private string GenerateRequestMenu(Table table, string serverUrl)
+        {
+            StringBuilder builder;
+
+            builder = new StringBuilder();
+
+            builder.AppendLine($"------------{table.Name}----------");
+
+            builder.AppendLine(GenerateGetAllData(table, serverUrl));
+            builder.AppendLine(GenerateDedicatedRequests(table, serverUrl));
+            builder.AppendLine(GenerateGetAddData(table, serverUrl));
+            builder.AppendLine(GeneratePostAddData(table, serverUrl));
 
             return builder.ToString();
         }
