@@ -120,12 +120,8 @@ namespace DatabaseFunctionsGenerator
             //generate post request
             builder.AppendLine();
             builder.Append($"{serverUrl}{table.Name}.php?cmd=update{table.SingularName}&{table.PrimaryKeyColumn.LowerCaseName}={Helpers.GetDefaultColumnDataWithoutApostrophe(table.PrimaryKeyColumn.Type.Type)}");
-            builder.AppendLine($"- DELETE request with following parameters");
-            foreach (Column column in table.EditableColumns)
-            {
-                builder.AppendLine($"{column.LowerCaseName} : {column.Type.GetMysqlType()}");
-            }
-            builder.AppendLine($"update a {table.SingularName} by id and returns the {table.SingularName} with id != 0 if succeeded");
+            builder.AppendLine($" - DELETE request");
+            builder.AppendLine($"deletes a {table.SingularName} by id and returns the {table.SingularName} with id == 0 if succeeded");
 
             return builder.ToString();
         }
