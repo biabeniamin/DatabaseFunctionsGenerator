@@ -229,7 +229,7 @@ namespace DatabaseFunctionsGenerator.Java
             classBuilder = new StringBuilder();
 
             builder.AppendLine("//generated automatically");
-            builder.AppendLine($"package {packageName};");
+            builder.AppendLine($"package {packageName}.Models;");
             builder.AppendLine("import java.util.List;");
             builder.AppendLine("import retrofit2.Call;");
             builder.AppendLine("import retrofit2.Callback;");

@@ -12,7 +12,7 @@ namespace DatabaseFunctionsGenerator
         private ObservableCollection<Table> _tables;
         private ObservableCollection<Relation> _relations;
         private string _serverUrl = "http://codeforgood18.avramiancuturda.ro/";
-        private string _javaPackageName= "com.example.biabe.testretrofit";
+        private string _javaPackageName= "com.example.biabe.DatabaseFunctionsGenerator";
 
         public string JavaPackageName
         {
