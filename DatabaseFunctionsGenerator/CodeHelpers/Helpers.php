@@ -4,11 +4,14 @@ $_POST = json_decode(file_get_contents('php://input'), true);
 
 function CheckParameter($list, $parameter)
 {
-	if(!isset($list[$parameter]) || $list[$parameter] == "")
+	if(isset($list[$parameter]))
     {
-        return false;
+        if($list[$parameter] != "" || $list[$parameter] == 0)
+        {
+            return true;
+        }
     }
-	return true;
+	return false;
 }
 
 function CheckGetParameters($list)
@@ -30,6 +33,7 @@ function CheckPostParameters($list)
     {
         if(!CheckParameter($_POST, $parameter))
 		{
+            file_put_contents("object.log",$parameter." empty");
 			return false;
 		}
     }
