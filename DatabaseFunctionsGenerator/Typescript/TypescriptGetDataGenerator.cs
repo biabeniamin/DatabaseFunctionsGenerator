@@ -44,12 +44,26 @@ namespace DatabaseFunctionsGenerator
 
         private string GenerateDedicatedGetRequestsFunction(Table table)
         {
-            StringBuilder builder = new StringBuilder();
-            StringBuilder functionBody = new StringBuilder();
+            StringBuilder builder;
+            StringBuilder functionBody;
+
+            builder = new StringBuilder();
+            functionBody = new StringBuilder();
+
 
             foreach (DedicatedGetRequest request in table.DedicatedGetRequests)
             {
-                builder.AppendLine($"Get{table.Name}By{request.ToString("")}()");
+                StringBuilder parameters;
+
+                parameters = new StringBuilder();
+
+                foreach(Column column in request.Columns)
+                {
+                    parameters.Append($"{column.LowerCaseName}, ");
+                }
+                Helpers.RemoveLastApparition(parameters, ", ");
+
+                builder.AppendLine($"Get{table.Name}By{request.ToString("")}({parameters})");
                 builder.AppendLine("{");
                 {
 
@@ -237,12 +251,12 @@ namespace DatabaseFunctionsGenerator
                 classBody.AppendLine($"public {table.LowerCaseName} : {table.SingularName}[];");
 
                 classBody.AppendLine(GenerateGetFunction(table));
-                classBody.AppendLine(GenerateDedicatedGetRequestsFunction(table));
                 classBody.AppendLine(GenerateGetDefaultValueFunction(table));
                 classBody.AppendLine(GenerateConstructor(table));
                 classBody.AppendLine(GenerateAddFunction(table));
                 classBody.AppendLine(GenerateUpdateFunction(table));
                 classBody.AppendLine(GenerateDeleteFunction(table));
+                classBody.AppendLine(GenerateDedicatedGetRequestsFunction(table));
             }
             builder.AppendLine(Helpers.AddIndentation(classBody.ToString(), 1));
             builder.AppendLine("}");
