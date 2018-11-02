@@ -104,6 +104,9 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine($"function {table.SingularName}({columnsCommaSeparated.ToString()})");
             builder.AppendLine("{");
 
+            builder.AppendLine($"\t$this->{table.PrimaryKeyColumn.LowerCaseName} = 0;");
+            builder.AppendLine();
+
             foreach (Column column in table.EditableColumns)
             {
                 builder.AppendLine($"\t$this->{Helpers.GetLowerCaseString(column.Name)} = ${column.Name};");
