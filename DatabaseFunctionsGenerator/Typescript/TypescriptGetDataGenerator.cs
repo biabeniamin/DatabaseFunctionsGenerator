@@ -70,12 +70,7 @@ namespace DatabaseFunctionsGenerator
                 builder.AppendLine("{");
                 {
 
-                    functionBody.AppendLine($"return this.http.get<{table.SingularName}[]>(ServerUrl.GetUrl()  + `{table.Name}.php?cmd=get{table.Name}By{request.ToString("")}{urlParameters}`).subscribe(data =>");
-                    functionBody.AppendLine("{");
-                    {
-                        functionBody.AppendLine($"\tthis.{table.LowerCaseName} = data;");
-                    }
-                    functionBody.AppendLine("});");
+                    functionBody.AppendLine($"return this.http.get<{table.SingularName}[]>(ServerUrl.GetUrl()  + `{table.Name}.php?cmd=get{table.Name}By{request.ToString("")}{urlParameters}`);");
 
                     builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
                 }
