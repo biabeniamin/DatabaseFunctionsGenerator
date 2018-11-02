@@ -54,12 +54,15 @@ namespace DatabaseFunctionsGenerator
             foreach (DedicatedGetRequest request in table.DedicatedGetRequests)
             {
                 StringBuilder parameters;
+                StringBuilder urlParameters;
 
                 parameters = new StringBuilder();
+                urlParameters = new StringBuilder();
 
-                foreach(Column column in request.Columns)
+                foreach (Column column in request.Columns)
                 {
                     parameters.Append($"{column.LowerCaseName}, ");
+                    urlParameters.Append($"&{column.LowerCaseName}=${{{column.LowerCaseName}}}");
                 }
                 Helpers.RemoveLastApparition(parameters, ", ");
 
@@ -67,7 +70,7 @@ namespace DatabaseFunctionsGenerator
                 builder.AppendLine("{");
                 {
 
-                    functionBody.AppendLine($"return this.http.get<{table.SingularName}[]>(ServerUrl.GetUrl()  + \"{table.Name}.php?cmd=get{table.Name}By{request.ToString("")}\").subscribe(data =>");
+                    functionBody.AppendLine($"return this.http.get<{table.SingularName}[]>(ServerUrl.GetUrl()  + `{table.Name}.php?cmd=get{table.Name}By{request.ToString("")}{urlParameters}`).subscribe(data =>");
                     functionBody.AppendLine("{");
                     {
                         functionBody.AppendLine($"\tthis.{table.LowerCaseName} = data;");
