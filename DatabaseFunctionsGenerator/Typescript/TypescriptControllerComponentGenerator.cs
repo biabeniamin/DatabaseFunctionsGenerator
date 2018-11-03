@@ -96,7 +96,7 @@ namespace DatabaseFunctionsGenerator
 
                 foreach (Table parentTable in table.Parents)
                 {
-                    builder.AppendLine($"private {parentTable.LowerCaseSingularName}Service : {parentTable.SingularName}Service");
+                    builder.AppendLine($"\tprivate {parentTable.LowerCaseSingularName}Service : {parentTable.SingularName}Service, ");
                 }
 
                 Helpers.RemoveLastApparition(builder, ", ");
