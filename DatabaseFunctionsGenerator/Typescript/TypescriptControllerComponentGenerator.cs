@@ -93,15 +93,24 @@ namespace DatabaseFunctionsGenerator
             StringBuilder builder = new StringBuilder();
             StringBuilder methodBody = new StringBuilder();
 
-            builder.AppendLine($"constructor(private http:HttpClient)");
+            builder.AppendLine($"constructor(private http:HttpClient, ");
+
+            //add the services
+            {
+                builder.AppendLine($"\t{table.LowerCaseSingularName}Service : {table.SingularName}Service, ");
+
+                foreach (Table parentTable in table.Parents)
+                {
+                    methodBody.AppendLine($"{parentTable.LowerCaseSingularName}Service : {parentTable.SingularName}Service");
+                }
+
+                Helpers.RemoveLastApparition(builder, ", ");
+            }
+            builder.AppendLine(")");
+
             builder.AppendLine("{");
             {
-                methodBody.AppendLine($"this.{table.LowerCaseSingularName}Service = new {table.SingularName}Service(http);");
 
-                foreach(Table parentTable in table.Parents)
-                {
-                    methodBody.AppendLine($"this.{parentTable.LowerCaseSingularName}Service = new {parentTable.SingularName}Service(http);");
-                }
 
                 builder.AppendLine(Helpers.AddIndentation(methodBody.ToString(), 1));
             }
