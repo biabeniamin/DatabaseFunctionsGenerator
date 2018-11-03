@@ -233,6 +233,7 @@ namespace DatabaseFunctionsGenerator
 
             builder.AppendLine($"import {{HttpClient}} from '@angular/common/http';");
             builder.AppendLine($"import {{ ServerUrl }} from './ServerUrl'");
+            builder.AppendLine("import { Injectable } from '@angular/core';");
             builder.AppendLine($"import {{ {table.SingularName} }} from '../app/Models/{table.SingularName}'");
 
             foreach (Table parentTable in table.Parents)
