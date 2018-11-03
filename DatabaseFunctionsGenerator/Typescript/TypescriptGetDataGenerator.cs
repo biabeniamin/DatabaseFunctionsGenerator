@@ -240,6 +240,12 @@ namespace DatabaseFunctionsGenerator
                 builder.AppendLine($"import {{ {parentTable.SingularName} }} from '../app/Models/{parentTable.SingularName}'");
                 builder.AppendLine($"import {{ {parentTable.SingularName}Service }} from './{parentTable.SingularName}Service'");
             }
+            builder.AppendLine();
+
+            //make it injectable
+            builder.AppendLine(@"@Injectable({
+    providedIn : 'root'
+})");
 
             builder.AppendLine($"export class {table.SingularName}Service");
             builder.AppendLine("{");
