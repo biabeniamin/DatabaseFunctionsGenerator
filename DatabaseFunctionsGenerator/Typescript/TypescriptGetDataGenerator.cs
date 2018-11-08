@@ -42,6 +42,24 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
+        private string GenerateGetLastFunction(Table table)
+        {
+            StringBuilder builder = new StringBuilder();
+            StringBuilder functionBody = new StringBuilder();
+
+            builder.AppendLine($"GetLast{table.SingularName}()");
+            builder.AppendLine("{");
+            {
+
+                functionBody.AppendLine($"return this.http.get<{table.SingularName}[]>(ServerUrl.GetUrl()  + \"{table.Name}.php?cmd=get{table.Name}\");");
+
+                builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
         private string GenerateDedicatedGetRequestsFunction(Table table)
         {
             StringBuilder builder = new StringBuilder();
@@ -53,7 +71,7 @@ namespace DatabaseFunctionsGenerator
                 builder.AppendLine("{");
                 {
 
-                    functionBody.AppendLine($"return this.http.get<{table.SingularName}[]>(ServerUrl.GetUrl()  + \"{table.Name}.php?cmd=get{table.Name}By{request.ToString("")}\").subscribe(data =>");
+                    functionBody.AppendLine($"return this.http.get<{table.SingularName}[]>(ServerUrl.GetUrl()  + \"{table.Name}.php?cmd=getLast{table.SingularName}By{request.ToString("")}\").subscribe(data =>");
                     functionBody.AppendLine("{");
                     {
                         functionBody.AppendLine($"\tthis.{table.LowerCaseName} = data;");
@@ -237,6 +255,7 @@ namespace DatabaseFunctionsGenerator
                 classBody.AppendLine($"public {table.LowerCaseName} : {table.SingularName}[];");
 
                 classBody.AppendLine(GenerateGetFunction(table));
+                classBody.AppendLine(GenerateGetLastFunction(table));
                 classBody.AppendLine(GenerateDedicatedGetRequestsFunction(table));
                 classBody.AppendLine(GenerateGetDefaultValueFunction(table));
                 classBody.AppendLine(GenerateConstructor(table));
