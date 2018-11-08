@@ -104,7 +104,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine($"function GetLast{table.SingularName}($database)");
             builder.AppendLine("{");
 
-            functionBody.AppendLine($"$data = $database->ReadData(\"SELECT * FROM {table.Name}\");");
+            functionBody.AppendLine($"$data = $database->ReadData(\"SELECT * FROM {table.Name} ORDER BY {table.CreationTimeColumn.Name} DESC LIMIT 1\");");
             functionBody.AppendLine($"${table.LowerCaseName} = ConvertListTo{table.Name}($data);");
 
             foreach (Table parentTable in table.Parents)
