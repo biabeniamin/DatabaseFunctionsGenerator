@@ -1,0 +1,5 @@
+require_once instead of require oin models. if you have multiple classes inheriting same model which has parents, it fails
+
+add missing fields should be called before start generating
+
+
