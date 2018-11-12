@@ -62,6 +62,7 @@ namespace DatabaseFunctionsGenerator
             Database.Tables.Add(new Table("Users"));
             Database.Tables.Add(new Table("VitalSigns"));
             Database.Tables.Add(new Table("Locations"));
+            Database.Tables.Add(new Table("Administrators"));
 
 
             Database.Tables[0].Columns.Add(new Column("Username", new ColumnType(Types.Varchar, 20)));
@@ -80,9 +81,13 @@ namespace DatabaseFunctionsGenerator
             Database.Tables[2].Columns.Add(new Column("X", new ColumnType(Types.Integer)));
             Database.Tables[2].Columns.Add(new Column("Y", new ColumnType(Types.Integer)));
 
+            Database.Tables[2].Columns.Add(new Column("Name", new ColumnType(Types.Varchar, 20)));
+
 
             Database.Relations.Add(new Relation(Database.Tables[0], Database.Tables[1], RelationType.OneToMany));
             Database.Relations.Add(new Relation(Database.Tables[0], Database.Tables[2], RelationType.OneToMany));
+            Database.Relations.Add(new Relation(Database.Tables[2], Database.Tables[3], RelationType.OneToMany));
+            Database.Relations.Add(new Relation(Database.Tables[0], Database.Tables[3], RelationType.OneToMany));
 
             Database.Tables[0].DedicatedGetRequests.Add(new DedicatedGetRequest(Database.Tables[0].Columns[0], Database.Tables[0].Columns[1]));
             Database.Tables[0].DedicatedGetRequests.Add(new DedicatedGetRequest(Database.Tables[0].Columns[2]));
