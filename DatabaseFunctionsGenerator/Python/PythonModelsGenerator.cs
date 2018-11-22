@@ -16,14 +16,16 @@ namespace DatabaseFunctionsGenerator.Python
             _database = database;
         }
 
-        private string GenerateGettersSetters(Table table)
+        private string GenerateFields(Table table)
         {
             StringBuilder builder;
 
             builder = new StringBuilder();
 
-            
-
+            foreach(Column column in table.Columns)
+            {
+                builder.AppendLine($"{column.LowerCaseName} : {column.Type.GetPythonDataClassType()}");
+            }
 
             return builder.ToString();
         }
@@ -41,9 +43,11 @@ namespace DatabaseFunctionsGenerator.Python
             
             builder.AppendLine();
 
+            builder.AppendLine("@dataclass_json");
+            builder.AppendLine("@dataclass");
             builder.AppendLine($"class {table.SingularName}:");
             {
-                //classBuilder.AppendLine(GenerateConstructor(table));
+                classBuilder.AppendLine(GenerateFields(table));
 
                 builder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(),
                         1));

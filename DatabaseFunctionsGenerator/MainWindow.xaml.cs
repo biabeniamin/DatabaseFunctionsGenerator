@@ -68,7 +68,7 @@ namespace DatabaseFunctionsGenerator
 
             Database = new Database();
 
-           /* Database.Tables.Add(new Table("Users"));
+            Database.Tables.Add(new Table("Users"));
             Database.Tables.Add(new Table("VitalSigns"));
             Database.Tables.Add(new Table("Locations"));
             Database.Tables.Add(new Table("Administrators"));
@@ -100,7 +100,7 @@ namespace DatabaseFunctionsGenerator
 
             Database.Tables[0].DedicatedGetRequests.Add(new DedicatedGetRequest(Database.Tables[0].Columns[0], Database.Tables[0].Columns[1]));
             Database.Tables[0].DedicatedGetRequests.Add(new DedicatedGetRequest(Database.Tables[0].Columns[2]));
-            Database.Tables[1].DedicatedGetRequests.Add(new DedicatedGetRequest(Database.Tables[1].Columns[0]));*/
+            Database.Tables[1].DedicatedGetRequests.Add(new DedicatedGetRequest(Database.Tables[1].Columns[0]));
             /*Database.Tables.Add(new Table("Users"));
             Database.Tables.Add(new Table("Locations"));
             Database.Tables.Add(new Table("AccessLogs"));
