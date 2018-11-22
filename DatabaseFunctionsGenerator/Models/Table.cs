@@ -37,7 +37,6 @@ namespace DatabaseFunctionsGenerator
             set { _parents = value; }
         }
 
-        [JsonIgnore]
         public ObservableCollection<Column> Columns
         {
             get { return _columns; }
@@ -54,6 +53,7 @@ namespace DatabaseFunctionsGenerator
             }
         }
 
+        [JsonIgnore]
         public bool HasPrimaryKey
         {
             get
@@ -64,6 +64,7 @@ namespace DatabaseFunctionsGenerator
             }
         }
 
+        [JsonIgnore]
         public Column PrimaryKeyColumn
         {
             get
@@ -83,6 +84,7 @@ namespace DatabaseFunctionsGenerator
             }
         }
 
+        [JsonIgnore]
         public Column CreationTimeColumn
         {
             get
@@ -102,6 +104,7 @@ namespace DatabaseFunctionsGenerator
             }
         }
 
+        [JsonIgnore]
         public IEnumerable<Column> PrimaryKeyColumns
         {
             get
@@ -112,6 +115,7 @@ namespace DatabaseFunctionsGenerator
             }
         }
 
+        [JsonIgnore]
         public IEnumerable<Column> ForeignKeyColumns
         {
             get
@@ -122,6 +126,7 @@ namespace DatabaseFunctionsGenerator
             }
         }
 
+        [JsonIgnore]
         public IEnumerable<Column> EditableColumns
         {
             get
@@ -131,6 +136,8 @@ namespace DatabaseFunctionsGenerator
                 });
             }
         }
+
+        [JsonIgnore]
         public IEnumerable<Column> NonEditableColumns
         {
             get
@@ -141,6 +148,7 @@ namespace DatabaseFunctionsGenerator
             }
         }
 
+        [JsonIgnore]
         public bool HasCreationTime
         {
             get
@@ -152,6 +160,7 @@ namespace DatabaseFunctionsGenerator
             }
         }
 
+        [JsonIgnore]
         public bool HasDedicatedGetRequestForPrimaryKey
         {
             get
@@ -167,6 +176,7 @@ namespace DatabaseFunctionsGenerator
             }
         }
 
+        [JsonIgnore]
         public string LowerCaseName
         {
             get
@@ -175,6 +185,7 @@ namespace DatabaseFunctionsGenerator
             }
         }
 
+        [JsonIgnore]
         public string SingularName
         {
             get
@@ -188,6 +199,7 @@ namespace DatabaseFunctionsGenerator
             set { _singularName = value; }
         }
 
+        [JsonIgnore]
         public string LowerCaseSingularName
         {
             get
@@ -197,6 +209,7 @@ namespace DatabaseFunctionsGenerator
             set { _singularName = value; }
         }
 
+        [JsonIgnore]
         public bool HasParent
         {
             get
@@ -207,6 +220,7 @@ namespace DatabaseFunctionsGenerator
             }
         }
 
+        [JsonIgnore]
         public DedicatedGetRequest GetDedicatedRequestById
         {
             get
