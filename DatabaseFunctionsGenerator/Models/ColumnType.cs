@@ -152,6 +152,23 @@ namespace DatabaseFunctionsGenerator
             return "NOT_EXISTING";
         }
 
+        public string GetPythonDataClassType()
+        {
+            switch (Type)
+            {
+                case Types.DateTime:
+                    return "str";
+                case Types.Integer:
+                    return "int";
+                case Types.Text:
+                case Types.Varchar:
+                    return "str";
+                    break;
+            }
+
+            return "NOT_EXISTING";
+        }
+
         public override string ToString()
         {
             return _type.ToString();
