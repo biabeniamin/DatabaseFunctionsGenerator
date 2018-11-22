@@ -45,6 +45,12 @@ namespace DatabaseFunctionsGenerator
             set { _type = value; }
         }
 
+        public ColumnType()
+            :this(Types.Text)
+        {
+
+        }
+        
         public ColumnType(Types type)
             : this(type, 0)
         {

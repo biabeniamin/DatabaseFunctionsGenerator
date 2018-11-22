@@ -245,6 +245,12 @@ namespace DatabaseFunctionsGenerator
             }
         }
 
+        public Table()
+            :this(null)
+        {
+
+        }
+
         public Table(string name)
             :this(name, new ObservableCollection<Column>())
         {

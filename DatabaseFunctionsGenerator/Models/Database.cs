@@ -62,5 +62,17 @@ namespace DatabaseFunctionsGenerator
             _tables = tables;
             _relations = new ObservableCollection<Relation>();
         }
+
+        public static Database ImportFromJson(string json)
+        {
+            Database database;
+
+            database = new Database();
+
+            database = JsonConvert.DeserializeObject<Database>(json);
+
+
+            return database;
+        }
     }
 }
