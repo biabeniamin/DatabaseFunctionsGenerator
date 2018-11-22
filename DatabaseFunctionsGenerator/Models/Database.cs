@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -39,6 +40,7 @@ namespace DatabaseFunctionsGenerator
             set { _tables = value; }
         }
 
+        [JsonIgnore]
         public bool HasNotificationSystem
         {
             get
