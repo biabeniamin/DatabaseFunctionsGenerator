@@ -40,7 +40,8 @@ namespace DatabaseFunctionsGenerator.Python
             classBuilder = new StringBuilder();
 
             builder.AppendLine("#generated automatically");
-            
+            builder.AppendLine("from dataclasses import dataclass");
+
             builder.AppendLine();
 
             builder.AppendLine("@dataclass_json");
