@@ -93,6 +93,36 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
+        private string GenerateGetLastEntryFunction(Table table)
+        {
+            StringBuilder builder = new StringBuilder();
+            StringBuilder functionBody = new StringBuilder();
+            string objectName;
+
+            objectName = Helpers.GetLowerCaseString(table.SingularName);
+
+            builder.AppendLine($"function GetLast{table.SingularName}($database)");
+            builder.AppendLine("{");
+
+            functionBody.AppendLine($"$data = $database->ReadData(\"SELECT * FROM {table.Name} ORDER BY {table.CreationTimeColumn.Name} DESC LIMIT 1\");");
+            functionBody.AppendLine($"${table.LowerCaseName} = ConvertListTo{table.Name}($data);");
+
+            foreach (Table parentTable in table.Parents)
+            {
+                functionBody.AppendLine($"${table.LowerCaseName} = Complete{parentTable.Name}($database, ${table.LowerCaseName});");
+            }
+
+
+            functionBody.AppendLine($"return ${table.LowerCaseName};");
+
+            builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
+
+
         private string GenerateDedicatedRequestFunctions(Table table)
         {
             StringBuilder builder;
@@ -532,11 +562,12 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine(GenerateDedicatedRequestFunctions(table));
             builder.AppendLine(GenerateGetAsParentFunction(table));
             builder.AppendLine(GenerateAddFunction(table));
+            builder.AppendLine(GenerateDeleteFunction(table));
             builder.AppendLine(GenerateUpdateFunction(table));
             builder.AppendLine(GenerateTestAddFunction(table));
             builder.AppendLine(GenerateGetEmptyEntryFunction(table));
             builder.AppendLine(PhpRequestsGenerator.GenerateRequests(table));
-            builder.AppendLine(GenerateDeleteFunction(table));
+            builder.AppendLine(GenerateGetLastEntryFunction(table));
             builder.AppendLine($"?>");
 
             Helpers.WriteFile($"{path}\\Php\\{table.Name}.php",
