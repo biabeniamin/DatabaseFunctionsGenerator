@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -22,19 +23,21 @@ namespace DatabaseFunctionsGenerator
             set { _dedicatedGetRequests = value; }
         }
 
-
+        [JsonIgnore]
         public ObservableCollection<Table> Childs
         {
             get { return _childs; }
             set { _childs = value; }
         }
 
+        [JsonIgnore]
         public ObservableCollection<Table> Parents
         {
             get { return _parents; }
             set { _parents = value; }
         }
 
+        [JsonIgnore]
         public ObservableCollection<Column> Columns
         {
             get { return _columns; }

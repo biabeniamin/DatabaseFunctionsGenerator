@@ -21,6 +21,7 @@ namespace DatabaseFunctionsGenerator
         private DocumentationGenerator _documentationGenerator;
         private JavaGenerator _javaGenerator;
         private PythonGenerator _pythonGenerator;
+        private GeneratorConfigGenerator _generatorConfigGenerator;
 
         public Generator(Database database)
         {
@@ -34,6 +35,7 @@ namespace DatabaseFunctionsGenerator
             _documentationGenerator = new DocumentationGenerator(_database);
             _javaGenerator = new JavaGenerator(_database);
             _pythonGenerator = new PythonGenerator(_database);
+            _generatorConfigGenerator = new GeneratorConfigGenerator(_database);
         }
 
         private void AddMissingFields()
@@ -123,6 +125,7 @@ namespace DatabaseFunctionsGenerator
             _documentationGenerator.Generate(path);
             _javaGenerator.Generate(path);
             _pythonGenerator.Generate(path);
+            _generatorConfigGenerator.Generate(path);
 
             foreach (string file in Directory.EnumerateFiles($"{path}\\Php"))
             {
