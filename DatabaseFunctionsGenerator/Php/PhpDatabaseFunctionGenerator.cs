@@ -184,7 +184,7 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
-        private string GenerateGetParentFunction(Table table)
+        private string GenerateGetAsParentFunction(Table table)
         {
             StringBuilder builder = new StringBuilder();
             StringBuilder functionBody = new StringBuilder();
@@ -193,63 +193,60 @@ namespace DatabaseFunctionsGenerator
 
             objectName = table.LowerCaseSingularName;
 
-            foreach (Table parentTable in table.Parents)
+            functionBody = new StringBuilder();
+            doWhilenBody = new StringBuilder();
+            builder.AppendLine($"function Complete{table.Name}($database, ${table.LowerCaseName})");
+            builder.AppendLine("{");
             {
-                functionBody = new StringBuilder();
-                doWhilenBody = new StringBuilder();
-                builder.AppendLine($"function Complete{parentTable.Name}($database, ${table.LowerCaseName})");
-                builder.AppendLine("{");
+
+                functionBody.AppendLine($"${table.LowerCaseName} = Get{table.Name}($database);");
+
+                functionBody.AppendLine($"foreach(${table.LowerCaseName} as ${table.LowerCaseSingularName})");
+                functionBody.AppendLine("{");
                 {
-
-                    functionBody.AppendLine($"${parentTable.LowerCaseName} = Get{parentTable.Name}($database);");
-
-                    functionBody.AppendLine($"foreach(${table.LowerCaseName} as ${table.LowerCaseSingularName})");
-                    functionBody.AppendLine("{");
+                    functionBody.AppendLine("\t$start = 0;");
+                    functionBody.AppendLine($"\t$end = count(${table.LowerCaseName}) - 1;");
+                    functionBody.AppendLine("\tdo");
+                    functionBody.AppendLine("\t{");
                     {
-                        functionBody.AppendLine("\t$start = 0;");
-                        functionBody.AppendLine($"\t$end = count(${parentTable.LowerCaseName}) - 1;");
-                        functionBody.AppendLine("\tdo");
-                        functionBody.AppendLine("\t{");
+                        doWhilenBody.AppendLine("$mid = floor(($start + $end) / 2);");
+                        doWhilenBody.AppendLine($"if(${table.LowerCaseSingularName}->Get{table.SingularName}Id() > ${table.LowerCaseName}[$mid]->Get{table.PrimaryKeyColumn.Name}())");
+                        doWhilenBody.AppendLine("{");
                         {
-                            doWhilenBody.AppendLine("$mid = floor(($start + $end) / 2);");
-                            doWhilenBody.AppendLine($"if(${table.LowerCaseSingularName}->Get{parentTable.SingularName}Id() > ${parentTable.LowerCaseName}[$mid]->Get{parentTable.PrimaryKeyColumn.Name}())");
-                            doWhilenBody.AppendLine("{");
-                            {
-                                doWhilenBody.AppendLine("\t$start = $mid + 1;");
-                            }
-                            doWhilenBody.AppendLine("}");
-
-                            doWhilenBody.AppendLine($"else if(${table.LowerCaseSingularName}->Get{parentTable.SingularName}Id() < ${parentTable.LowerCaseName}[$mid]->Get{parentTable.PrimaryKeyColumn.Name}())");
-                            doWhilenBody.AppendLine("{");
-                            {
-                                doWhilenBody.AppendLine("\t$end = $mid - 1;");
-                            }
-                            doWhilenBody.AppendLine("}");
-
-                            doWhilenBody.AppendLine($"else if(${table.LowerCaseSingularName}->Get{parentTable.SingularName}Id() == ${parentTable.LowerCaseName}[$mid]->Get{parentTable.PrimaryKeyColumn.Name}())");
-                            doWhilenBody.AppendLine("{");
-                            {
-                                doWhilenBody.AppendLine("\t$start = $mid + 1;");
-                                doWhilenBody.AppendLine("\t$end = $mid - 1;");
-                                doWhilenBody.AppendLine($"\t${table.LowerCaseSingularName}->Set{parentTable.SingularName}(${parentTable.LowerCaseName}[$mid]);");
-                            }
-                            doWhilenBody.AppendLine("}");
-                            functionBody.AppendLine();
+                            doWhilenBody.AppendLine("\t$start = $mid + 1;");
                         }
-                        functionBody.AppendLine(Helpers.AddIndentation(doWhilenBody.ToString(), 2));
-                        functionBody.AppendLine("\t}while($start <= $end);");
+                        doWhilenBody.AppendLine("}");
+
+                        doWhilenBody.AppendLine($"else if(${table.LowerCaseSingularName}->Get{table.SingularName}Id() < ${table.LowerCaseName}[$mid]->Get{table.PrimaryKeyColumn.Name}())");
+                        doWhilenBody.AppendLine("{");
+                        {
+                            doWhilenBody.AppendLine("\t$end = $mid - 1;");
+                        }
+                        doWhilenBody.AppendLine("}");
+
+                        doWhilenBody.AppendLine($"else if(${table.LowerCaseSingularName}->Get{table.SingularName}Id() == ${table.LowerCaseName}[$mid]->Get{table.PrimaryKeyColumn.Name}())");
+                        doWhilenBody.AppendLine("{");
+                        {
+                            doWhilenBody.AppendLine("\t$start = $mid + 1;");
+                            doWhilenBody.AppendLine("\t$end = $mid - 1;");
+                            doWhilenBody.AppendLine($"\t${table.LowerCaseSingularName}->Set{table.SingularName}(${table.LowerCaseName}[$mid]);");
+                        }
+                        doWhilenBody.AppendLine("}");
+                        functionBody.AppendLine();
                     }
-                    functionBody.AppendLine("}");
-                    functionBody.AppendLine();
-
-                    functionBody.AppendLine($"return ${table.LowerCaseName};");
-
-                    builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
+                    functionBody.AppendLine(Helpers.AddIndentation(doWhilenBody.ToString(), 2));
+                    functionBody.AppendLine("\t}while($start <= $end);");
                 }
-                builder.AppendLine("}");
-            }
+                functionBody.AppendLine("}");
+                functionBody.AppendLine();
 
-             return builder.ToString();
+                functionBody.AppendLine($"return ${table.LowerCaseName};");
+
+                builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
         }
 
         private string GenerateAddFunction(Table table)
@@ -367,8 +364,9 @@ namespace DatabaseFunctionsGenerator
                 if (Types.Integer != column.Type.Type
                     && !column.IsCreationTimeColumn)
                 {
-                    dataColumnsCommaSeparated.Append("'\" . ");
+                    dataColumnsCommaSeparated.Append("'");
                 }
+                dataColumnsCommaSeparated.Append("\" . ");
 
                 if (column.IsCreationTimeColumn)
                 {
@@ -562,7 +560,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine(GenerateListToObjectFunction(table));
             builder.AppendLine(GenerateGetFunction(table));
             builder.AppendLine(GenerateDedicatedRequestFunctions(table));
-            builder.AppendLine(GenerateGetParentFunction(table));
+            builder.AppendLine(GenerateGetAsParentFunction(table));
             builder.AppendLine(GenerateAddFunction(table));
             builder.AppendLine(GenerateDeleteFunction(table));
             builder.AppendLine(GenerateUpdateFunction(table));

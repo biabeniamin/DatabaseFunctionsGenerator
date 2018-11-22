@@ -5,36 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DatabaseFunctionsGenerator.Java
+namespace DatabaseFunctionsGenerator.Python
 {
-    public class JavaModelsGenerator : IGenerator
+    public class PythonModelsGenerator : IGenerator
     {
         private Database _database;
 
-        public JavaModelsGenerator(Database database)
+        public PythonModelsGenerator(Database database)
         {
             _database = database;
-        }
-
-        private string GenerateFields(Table table)
-        {
-            StringBuilder builder;
-
-            builder = new StringBuilder();
-
-            //generate fields
-            foreach (Column column in table.Columns)
-            {
-                builder.AppendLine($"private {column.Type.GetJavaType()} {column.LowerCaseName};");
-            }
-
-            foreach (Table parentTable in table.Parents)
-            {
-                builder.AppendLine($"private {parentTable.SingularName} {parentTable.LowerCaseSingularName};");
-            }
-
-
-            return builder.ToString();
         }
 
         private string GenerateGettersSetters(Table table)
@@ -47,22 +26,20 @@ namespace DatabaseFunctionsGenerator.Java
             foreach (Column column in table.Columns)
             {
                 //getter
-                builder.AppendLine($"public {column.Type.GetJavaType()} get{column.Name}()");
-                builder.AppendLine("{");
+                builder.AppendLine($"@property");
+                builder.AppendLine($"def {column.LowerCaseName}(self):");
                 {
-                    builder.AppendLine($"\treturn this.{column.LowerCaseName};");
+                    builder.AppendLine($"\treturn self._{column.LowerCaseName};");
                 }
-                builder.AppendLine("}");
 
                 builder.AppendLine();
 
                 //setter
-                builder.AppendLine($"public void set{column.Name}({column.Type.GetJavaType()} {column.LowerCaseName})");
-                builder.AppendLine("{");
+                builder.AppendLine($"@{column.LowerCaseName}.setter");
+                builder.AppendLine($"def {column.LowerCaseName}(self, {column.LowerCaseName}):");
                 {
-                    builder.AppendLine($"\tthis.{column.LowerCaseName} = {column.LowerCaseName};");
+                    builder.AppendLine($"\tself._{column.LowerCaseName} = {column.LowerCaseName};");
                 }
-                builder.AppendLine("}");
 
                 builder.AppendLine();
             }
@@ -105,7 +82,7 @@ namespace DatabaseFunctionsGenerator.Java
             //generate columnsCommaSeparated
             foreach (Column column in table.EditableColumns)
             {
-                columnsCommaSeparated.Append($"{column.Type.GetJavaType()} {column.LowerCaseName}, ");
+                columnsCommaSeparated.Append($"{column.LowerCaseName} = {Helpers.GetDefaultPythonColumnData(column.Type.Type)}, ");
             }
 
             if (1 < columnsCommaSeparated.Length)
@@ -113,54 +90,15 @@ namespace DatabaseFunctionsGenerator.Java
                 columnsCommaSeparated = columnsCommaSeparated.Remove(columnsCommaSeparated.Length - 2, 2);
             }
 
-            builder.AppendLine($"public {table.SingularName}({columnsCommaSeparated.ToString()})");
-            builder.AppendLine("{");
+            builder.AppendLine($"def __init__(self, {columnsCommaSeparated.ToString()}):");
             {
 
                 foreach (Column column in table.EditableColumns)
                 {
-                    builder.AppendLine($"\tthis.{column.LowerCaseName} = {column.LowerCaseName};");
+                    builder.AppendLine($"\tself._{column.LowerCaseName} = {column.LowerCaseName};");
                 }
 
             }
-            builder.AppendLine("}");
-
-            return builder.ToString();
-        }
-
-        private string GenerateEmptyConstructor(Table table)
-        {
-            StringBuilder builder;
-            StringBuilder constructorBuilder;
-
-            builder = new StringBuilder();
-            constructorBuilder = new StringBuilder();
-
-            builder.AppendLine($"public {table.SingularName}()");
-
-            
-
-            builder.AppendLine("{");
-            {
-                constructorBuilder.AppendLine("this(");
-                {
-                    foreach (Column column in table.EditableColumns)
-                    {
-                        constructorBuilder.AppendLine($"\t{Helpers.GetDefaultJavaColumnData(column.Type.Type)}, //{column.Name}");
-                    }
-                    Helpers.RemoveLastApparition(constructorBuilder, ",");
-                }
-                constructorBuilder.AppendLine(");");
-
-                foreach (Column column in table.NonEditableColumns)
-                {
-                    constructorBuilder.AppendLine($"this.{column.LowerCaseName} = {Helpers.GetDefaultJavaColumnData(column.Type.Type)};");
-                }
-                builder.AppendLine(Helpers.AddIndentation(constructorBuilder.ToString(),
-                    1));
-
-            }
-            builder.AppendLine("}");
 
             return builder.ToString();
         }
@@ -228,41 +166,25 @@ namespace DatabaseFunctionsGenerator.Java
             builder = new StringBuilder();
             classBuilder = new StringBuilder();
 
-            builder.AppendLine("//generated automatically");
-            builder.AppendLine($"package {packageName}.Models;");
-            builder.AppendLine("import java.util.List;");
-            builder.AppendLine("import retrofit2.Call;");
-            builder.AppendLine("import retrofit2.Callback;");
-            builder.AppendLine("import retrofit2.Response;");
-            builder.AppendLine("import retrofit2.Retrofit;");
-            builder.AppendLine("import retrofit2.converter.gson.GsonConverterFactory;");
-            builder.AppendLine("import retrofit2.http.GET;");
-            builder.AppendLine("import retrofit2.http.Query;");
-            builder.AppendLine("import retrofit2.http.POST;");
-            builder.AppendLine("import retrofit2.http.Body;");
-            builder.AppendLine("import java.util.Date;");
+            builder.AppendLine("#generated automatically");
+            
             builder.AppendLine();
 
-            builder.AppendLine($"public class {table.SingularName}");
-            builder.AppendLine("{");
+            builder.AppendLine($"class {table.SingularName}:");
             {
-                classBuilder.AppendLine(GenerateFields(table));
                 classBuilder.AppendLine(GenerateGettersSetters(table));
                 classBuilder.AppendLine(GenerateConstructor(table));
 
                 if (0 < table.Parents.Count)
                 {
-                    classBuilder.AppendLine(GenerateConstructorWithParents(table));
+                    //classBuilder.AppendLine(GenerateConstructorWithParents(table));
                 }
-
-                classBuilder.AppendLine(GenerateEmptyConstructor(table));
 
                 builder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(),
                         1));
             }
-            builder.AppendLine("}");
 
-            Helpers.WriteFile($"{path}\\{table.SingularName}.java", (builder.ToString()));
+            Helpers.WriteFile($"{path}\\{table.SingularName}.py", (builder.ToString()));
 
             //return builder.ToString();
         }

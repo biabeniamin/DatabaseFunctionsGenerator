@@ -62,21 +62,32 @@ namespace DatabaseFunctionsGenerator
 
         private string GenerateDedicatedGetRequestsFunction(Table table)
         {
-            StringBuilder builder = new StringBuilder();
-            StringBuilder functionBody = new StringBuilder();
+            StringBuilder builder;
+            StringBuilder functionBody;
+
+            builder = new StringBuilder();
+            functionBody = new StringBuilder();
+
 
             foreach (DedicatedGetRequest request in table.DedicatedGetRequests)
             {
-                builder.AppendLine($"Get{table.Name}By{request.ToString("")}()");
+                StringBuilder parameters;
+                StringBuilder urlParameters;
+
+                parameters = new StringBuilder();
+                urlParameters = new StringBuilder();
+
+                foreach (Column column in request.Columns)
+                {
+                    parameters.Append($"{column.LowerCaseName}, ");
+                    urlParameters.Append($"&{column.LowerCaseName}=${{{column.LowerCaseName}}}");
+                }
+                Helpers.RemoveLastApparition(parameters, ", ");
+
+                builder.AppendLine($"Get{table.Name}By{request.ToString("")}({parameters})");
                 builder.AppendLine("{");
                 {
-
-                    functionBody.AppendLine($"return this.http.get<{table.SingularName}[]>(ServerUrl.GetUrl()  + \"{table.Name}.php?cmd=getLast{table.SingularName}By{request.ToString("")}\").subscribe(data =>");
-                    functionBody.AppendLine("{");
-                    {
-                        functionBody.AppendLine($"\tthis.{table.LowerCaseName} = data;");
-                    }
-                    functionBody.AppendLine("});");
+                    functionBody.AppendLine($"return this.http.get<{table.SingularName}[]>(ServerUrl.GetUrl()  + `{table.Name}.php?cmd=get{table.Name}By{request.ToString("")}{urlParameters}`);");
 
                     builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
                 }
@@ -239,6 +250,7 @@ namespace DatabaseFunctionsGenerator
 
             builder.AppendLine($"import {{HttpClient}} from '@angular/common/http';");
             builder.AppendLine($"import {{ ServerUrl }} from './ServerUrl'");
+            builder.AppendLine("import { Injectable } from '@angular/core';");
             builder.AppendLine($"import {{ {table.SingularName} }} from '../app/Models/{table.SingularName}'");
 
             foreach (Table parentTable in table.Parents)
@@ -246,6 +258,12 @@ namespace DatabaseFunctionsGenerator
                 builder.AppendLine($"import {{ {parentTable.SingularName} }} from '../app/Models/{parentTable.SingularName}'");
                 builder.AppendLine($"import {{ {parentTable.SingularName}Service }} from './{parentTable.SingularName}Service'");
             }
+            builder.AppendLine();
+
+            //make it injectable
+            builder.AppendLine(@"@Injectable({
+    providedIn : 'root'
+})");
 
             builder.AppendLine($"export class {table.SingularName}Service");
             builder.AppendLine("{");
@@ -256,12 +274,12 @@ namespace DatabaseFunctionsGenerator
 
                 classBody.AppendLine(GenerateGetFunction(table));
                 classBody.AppendLine(GenerateGetLastFunction(table));
-                classBody.AppendLine(GenerateDedicatedGetRequestsFunction(table));
                 classBody.AppendLine(GenerateGetDefaultValueFunction(table));
                 classBody.AppendLine(GenerateConstructor(table));
                 classBody.AppendLine(GenerateAddFunction(table));
                 classBody.AppendLine(GenerateUpdateFunction(table));
                 classBody.AppendLine(GenerateDeleteFunction(table));
+                classBody.AppendLine(GenerateDedicatedGetRequestsFunction(table));
             }
             builder.AppendLine(Helpers.AddIndentation(classBody.ToString(), 1));
             builder.AppendLine("}");

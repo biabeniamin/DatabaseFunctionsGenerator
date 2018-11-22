@@ -181,7 +181,8 @@ namespace DatabaseFunctionsGenerator.Java
 
             builder.AppendLine("//generated automatically");
             builder.AppendLine($"package {packageName};");
-
+            builder.AppendLine($"import {packageName}.Models.*;");
+            
             builder.AppendLine("import android.content.Context;");
             builder.AppendLine("import android.view.LayoutInflater;");
             builder.AppendLine("import android.view.View;");

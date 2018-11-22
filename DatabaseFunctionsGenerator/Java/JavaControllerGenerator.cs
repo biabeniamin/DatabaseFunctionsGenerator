@@ -500,6 +500,7 @@ namespace DatabaseFunctionsGenerator.Java
             
             builder.AppendLine("//generated automatically");
             builder.AppendLine($"package {packageName};");
+            builder.AppendLine($"import {packageName}.Models.*;");
             builder.AppendLine("import java.util.List;");
             builder.AppendLine("import retrofit2.Call;");
             builder.AppendLine("import retrofit2.Callback;");

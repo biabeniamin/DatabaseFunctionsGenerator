@@ -141,6 +141,25 @@ namespace DatabaseFunctionsGenerator
             }
         }
 
+        public static string GetDefaultPythonColumnData(Types type)
+        {
+            switch (type)
+            {
+                case Types.DateTime:
+                    return "new DateTime(1970, 1, 1, 0, 0, 0)";
+                    break;
+                case Types.Integer:
+                    return "0";
+                    break;
+                case Types.Text:
+                case Types.Varchar:
+                    return "\"Test\"";
+                    break;
+                default:
+                    return "";
+            }
+        }
+
         public static string GetDefaultJavaColumnData(Types type)
         {
             switch (type)
