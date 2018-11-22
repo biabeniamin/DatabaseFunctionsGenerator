@@ -62,5 +62,6 @@ namespace DatabaseFunctionsGenerator
             _tables = tables;
             _relations = new ObservableCollection<Relation>();
         }
+
     }
 }
