@@ -254,13 +254,11 @@ namespace DatabaseFunctionsGenerator
             StringBuilder builder;
             StringBuilder functionBody;
             StringBuilder columnsCommaSeparated;
-            StringBuilder dataColumnsCommaSeparated;
             String parameter;
 
             builder = new StringBuilder();
             functionBody = new StringBuilder();
             columnsCommaSeparated = new StringBuilder();
-            dataColumnsCommaSeparated = new StringBuilder();
 
             parameter = table.LowerCaseSingularName;
 
@@ -271,34 +269,6 @@ namespace DatabaseFunctionsGenerator
                     continue;
 
                 columnsCommaSeparated.Append($"{column.Name}, ");
-
-
-                dataColumnsCommaSeparated.Append($"$query = $query . ");
-
-                if (Types.Integer != column.Type.Type
-                    && !column.IsCreationTimeColumn)
-                {
-                    dataColumnsCommaSeparated.Append("\"'\" . ");
-                }
-
-                if (column.IsCreationTimeColumn)
-                {
-                    dataColumnsCommaSeparated.Append($"\"NOW()\"");
-                }
-                else
-                {
-                    dataColumnsCommaSeparated.Append($"${parameter}->Get{column.Name}()");
-                }
-
-                if (Types.Integer != column.Type.Type
-                    && !column.IsCreationTimeColumn)
-                {
-                    dataColumnsCommaSeparated.AppendLine(" . \"', \";");
-                }
-                else
-                {
-                    dataColumnsCommaSeparated.AppendLine(".\", \";");
-                }
             }
 
             if (1 < columnsCommaSeparated.Length)
@@ -306,18 +276,62 @@ namespace DatabaseFunctionsGenerator
                 columnsCommaSeparated = columnsCommaSeparated.Remove(columnsCommaSeparated.Length - 2, 2);
             }
 
-            if (1 < dataColumnsCommaSeparated.Length)
-            {
-                dataColumnsCommaSeparated = dataColumnsCommaSeparated.Remove(dataColumnsCommaSeparated.Length - 6, 2);
-            }
 
             builder.AppendLine($"function Add{table.SingularName}($database, ${parameter})");
             builder.AppendLine("{");
 
-            functionBody.AppendLine($"$query = \"INSERT INTO {table.Name}({columnsCommaSeparated.ToString()}) VALUES(\";");
-            functionBody.AppendLine(dataColumnsCommaSeparated.ToString());
-            functionBody.AppendLine($"$query = $query . \");\";");
-            functionBody.AppendLine($"$database->ExecuteSqlWithoutWarning($query);");
+            functionBody.Append($"$query = \"INSERT INTO {table.Name}({columnsCommaSeparated.ToString()}) VALUES(");
+            foreach (Column column in table.Columns)
+            {
+                if (column.Type.IsPrimaryKey)
+                    continue;
+
+                if (column.IsCreationTimeColumn)
+                {
+                    functionBody.Append($"NOW()");
+                }
+                else
+                {
+                    functionBody.Append("?");
+                }
+
+                functionBody.Append($", ");
+            }
+            Helpers.RemoveLastApparition(functionBody, ", ");
+            functionBody.AppendLine(")\";");
+
+            functionBody.AppendLine($"$database->ExecuteSqlWithoutWarning($query,[");
+            foreach (Column column in table.Columns)
+            {
+                if (column.Type.IsPrimaryKey
+                    || column.IsCreationTimeColumn)
+                    continue;
+
+                functionBody.Append("[");
+
+                switch (column.Type.Type)
+                {
+                    case Types.Double:
+                        functionBody.Append("d");
+                        break;
+                    case Types.Integer:
+                        functionBody.Append("i");
+                        break;
+                    case Types.DateTime:
+                    case Types.Varchar:
+                    case Types.Text:
+                        functionBody.Append("s");
+                        break;
+                }
+
+                functionBody.Append($", ${parameter}->Get{column.Name}()");
+
+                functionBody.AppendLine($"], ");
+            }
+            Helpers.RemoveLastApparition(functionBody, ", ");
+            functionBody.AppendLine("]);");
+
+
             functionBody.AppendLine($"$id = $database->GetLastInsertedId();");
 
             functionBody.AppendLine($"${parameter}->Set{table.PrimaryKeyColumn.Name}($id);");
