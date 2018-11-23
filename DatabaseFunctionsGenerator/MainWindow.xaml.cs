@@ -72,7 +72,10 @@ namespace DatabaseFunctionsGenerator
             Database.Tables.Add(new Table("VitalSigns"));
             Database.Tables.Add(new Table("Locations"));
             Database.Tables.Add(new Table("Administrators"));
+            Database.Tables.Add(new Table("Tests"));
 
+
+            Database.Tables[4].Columns.Add(new Column("Value", new ColumnType(Types.Double)));
 
             Database.Tables[0].Columns.Add(new Column("Username", new ColumnType(Types.Varchar, 20)));
             Database.Tables[0].Columns.Add(new Column("Password", new ColumnType(Types.Varchar, 20)));
