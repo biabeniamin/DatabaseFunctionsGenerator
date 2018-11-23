@@ -104,14 +104,13 @@ namespace DatabaseFunctionsGenerator
             {
                 case Types.DateTime:
                     return "\'2000-01-01 00:00:00\'";
-                    break;
                 case Types.Integer:
                     return "0";
-                    break;
+                case Types.Double:
+                    return "0";
                 case Types.Text:
                 case Types.Varchar:
                     return "\'Test\'";
-                    break;
                 default:
                     return "";
             }
@@ -128,14 +127,12 @@ namespace DatabaseFunctionsGenerator
             {
                 case Types.DateTime:
                     return "new DateTime(1970, 1, 1, 0, 0, 0)";
-                    break;
                 case Types.Integer:
+                case Types.Double:
                     return "0";
-                    break;
                 case Types.Text:
                 case Types.Varchar:
                     return "\"Test\"";
-                    break;
                 default:
                     return "";
             }
@@ -147,14 +144,12 @@ namespace DatabaseFunctionsGenerator
             {
                 case Types.DateTime:
                     return "new DateTime(1970, 1, 1, 0, 0, 0)";
-                    break;
                 case Types.Integer:
+                case Types.Double:
                     return "0";
-                    break;
                 case Types.Text:
                 case Types.Varchar:
                     return "\"Test\"";
-                    break;
                 default:
                     return "";
             }
@@ -166,14 +161,12 @@ namespace DatabaseFunctionsGenerator
             {
                 case Types.DateTime:
                     return "new Date(0)";
-                    break;
                 case Types.Integer:
+                case Types.Double:
                     return "0";
-                    break;
                 case Types.Text:
                 case Types.Varchar:
                     return "\"Test\"";
-                    break;
                 default:
                     return "";
             }
@@ -185,16 +178,13 @@ namespace DatabaseFunctionsGenerator
             {
                 case Types.DateTime:
                     return "\'2000-01-01 00:00:00\'";
-                    break;
                 case Types.Integer:
+                case Types.Double:
                     return "0";
-                    break;
                 case Types.Text:
                     return "\'\'";
-                    break;
                 case Types.Varchar:
                     return "\'\'";
-                    break;
                 default:
                     return "";
             }
@@ -213,6 +203,7 @@ namespace DatabaseFunctionsGenerator
                 case Types.Varchar:
                     return $"\'{startCharacter}{input}\'";
                 case Types.Integer:
+                case Types.Double:
                     return $"{startCharacter}{input}";
             }
 

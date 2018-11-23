@@ -94,6 +94,8 @@ namespace DatabaseFunctionsGenerator
                     return "TEXT";
                 case Types.Varchar:
                     return $"VARCHAR({_length})";
+                case Types.Double:
+                    return $"DOUBLE";
                     break;
             }
 
@@ -112,6 +114,8 @@ namespace DatabaseFunctionsGenerator
                     return "string";
                 case Types.Varchar:
                     return $"string";
+                case Types.Double:
+                    return $"number";
                     break;
             }
 
@@ -129,6 +133,8 @@ namespace DatabaseFunctionsGenerator
                 case Types.Text:
                 case Types.Varchar:
                     return "string";
+                case Types.Double:
+                    return "double";
                     break;
             }
 
@@ -146,6 +152,8 @@ namespace DatabaseFunctionsGenerator
                 case Types.Text:
                 case Types.Varchar:
                     return "String";
+                case Types.Double:
+                    return "double";
                     break;
             }
 
@@ -162,6 +170,7 @@ namespace DatabaseFunctionsGenerator
                     return "int";
                 case Types.Text:
                 case Types.Varchar:
+                case Types.Double:
                     return "str";
                     break;
             }
