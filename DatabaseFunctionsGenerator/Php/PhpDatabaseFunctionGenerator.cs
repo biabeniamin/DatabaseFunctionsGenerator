@@ -307,7 +307,7 @@ namespace DatabaseFunctionsGenerator
                     || column.IsCreationTimeColumn)
                     continue;
 
-                functionBody.Append("[");
+                functionBody.Append("[\"");
 
                 switch (column.Type.Type)
                 {
@@ -323,6 +323,7 @@ namespace DatabaseFunctionsGenerator
                         functionBody.Append("s");
                         break;
                 }
+                functionBody.Append("\"");
 
                 functionBody.Append($", ${parameter}->Get{column.Name}()");
 

@@ -41,7 +41,6 @@ class DatabaseOperations
 
         foreach($Parameters as $parameter)
         {
-            var_dump($parameter);
             $statement->bind_param($parameter[0], $parameter[1]);
         }
 
