@@ -33,13 +33,26 @@ class DatabaseOperations
         }
     }
     
-    function ExecuteSqlWithoutWarning($Sql)
+    function ExecuteSqlWithoutWarning($Sql, $Parameters)
     {
-        if ($this->connection->query($Sql) === TRUE)
+        $result = 0;
+
+        $statement = $this->connection->prepare($Sql);
+
+        foreach($Parameters as $parameter)
         {
-            return 1;
+            var_dump($parameter);
+            $statement->bind_param($parameter[0], $parameter[1]);
+        }
+
+        if ($statement->execute() === TRUE)
+        {
+            $result = 1;
         } 
-        return 0;
+        
+        $statement->close();
+
+        return $result;
     }
 	
 	function GetLastInsertedId()
