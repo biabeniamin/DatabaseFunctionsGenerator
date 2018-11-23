@@ -24,6 +24,30 @@ class DatabaseOperations
 
     function ExecuteSql($Sql)
     {
+        $result = 0;
+
+        $statement = $this->connection->prepare($Sql);
+
+        foreach($Parameters as $parameter)
+        {
+            $statement->bind_param($parameter[0], $parameter[1]);
+        }
+
+        if ($statement->execute() === TRUE)
+        {
+            echo "New record created successfully<br>";
+            return $this->GetLastInsertedId();
+        } 
+        else
+        {
+            echo "Error: " . $Sql . "<br>" . $this->connection->error;
+        }
+        
+        $statement->close();
+
+        return $result;
+
+
         if ($this->connection->query($Sql) === TRUE)
         {
             echo "New record created successfully<br>";
