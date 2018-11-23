@@ -22,7 +22,7 @@ class DatabaseOperations
         }
     }
 
-    function ExecuteSql($Sql)
+    function ExecuteSql($Sql, $Parameters)
     {
         $result = 0;
 
