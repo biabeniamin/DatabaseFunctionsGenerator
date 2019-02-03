@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -20,11 +21,19 @@ namespace DatabaseFunctionsGenerator
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private Database _database;
         private Table _selectedTable;
-        private DelegateCommand _generateDelegateCommand;   
+        private DelegateCommand _generateDelegateCommand;
+        private DelegateCommand _importDelegateCommand;
+
+        public DelegateCommand ImportDelegateCommand
+        {
+            get { return _importDelegateCommand; }
+            set { _importDelegateCommand = value; }
+        }
+        
 
         public DelegateCommand GenerateDelegateCommand
         {
@@ -63,7 +72,10 @@ namespace DatabaseFunctionsGenerator
             Database.Tables.Add(new Table("VitalSigns"));
             Database.Tables.Add(new Table("Locations"));
             Database.Tables.Add(new Table("Administrators"));
+            Database.Tables.Add(new Table("Tests"));
 
+
+            Database.Tables[4].Columns.Add(new Column("Value", new ColumnType(Types.Double)));
 
             Database.Tables[0].Columns.Add(new Column("Username", new ColumnType(Types.Varchar, 20)));
             Database.Tables[0].Columns.Add(new Column("Password", new ColumnType(Types.Varchar, 20)));
@@ -118,13 +130,30 @@ namespace DatabaseFunctionsGenerator
             Database.Relations.Add(new Relation(Database.Tables[2], Database.Tables[4], RelationType.OneToMany));
             Database.Relations.Add(new Relation(Database.Tables[4], Database.Tables[5], RelationType.OneToMany));*/
 
-            SelectedTable = Database.Tables[0];
+
+            //SelectedTable = Database.Tables[0];
 
             Generator generator = new Generator(_database);
             generator.Generate();
 
             _generateDelegateCommand = new DelegateCommand(GenerateCommand);
-            
+
+            _importDelegateCommand = new DelegateCommand(ImportFromJsonCommand);
+
+
+        }
+
+        private void ImportFromJsonCommand()
+        {
+            OpenFileDialog openFileDialog;
+
+            openFileDialog = new OpenFileDialog();
+            openFileDialog.FileName = "Config.json";
+
+            if (true == openFileDialog.ShowDialog())
+            {
+                Database = Database.ImportFromJson(Helpers.ReadFile(openFileDialog.FileName));
+            }
         }
 
         private void GenerateCommand()

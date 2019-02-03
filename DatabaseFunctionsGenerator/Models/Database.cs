@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -39,6 +40,7 @@ namespace DatabaseFunctionsGenerator
             set { _tables = value; }
         }
 
+        [JsonIgnore]
         public bool HasNotificationSystem
         {
             get
@@ -59,6 +61,18 @@ namespace DatabaseFunctionsGenerator
         {
             _tables = tables;
             _relations = new ObservableCollection<Relation>();
+        }
+
+        public static Database ImportFromJson(string json)
+        {
+            Database database;
+
+            database = new Database();
+
+            database = JsonConvert.DeserializeObject<Database>(json);
+
+
+            return database;
         }
     }
 }

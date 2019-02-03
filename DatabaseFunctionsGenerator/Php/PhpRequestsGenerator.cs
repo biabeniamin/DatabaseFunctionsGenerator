@@ -26,6 +26,24 @@ namespace DatabaseFunctionsGenerator.Php
             return builder.ToString();
         }
 
+        private static string GenerateGetLastRequest(Table table)
+        {
+            StringBuilder builder;
+
+            builder = new StringBuilder();
+
+            //to get data
+            builder.AppendLine($"if(\"getLast{table.SingularName}\" == $_GET[\"cmd\"])");
+            builder.AppendLine("{");
+            {
+                builder.AppendLine($"\t$database = new DatabaseOperations();");
+                builder.AppendLine($"\t\techo json_encode(GetLast{table.SingularName}($database));");
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
         private static string GenerateGetDedicatedRequest(Table table)
         {
             StringBuilder builder;
@@ -145,6 +163,10 @@ namespace DatabaseFunctionsGenerator.Php
             {
                 //to get data
                 builder.AppendLine(Helpers.AddIndentation(GenerateGetAllRequest(table),
+                    1));
+
+                //to get last entry
+                builder.AppendLine(Helpers.AddIndentation(GenerateGetLastRequest(table),
                     1));
 
                 //to get data by dedicated fields

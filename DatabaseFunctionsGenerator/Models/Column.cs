@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,7 @@ namespace DatabaseFunctionsGenerator
             set { _name = value; }
         }
 
+        [JsonIgnore]
         public string LowerCaseName
         {
             get
@@ -31,6 +33,7 @@ namespace DatabaseFunctionsGenerator
             }
         }
 
+        [JsonIgnore]
         public bool IsCreationTimeColumn
         {
             get

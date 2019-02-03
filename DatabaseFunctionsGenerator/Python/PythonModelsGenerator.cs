@@ -16,147 +16,20 @@ namespace DatabaseFunctionsGenerator.Python
             _database = database;
         }
 
-        private string GenerateGettersSetters(Table table)
+        private string GenerateFields(Table table)
         {
             StringBuilder builder;
 
             builder = new StringBuilder();
 
-            //generate getters and setters
-            foreach (Column column in table.Columns)
+            foreach(Column column in table.Columns)
             {
-                //getter
-                builder.AppendLine($"@property");
-                builder.AppendLine($"def {column.LowerCaseName}(self):");
-                {
-                    builder.AppendLine($"\treturn self._{column.LowerCaseName};");
-                }
-
-                builder.AppendLine();
-
-                //setter
-                builder.AppendLine($"@{column.LowerCaseName}.setter");
-                builder.AppendLine($"def {column.LowerCaseName}(self, {column.LowerCaseName}):");
-                {
-                    builder.AppendLine($"\tself._{column.LowerCaseName} = {column.LowerCaseName};");
-                }
-
-                builder.AppendLine();
-            }
-
-            foreach (Table parentTable in table.Parents)
-            {
-                //getter
-                builder.AppendLine($"public {parentTable.SingularName} get{parentTable.SingularName}()");
-                builder.AppendLine("{");
-                {
-                    builder.AppendLine($"\treturn this.{parentTable.LowerCaseSingularName};");
-                }
-                builder.AppendLine("}");
-
-                builder.AppendLine();
-
-                //setter
-                builder.AppendLine($"public void set{parentTable.SingularName}({parentTable.SingularName} {parentTable.LowerCaseSingularName})");
-                builder.AppendLine("{");
-                {
-                    builder.AppendLine($"\tthis.{parentTable.LowerCaseSingularName} = {parentTable.LowerCaseSingularName};");
-                }
-                builder.AppendLine("}");
-
-                builder.AppendLine();
-            }
-
-
-            return builder.ToString();
-        }
-
-        private string GenerateConstructor(Table table)
-        {
-            StringBuilder builder;
-            StringBuilder columnsCommaSeparated;
-
-            builder = new StringBuilder();
-            columnsCommaSeparated = new StringBuilder();
-
-            //generate columnsCommaSeparated
-            foreach (Column column in table.EditableColumns)
-            {
-                columnsCommaSeparated.Append($"{column.LowerCaseName} = {Helpers.GetDefaultPythonColumnData(column.Type.Type)}, ");
-            }
-
-            if (1 < columnsCommaSeparated.Length)
-            {
-                columnsCommaSeparated = columnsCommaSeparated.Remove(columnsCommaSeparated.Length - 2, 2);
-            }
-
-            builder.AppendLine($"def __init__(self, {columnsCommaSeparated.ToString()}):");
-            {
-
-                foreach (Column column in table.EditableColumns)
-                {
-                    builder.AppendLine($"\tself._{column.LowerCaseName} = {column.LowerCaseName};");
-                }
-
+                builder.AppendLine($"{column.LowerCaseName} : {column.Type.GetPythonDataClassType()}");
             }
 
             return builder.ToString();
         }
 
-        private string GenerateConstructorWithParents(Table table)
-        {
-            StringBuilder builder;
-            StringBuilder parametersCommaSeparated;
-            StringBuilder constructorBuilder;
-
-            builder = new StringBuilder();
-            parametersCommaSeparated = new StringBuilder();
-            constructorBuilder = new StringBuilder();
-
-            //generate columnsCommaSeparated
-            foreach (Column column in table.EditableColumns)
-            {
-                parametersCommaSeparated.Append($"{column.Type.GetJavaType()} {column.LowerCaseName}, ");
-            }
-
-            //add parents
-            foreach (Table parentTable in table.Parents)
-            {
-                parametersCommaSeparated.Append($"{parentTable.SingularName} {parentTable.LowerCaseSingularName}, ");
-            }
-            if (1 < parametersCommaSeparated.Length)
-            {
-                parametersCommaSeparated = parametersCommaSeparated.Remove(parametersCommaSeparated.Length - 2, 2);
-            }
-
-
-            builder.AppendLine($"public {table.SingularName}({parametersCommaSeparated.ToString()})");
-            builder.AppendLine("{");
-            {
-
-                //generate the call of main constructor
-                constructorBuilder.AppendLine("this(");
-                {
-                    foreach (Column column in table.EditableColumns)
-                    {
-                        constructorBuilder.AppendLine($"\t{Helpers.GetDefaultJavaColumnData(column.Type.Type)}, //{column.Name}");
-                    }
-                    Helpers.RemoveLastApparition(constructorBuilder, ",");
-                }
-                constructorBuilder.AppendLine(");");
-
-                foreach (Table parentTable in table.Parents)
-                {
-                    constructorBuilder.AppendLine($"this.{parentTable.LowerCaseSingularName} = {parentTable.LowerCaseSingularName};");
-                }
-
-                builder.AppendLine(Helpers.AddIndentation(constructorBuilder.ToString(),
-                    1));
-            }
-            builder.AppendLine("}");
-
-            return builder.ToString();
-        }
 
         private void GenerateModel(Table table, string path, string packageName)
         {
@@ -167,18 +40,15 @@ namespace DatabaseFunctionsGenerator.Python
             classBuilder = new StringBuilder();
 
             builder.AppendLine("#generated automatically");
-            
+            builder.AppendLine("from dataclasses import dataclass");
+
             builder.AppendLine();
 
+            builder.AppendLine("@dataclass_json");
+            builder.AppendLine("@dataclass");
             builder.AppendLine($"class {table.SingularName}:");
             {
-                classBuilder.AppendLine(GenerateGettersSetters(table));
-                classBuilder.AppendLine(GenerateConstructor(table));
-
-                if (0 < table.Parents.Count)
-                {
-                    //classBuilder.AppendLine(GenerateConstructorWithParents(table));
-                }
+                classBuilder.AppendLine(GenerateFields(table));
 
                 builder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(),
                         1));
