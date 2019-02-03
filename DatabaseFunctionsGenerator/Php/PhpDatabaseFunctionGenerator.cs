@@ -257,7 +257,7 @@ namespace DatabaseFunctionsGenerator
                 }
                 else
                 {
-                    dataColumnsCommaSeparated.Append($"${parameter}->Get{column.Name}()");
+                    dataColumnsCommaSeparated.Append($"mysqli_real_escape_string($database->connection ,${parameter}->Get{column.Name}())");
                 }
 
                 if (Types.Integer != column.Type.Type

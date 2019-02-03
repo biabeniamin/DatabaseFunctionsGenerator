@@ -123,7 +123,7 @@ namespace DatabaseFunctionsGenerator
             _documentationGenerator.Generate(path);
             _javaGenerator.Generate(path);
             _pythonGenerator.Generate(path);
-
+            /*
             foreach (string file in Directory.EnumerateFiles($"{path}\\Php"))
             {
                 File.Copy(file, $"d:\\xampp\\htdocs\\generator\\Test\\{Path.GetFileName(file)}", true);
@@ -132,7 +132,7 @@ namespace DatabaseFunctionsGenerator
             foreach (string file in Directory.EnumerateFiles($"{path}\\Php\\Models"))
             {
                 File.Copy(file, $"d:\\xampp\\htdocs\\generator\\Test\\Models\\{Path.GetFileName(file)}", true);
-            }
+            }*/
         }
     }
 }
