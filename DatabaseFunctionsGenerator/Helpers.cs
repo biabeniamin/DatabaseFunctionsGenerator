@@ -29,6 +29,11 @@ namespace DatabaseFunctionsGenerator
             Directory.CreateDirectory(GetPath(path));
         }
 
+        public static bool DoesDirectoryExists(string path)
+        {
+            return Directory.Exists(GetPath(path));
+        }
+
         public static string ReadFile(string path)
         {
             String text;
