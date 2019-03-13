@@ -12,7 +12,7 @@ namespace DatabaseFunctionsGenerator.Typescript
         {
             string componentSpecTemplate;
 
-            componentSpecTemplate = Helpers.ReadFile("CodeHelpers\\TypescriptComponentSpec.ts");
+            componentSpecTemplate = IO.ReadFile("CodeHelpers\\TypescriptComponentSpec.ts");
 
             //replace component name
             componentSpecTemplate = componentSpecTemplate.Replace("!--ComponentName--!", table.SingularName);
@@ -20,7 +20,7 @@ namespace DatabaseFunctionsGenerator.Typescript
             //replace component file name
             componentSpecTemplate = componentSpecTemplate.Replace("!--ComponentFileName--!", table.LowerCaseSingularName);
 
-            Helpers.WriteFile($"{path}\\{table.LowerCaseSingularName}.component.spec.ts",
+            IO.WriteFile($"{path}\\{table.LowerCaseSingularName}.component.spec.ts",
                componentSpecTemplate);
         }
     }

@@ -25,10 +25,12 @@ namespace WebApi.Controllers
         }
 
         // POST api/values
-        public void Post([FromBody]Database database)
+        public string Post([FromBody]Database database)
         {
             Generator generator = new Generator(database);
             generator.Generate();
+
+            return generator.Timestamp;
         }
 
         // PUT api/values/5

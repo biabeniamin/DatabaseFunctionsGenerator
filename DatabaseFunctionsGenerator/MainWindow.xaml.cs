@@ -131,7 +131,7 @@ namespace DatabaseFunctionsGenerator
 
             if (true == openFileDialog.ShowDialog())
             {
-                Database = Database.ImportFromJson(Helpers.ReadFile(openFileDialog.FileName));
+                Database = Database.ImportFromJson(IO.ReadFile(openFileDialog.FileName));
             }
         }
 

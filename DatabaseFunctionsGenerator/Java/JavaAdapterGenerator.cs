@@ -210,7 +210,7 @@ namespace DatabaseFunctionsGenerator.Java
             }
             builder.AppendLine("}");
 
-            Helpers.WriteFile($"{path}\\{table.SingularName}Adapter.java", (builder.ToString()));
+            IO.WriteFile($"{path}\\{table.SingularName}Adapter.java", (builder.ToString()));
 
             //return builder.ToString();
         }
@@ -221,7 +221,7 @@ namespace DatabaseFunctionsGenerator.Java
 
             modelsPath = $"{path}\\Controllers";
 
-            Helpers.CreateDirectory(modelsPath);
+            IO.CreateDirectory(modelsPath);
 
             foreach (Table table in _database.Tables)
             {

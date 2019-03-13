@@ -95,7 +95,7 @@ namespace DatabaseFunctionsGenerator
                 builder.AppendLine(GenerateTableQuery(table));
             }
 
-            Helpers.WriteFile($"{path}\\sqlDatabase.sql", builder.ToString());
+            IO.WriteFile($"{path}\\sqlDatabase.sql", builder.ToString());
         }
     }
 }

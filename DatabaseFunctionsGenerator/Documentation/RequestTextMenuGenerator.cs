@@ -155,7 +155,7 @@ namespace DatabaseFunctionsGenerator
                 requestMenu.AppendLine(GenerateRequestMenu(table, _database.ServerUrl));
             }
 
-            Helpers.WriteFile($"{path}\\Requests.txt", requestMenu.ToString());
+            IO.WriteFile($"{path}\\Requests.txt", requestMenu.ToString());
         }
     }
 }

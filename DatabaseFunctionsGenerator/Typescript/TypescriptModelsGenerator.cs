@@ -62,7 +62,7 @@ namespace DatabaseFunctionsGenerator
                 builder.AppendLine("}");
             }
 
-            Helpers.WriteFile($"{path}\\{table.SingularName}.ts", (builder.ToString()));
+            IO.WriteFile($"{path}\\{table.SingularName}.ts", (builder.ToString()));
 
             //return builder.ToString();
         }
@@ -73,7 +73,7 @@ namespace DatabaseFunctionsGenerator
 
             modelsPath = $"{path}\\Models";
 
-            Helpers.CreateDirectory(modelsPath);
+            IO.CreateDirectory(modelsPath);
 
             foreach (Table table in _database.Tables)
             {

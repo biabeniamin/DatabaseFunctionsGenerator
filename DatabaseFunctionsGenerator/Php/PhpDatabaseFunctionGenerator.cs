@@ -570,7 +570,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine(GenerateGetLastEntryFunction(table));
             builder.AppendLine($"?>");
 
-            Helpers.WriteFile($"{path}\\Php\\{table.Name}.php",
+            IO.WriteFile($"{path}\\Php\\{table.Name}.php",
                 builder.ToString());
 
             return builder.ToString();

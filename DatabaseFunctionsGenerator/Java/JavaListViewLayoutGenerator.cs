@@ -67,7 +67,7 @@ namespace DatabaseFunctionsGenerator.Java
             }
             layoutBuilder.AppendLine("</LinearLayout>");  
 
-            Helpers.WriteFile($"{path}\\{table.LowerCaseSingularName.ToLower()}_view.xml", (layoutBuilder.ToString()));
+            IO.WriteFile($"{path}\\{table.LowerCaseSingularName.ToLower()}_view.xml", (layoutBuilder.ToString()));
 
             //return builder.ToString();
         }
@@ -78,7 +78,7 @@ namespace DatabaseFunctionsGenerator.Java
 
             modelsPath = $"{path}\\Layouts";
 
-            Helpers.CreateDirectory(modelsPath);
+            IO.CreateDirectory(modelsPath);
 
             foreach (Table table in _database.Tables)
             {

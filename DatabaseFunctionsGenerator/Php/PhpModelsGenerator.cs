@@ -144,7 +144,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine("}");
             builder.AppendLine("?>");
 
-            Helpers.WriteFile($"{path}\\{table.SingularName}.php", (builder.ToString()));
+            IO.WriteFile($"{path}\\{table.SingularName}.php", (builder.ToString()));
 
             //return builder.ToString();
         }
@@ -155,7 +155,7 @@ namespace DatabaseFunctionsGenerator
 
             modelsPath = $"{path}\\Php\\Models";
 
-            Helpers.CreateDirectory(modelsPath);
+            IO.CreateDirectory(modelsPath);
 
             foreach(Table table in _database.Tables)
             {

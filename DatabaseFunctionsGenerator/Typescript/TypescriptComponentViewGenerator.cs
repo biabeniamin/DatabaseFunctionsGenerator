@@ -135,7 +135,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine(GenerateAddForm(table));
             builder.AppendLine(GenerateListView(table));
 
-            Helpers.WriteFile($"{path}\\{table.LowerCaseSingularName}.component.html",
+            IO.WriteFile($"{path}\\{table.LowerCaseSingularName}.component.html",
                 builder.ToString());
 
             return builder.ToString();

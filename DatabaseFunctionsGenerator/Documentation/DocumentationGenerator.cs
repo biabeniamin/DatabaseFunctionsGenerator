@@ -26,7 +26,7 @@ namespace DatabaseFunctionsGenerator
 
             documentationPath = $"{path}\\Documentation";
 
-            Helpers.CreateDirectory(documentationPath);
+            IO.CreateDirectory(documentationPath);
 
             _requestTextMenuGenerator.Generate(documentationPath);
 

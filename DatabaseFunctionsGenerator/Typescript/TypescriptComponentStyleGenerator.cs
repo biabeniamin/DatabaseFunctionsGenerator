@@ -23,7 +23,7 @@ namespace DatabaseFunctionsGenerator.Typescript
 
             builder.AppendLine(GenerateStyle(table));
 
-            Helpers.WriteFile($"{path}\\{table.LowerCaseSingularName}.component.css",
+            IO.WriteFile($"{path}\\{table.LowerCaseSingularName}.component.css",
                 builder.ToString());
 
             return builder.ToString();

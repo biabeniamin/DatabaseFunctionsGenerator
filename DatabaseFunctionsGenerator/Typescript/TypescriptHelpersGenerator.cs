@@ -21,12 +21,12 @@ namespace DatabaseFunctionsGenerator
             string serverUrl;
 
             builder = new StringBuilder();
-            serverUrl = Helpers.ReadFile("CodeHelpers\\ServerUrl.ts");
+            serverUrl = IO.ReadFile("CodeHelpers\\ServerUrl.ts");
 
             //replace url
             serverUrl = serverUrl.Replace("!--url--!", _database.ServerUrl);
 
-            Helpers.WriteFile($"{path}\\ServerUrl.ts", serverUrl);
+            IO.WriteFile($"{path}\\ServerUrl.ts", serverUrl);
         }
     }
 }

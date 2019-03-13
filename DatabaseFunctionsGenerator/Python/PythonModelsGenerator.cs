@@ -54,7 +54,7 @@ namespace DatabaseFunctionsGenerator.Python
                         1));
             }
 
-            Helpers.WriteFile($"{path}\\{table.SingularName}.py", (builder.ToString()));
+            IO.WriteFile($"{path}\\{table.SingularName}.py", (builder.ToString()));
 
             //return builder.ToString();
         }
@@ -65,7 +65,7 @@ namespace DatabaseFunctionsGenerator.Python
 
             modelsPath = $"{path}\\Models";
 
-            Helpers.CreateDirectory(modelsPath);
+            IO.CreateDirectory(modelsPath);
 
             foreach (Table table in _database.Tables)
             {

@@ -284,7 +284,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine(Helpers.AddIndentation(classBody.ToString(), 1));
             builder.AppendLine("}");
 
-            Helpers.WriteFile($"{path}\\{table.SingularName}Service.ts",
+            IO.WriteFile($"{path}\\{table.SingularName}Service.ts",
                 builder.ToString());
 
             return builder.ToString();

@@ -24,7 +24,7 @@ namespace DatabaseFunctionsGenerator
 
             config = JsonConvert.SerializeObject(_database);
 
-            Helpers.WriteFile($"{path}\\Config.json", config);
+            IO.WriteFile($"{path}\\Config.json", config);
         }
 
         public void Generate(string path)

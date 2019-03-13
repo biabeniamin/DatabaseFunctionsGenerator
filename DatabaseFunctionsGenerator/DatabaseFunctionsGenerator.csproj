@@ -73,6 +73,7 @@
     <Compile Include="GeneratorConfigGenerator.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="IGenerator.cs" />
+    <Compile Include="IO.cs" />
     <Compile Include="Java\JavaAdapterGenerator.cs" />
     <Compile Include="Java\JavaControllerGenerator.cs" />
     <Compile Include="Java\JavaGenerator.cs" />

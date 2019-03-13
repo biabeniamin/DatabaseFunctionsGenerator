@@ -154,7 +154,7 @@ namespace DatabaseFunctionsGenerator
             }
             builder.AppendLine("}");
 
-            Helpers.WriteFile($"{path}\\{table.Name}.cs", (builder.ToString()));
+            IO.WriteFile($"{path}\\{table.Name}.cs", (builder.ToString()));
 
             //return builder.ToString();
         }
@@ -165,7 +165,7 @@ namespace DatabaseFunctionsGenerator
 
             modelsPath = $"{path}\\Controllers";
 
-            Helpers.CreateDirectory(modelsPath);
+            IO.CreateDirectory(modelsPath);
 
             foreach (Table table in _database.Tables)
             {

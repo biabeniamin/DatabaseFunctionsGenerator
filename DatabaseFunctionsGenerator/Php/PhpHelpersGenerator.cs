@@ -15,11 +15,11 @@ namespace DatabaseFunctionsGenerator
             string helpers;
 
             builder = new StringBuilder();
-            databaseOperations = Helpers.ReadFile("CodeHelpers\\DatabaseOperations.php");
-            helpers = Helpers.ReadFile("CodeHelpers\\Helpers.php");
+            databaseOperations = IO.ReadFile("CodeHelpers\\DatabaseOperations.php");
+            helpers = IO.ReadFile("CodeHelpers\\Helpers.php");
 
-            Helpers.WriteFile($"{path}\\Php\\DatabaseOperations.php", databaseOperations);
-            Helpers.WriteFile($"{path}\\Php\\Helpers.php", helpers);
+            IO.WriteFile($"{path}\\Php\\DatabaseOperations.php", databaseOperations);
+            IO.WriteFile($"{path}\\Php\\Helpers.php", helpers);
 
 
             //builder.AppendLine()

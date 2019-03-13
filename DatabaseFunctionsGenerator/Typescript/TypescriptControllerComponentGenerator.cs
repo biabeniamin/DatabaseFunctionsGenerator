@@ -185,7 +185,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine("})");
             builder.AppendLine(GenerateClass(table));
 
-            Helpers.WriteFile($"{path}\\{table.LowerCaseSingularName}.component.ts",
+            IO.WriteFile($"{path}\\{table.LowerCaseSingularName}.component.ts",
                 builder.ToString());
 
             return builder.ToString();

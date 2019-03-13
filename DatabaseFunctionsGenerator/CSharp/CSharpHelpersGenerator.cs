@@ -21,12 +21,12 @@ namespace DatabaseFunctionsGenerator
             string httpRequestClient;
 
             builder = new StringBuilder();
-            httpRequestClient = Helpers.ReadFile("CodeHelpers\\HttpRequestClient.cs");
+            httpRequestClient = IO.ReadFile("CodeHelpers\\HttpRequestClient.cs");
 
             //replace url
             httpRequestClient = httpRequestClient.Replace("!--url--!", _database.ServerUrl);
 
-            Helpers.WriteFile($"{path}\\Controllers\\HttpRequestClient.cs", httpRequestClient);
+            IO.WriteFile($"{path}\\Controllers\\HttpRequestClient.cs", httpRequestClient);
         }
     }
 }

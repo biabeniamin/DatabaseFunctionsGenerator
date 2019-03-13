@@ -114,15 +114,15 @@ namespace DatabaseFunctionsGenerator
             _timestamp = Helpers.GenerateTimeStamp();
             path = $"GeneratorResult\\{_timestamp}";
 
-            if (!Helpers.DoesDirectoryExists("GeneratorResult"))
+            if (!IO.DoesDirectoryExists("GeneratorResult"))
             {
-                Helpers.CreateDirectory("GeneratorResult");
+                IO.CreateDirectory("GeneratorResult");
             }
 
-            Helpers.CreateDirectory(path);
-            Helpers.CreateDirectory($"{path}\\Php");
-            Helpers.CreateDirectory($"{path}\\Typescript");
-            Helpers.CreateDirectory($"{path}\\Java");
+            IO.CreateDirectory(path);
+            IO.CreateDirectory($"{path}\\Php");
+            IO.CreateDirectory($"{path}\\Typescript");
+            IO.CreateDirectory($"{path}\\Java");
 
             //add missing fields
             AddMissingFields();

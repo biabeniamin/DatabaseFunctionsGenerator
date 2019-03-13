@@ -34,7 +34,7 @@ namespace DatabaseFunctionsGenerator
 
                 tableComponentPath = $"{path}\\{table.LowerCaseSingularName}";
 
-                Helpers.CreateDirectory(tableComponentPath);
+                IO.CreateDirectory(tableComponentPath);
                 GenerateComponentForTable(table, tableComponentPath);
             }
         }

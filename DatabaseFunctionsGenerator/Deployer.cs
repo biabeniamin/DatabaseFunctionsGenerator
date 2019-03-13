@@ -25,7 +25,7 @@ namespace DatabaseFunctionsGenerator
 
         public void Deploy()
         {
-            Helpers.CreateDirectory($"{_serverPath}\\{_generator.Timestamp}");
+            IO.CreateDirectory($"{_serverPath}\\{_generator.Timestamp}");
         }
     }
 }
