@@ -32,6 +32,20 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
+        private string GenerateDeleteOldTablesQuery(Database database)
+        {
+            StringBuilder builder = new StringBuilder();
+ 
+            builder.AppendLine("-- Following lines remove old tables from database");
+
+            foreach (Table table in database.Tables)
+            {
+                builder.AppendLine($"DROP TABLE `{table.Name}`;");
+            }
+
+            return builder.ToString();
+        }
+
         private string GenerateTableQuery(Table table)
         {
             StringBuilder builder = new StringBuilder();
@@ -72,6 +86,9 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine("-- for mysql ");
             builder.AppendLine("SET SQL_MODE = \"NO_AUTO_VALUE_ON_ZERO\";");
             builder.AppendLine("SET time_zone = \"+00:00\";");
+            builder.AppendLine();
+
+            builder.AppendLine(GenerateDeleteOldTablesQuery(_database));
 
             foreach (Table table in _database.Tables)
             {
