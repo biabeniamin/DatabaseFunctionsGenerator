@@ -16,7 +16,7 @@ namespace DatabaseFunctionsGenerator
             //this is designed to determine if it is running on a webserver or desktop
             string relativePath = path;
 
-            if(HttpRuntime.AppDomainAppId != null)
+            if (!Path.IsPathRooted(path) && HttpRuntime.AppDomainAppId != null)
             {
                 relativePath = Path.Combine(@HostingEnvironment.ApplicationPhysicalPath, $"bin\\{path}");
             }
