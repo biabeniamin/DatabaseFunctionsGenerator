@@ -148,7 +148,6 @@ namespace DatabaseFunctionsGenerator
                 File.Copy(file, $"d:\\xampp\\htdocs\\generator\\Test\\Models\\{Path.GetFileName(file)}", true);
             }*/
 
-            _timestamp = path;
         }
     }
 }
