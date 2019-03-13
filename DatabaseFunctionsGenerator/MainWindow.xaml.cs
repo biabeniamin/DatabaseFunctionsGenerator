@@ -112,6 +112,9 @@ namespace DatabaseFunctionsGenerator
             Generator generator = new Generator(_database);
             generator.Generate();
 
+            Deployer deployer = new Deployer(generator);
+            deployer.Deploy();
+
             _generateDelegateCommand = new DelegateCommand(GenerateCommand);
 
             _importDelegateCommand = new DelegateCommand(ImportFromJsonCommand);
