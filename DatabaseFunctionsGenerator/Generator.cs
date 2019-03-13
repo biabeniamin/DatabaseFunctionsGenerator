@@ -104,14 +104,15 @@ namespace DatabaseFunctionsGenerator
 
             path = $"GeneratorResult\\{Helpers.GenerateTimeStamp()}";
 
-            if (!Directory.Exists("GeneratorResult"))
+            if (!Helpers.DoesDirectoryExists("GeneratorResult"))
             {
+                Helpers.CreateDirectory("GeneratorResult");
             }
 
-            Directory.CreateDirectory(path);
-            Directory.CreateDirectory($"{path}\\Php");
-            Directory.CreateDirectory($"{path}\\Typescript");
-            Directory.CreateDirectory($"{path}\\Java");
+            Helpers.CreateDirectory(path);
+            Helpers.CreateDirectory($"{path}\\Php");
+            Helpers.CreateDirectory($"{path}\\Typescript");
+            Helpers.CreateDirectory($"{path}\\Java");
 
             //add missing fields
             AddMissingFields();
