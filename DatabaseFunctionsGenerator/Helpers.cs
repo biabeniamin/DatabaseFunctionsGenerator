@@ -24,6 +24,11 @@ namespace DatabaseFunctionsGenerator
             return relativePath;
         }
 
+        public static void CreateDirectory(string path)
+        {
+            Directory.CreateDirectory(GetPath(path));
+        }
+
         public static string ReadFile(string path)
         {
             String text;
