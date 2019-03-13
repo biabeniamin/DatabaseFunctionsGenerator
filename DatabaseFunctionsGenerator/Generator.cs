@@ -24,7 +24,7 @@ namespace DatabaseFunctionsGenerator
         private GeneratorConfigGenerator _generatorConfigGenerator;
         private string _timestamp;
 
-        public string GetTimestamp
+        public string Timestamp
         {
             get
             {
