@@ -25,7 +25,7 @@ namespace DatabaseFunctionsGenerator.Python
             string pythonPath;
 
             pythonPath = $"{path}\\Python";
-            Directory.CreateDirectory(pythonPath);
+            Helpers.CreateDirectory(pythonPath);
 
             _pythonModelsGenerator.Generate(pythonPath);
         }

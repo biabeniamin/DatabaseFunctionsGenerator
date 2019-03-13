@@ -65,7 +65,7 @@ namespace DatabaseFunctionsGenerator.Python
 
             modelsPath = $"{path}\\Models";
 
-            Directory.CreateDirectory(modelsPath);
+            Helpers.CreateDirectory(modelsPath);
 
             foreach (Table table in _database.Tables)
             {

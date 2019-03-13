@@ -78,7 +78,7 @@ namespace DatabaseFunctionsGenerator.Java
 
             modelsPath = $"{path}\\Layouts";
 
-            Directory.CreateDirectory(modelsPath);
+            Helpers.CreateDirectory(modelsPath);
 
             foreach (Table table in _database.Tables)
             {

@@ -165,7 +165,7 @@ namespace DatabaseFunctionsGenerator
 
             modelsPath = $"{path}\\Controllers";
 
-            Directory.CreateDirectory(modelsPath);
+            Helpers.CreateDirectory(modelsPath);
 
             foreach (Table table in _database.Tables)
             {
