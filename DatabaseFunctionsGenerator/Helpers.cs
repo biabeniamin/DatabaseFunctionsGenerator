@@ -4,17 +4,32 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
+using System.Web.Hosting;
 
 namespace DatabaseFunctionsGenerator
 {
     public static class Helpers
     {
+        public static string GetPath(string path)
+        {
+            //this is designed to determine if it is running on a webserver or desktop
+            string relativePath = path;
+
+            if(HttpRuntime.AppDomainAppId != null)
+            {
+                relativePath = Path.Combine(@HostingEnvironment.ApplicationPhysicalPath, $"bin\\{path}");
+            }
+
+            return relativePath;
+        }
+
         public static string ReadFile(string path)
         {
             String text;
             StreamReader reader;
 
-            reader = new StreamReader(path);
+            reader = new StreamReader(GetPath(path));
             text = "";
 
             text = reader.ReadToEnd();
@@ -28,7 +43,7 @@ namespace DatabaseFunctionsGenerator
         {
             StreamWriter writer;
 
-            writer = new StreamWriter(path);
+            writer = new StreamWriter(GetPath(path));
 
             writer.Write(text);
 
