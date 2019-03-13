@@ -34,6 +34,11 @@ namespace DatabaseFunctionsGenerator
             return Directory.Exists(GetPath(path));
         }
 
+        public static void Copy(string source, string destination)
+        {
+            File.Copy(GetPath(source), GetPath(destination), true);
+        }
+
         public static string ReadFile(string path)
         {
             String text;
