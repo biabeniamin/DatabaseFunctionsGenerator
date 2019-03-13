@@ -67,6 +67,7 @@
     <Compile Include="CSharp\CSharpHelpersGenerator.cs" />
     <Compile Include="CSharp\CSharpModelsGenerator.cs" />
     <Compile Include="DelegateCommand.cs" />
+    <Compile Include="Deployer.cs" />
     <Compile Include="Documentation\DocumentationGenerator.cs" />
     <Compile Include="Generator.cs" />
     <Compile Include="GeneratorConfigGenerator.cs" />
