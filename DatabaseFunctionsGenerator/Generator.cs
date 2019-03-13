@@ -22,13 +22,13 @@ namespace DatabaseFunctionsGenerator
         private JavaGenerator _javaGenerator;
         private PythonGenerator _pythonGenerator;
         private GeneratorConfigGenerator _generatorConfigGenerator;
-        private string _path;
+        private string _timestamp;
 
-        public string GetGeneratedPath
+        public string GetTimestamp
         {
             get
             {
-                return _path;
+                return _timestamp;
             }
         }
 
@@ -111,7 +111,8 @@ namespace DatabaseFunctionsGenerator
         {
             string path;
 
-            path = $"GeneratorResult\\{Helpers.GenerateTimeStamp()}";
+            _timestamp = Helpers.GenerateTimeStamp();
+            path = $"GeneratorResult\\{_timestamp}";
 
             if (!Helpers.DoesDirectoryExists("GeneratorResult"))
             {
@@ -147,7 +148,7 @@ namespace DatabaseFunctionsGenerator
                 File.Copy(file, $"d:\\xampp\\htdocs\\generator\\Test\\Models\\{Path.GetFileName(file)}", true);
             }*/
 
-            _path = path;
+            _timestamp = path;
         }
     }
 }
