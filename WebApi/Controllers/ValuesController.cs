@@ -30,6 +30,9 @@ namespace WebApi.Controllers
             Generator generator = new Generator(database);
             generator.Generate();
 
+            Deployer deployer = new Deployer(generator);
+            deployer.Deploy();
+
             return generator.Timestamp;
         }
 
