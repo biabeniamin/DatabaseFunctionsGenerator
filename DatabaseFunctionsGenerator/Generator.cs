@@ -106,7 +106,6 @@ namespace DatabaseFunctionsGenerator
 
             if (!Directory.Exists("GeneratorResult"))
             {
-                Directory.CreateDirectory("GeneratorResult");
             }
 
             Directory.CreateDirectory(path);

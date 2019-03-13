@@ -1,5 +1,7 @@
-﻿using System;
+﻿using DatabaseFunctionsGenerator;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -22,8 +24,12 @@ namespace WebApi.Controllers
         }
 
         // POST api/values
-        public void Post([FromBody]string value)
+        public void Post([FromBody]Database database)
         {
+            int i = 5;
+            i++;
+            //Generator generator = new Generator(database);
+            //generator.Generate();
         }
 
         // PUT api/values/5
