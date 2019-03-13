@@ -22,6 +22,15 @@ namespace DatabaseFunctionsGenerator
         private JavaGenerator _javaGenerator;
         private PythonGenerator _pythonGenerator;
         private GeneratorConfigGenerator _generatorConfigGenerator;
+        private string _path;
+
+        public string GetGeneratedPath
+        {
+            get
+            {
+                return _path;
+            }
+        }
 
         public Generator(Database database)
         {
@@ -137,6 +146,8 @@ namespace DatabaseFunctionsGenerator
             {
                 File.Copy(file, $"d:\\xampp\\htdocs\\generator\\Test\\Models\\{Path.GetFileName(file)}", true);
             }*/
+
+            _path = path;
         }
     }
 }
