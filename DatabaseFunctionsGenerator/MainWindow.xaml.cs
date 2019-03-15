@@ -109,6 +109,8 @@ namespace DatabaseFunctionsGenerator
 
             //SelectedTable = Database.Tables[0];
 
+            DatabaseOperations database = new DatabaseOperations();
+
             Generator generator = new Generator(_database);
             generator.Generate();
 
