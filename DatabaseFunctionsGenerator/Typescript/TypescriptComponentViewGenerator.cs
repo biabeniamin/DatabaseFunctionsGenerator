@@ -113,8 +113,8 @@ namespace DatabaseFunctionsGenerator
                     //<div class="bar"></div>
                     //</div>
                     tableBody.AppendLine("<div class=\"input-container\">");
-                    tableBody.AppendLine($"\t{column.Name}");
-                    tableBody.AppendLine($"\t<input type=\"text\" id=\"{column.Name}\"><br>");
+                    tableBody.AppendLine($"<input type=\"text\" placeholder= \"{column.Name}\" id=\"{column.Name}\" />");
+                    tableBody.AppendLine("<div class=\"bar\"></div>");
                     tableBody.AppendLine("</div>");
                 }
 
