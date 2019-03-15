@@ -10,14 +10,7 @@ namespace DatabaseFunctionsGenerator
     {
         private Generator _generator;
         private DatabaseOperations _database;
-        private string _serverPath = @"D:\xampp\htdocs";
-
-        public string ServerPath
-        {
-            get { return _serverPath; }
-            set { _serverPath = value; }
-        }
-
+        
 
         public Deployer(Generator generator)
         {
@@ -27,21 +20,22 @@ namespace DatabaseFunctionsGenerator
 
         public void Deploy()
         {
-            IO.CreateDirectory($"{_serverPath}\\{_generator.Timestamp}");
+            IO.CreateDirectory($@"{Constants.ServerPath}\\{_generator.Timestamp}");
             IO.Copy($"GeneratorResult\\{_generator.Timestamp}\\Typescript\\user\\user.component.html",
-                @"D:\Beni\angular\BackEndGeneratorAngularSample\src\app\user\\user.component.html");
+                $@"{Constants.AngularPath}\user\\user.component.html");
             IO.Copy($"GeneratorResult\\{_generator.Timestamp}\\Typescript\\user\\user.component.ts",
-                @"D:\Beni\angular\BackEndGeneratorAngularSample\src\app\user\\user.component.ts");
+                $@"{Constants.AngularPath}\user\\user.component.ts");
             IO.Copy($"GeneratorResult\\{_generator.Timestamp}\\Typescript\\Models\\User.ts",
-                @"D:\Beni\angular\BackEndGeneratorAngularSample\src\app\Models\User.ts");
+                $@"{Constants.AngularPath}\Models\User.ts");
 
             IO.Copy($"GeneratorResult\\{_generator.Timestamp}\\Typescript\\UserService.ts",
-                @"D:\Beni\angular\BackEndGeneratorAngularSample\src\app\UserService.ts");
+                $@"{Constants.AngularPath}\UserService.ts");
+
 
             IO.Copy($"GeneratorResult\\{_generator.Timestamp}\\Php\\Users.php",
-                @"d:\xampp\htdocs\gen\Users.php");
+                $@"d:\xampp\htdocs\gen\Users.php");
             IO.Copy($"GeneratorResult\\{_generator.Timestamp}\\Php\\Models\\User.php",
-                @"d:\xampp\htdocs\gen\Models\User.php");
+                $@"d:\xampp\htdocs\gen\Models\User.php");
 
             _database.ExecuteQuery(IO.ReadFile("GeneratorResult\\20180916213520426\\sqlDatabase.sql"));
         }
