@@ -108,10 +108,6 @@ namespace DatabaseFunctionsGenerator
             {
                 foreach (Column column in table.EditableColumns.Where(col => { return false == col.Type.IsForeignKey; }))
                 {
-                    //          < div class="input-container">
-                    //<input type = "text" placeholder="Nume" id="Nume"/>
-                    //<div class="bar"></div>
-                    //</div>
                     tableBody.AppendLine("<div class=\"input-container\">");
                     tableBody.AppendLine($"<input type=\"text\" placeholder= \"{column.Name}\" id=\"{column.Name}\" />");
                     tableBody.AppendLine("<div class=\"bar\"></div>");
@@ -123,7 +119,9 @@ namespace DatabaseFunctionsGenerator
                     tableBody.AppendLine(GenerateDropDownForParentSelection(parentTable));
                 }
 
-                tableBody.AppendLine("<input type=\"submit\" value=\"Add\">");
+                tableBody.AppendLine("<div class=\"button-container\">");
+                     tableBody.AppendLine("\t<input type=\"submit\" value=\"Add\">");
+                tableBody.AppendLine("</div>");
 
                 builder.Append(Helpers.AddIndentation(tableBody.ToString(), 1));
             }
