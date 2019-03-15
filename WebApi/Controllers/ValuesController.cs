@@ -27,6 +27,8 @@ namespace WebApi.Controllers
         // POST api/values
         public string Post([FromBody]Database database)
         {
+            if (database == null)
+                return "";
             Generator generator = new Generator(database);
             generator.Generate();
 
