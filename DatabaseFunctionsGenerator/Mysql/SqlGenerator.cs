@@ -40,7 +40,7 @@ namespace DatabaseFunctionsGenerator
 
             foreach (Table table in database.Tables)
             {
-                builder.AppendLine($"DROP TABLE `{table.Name}`;");
+                builder.AppendLine($"DROP TABLE IF EXISTS`{table.Name}`;");
             }
 
             return builder.ToString();
