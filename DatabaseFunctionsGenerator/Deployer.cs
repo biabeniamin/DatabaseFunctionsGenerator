@@ -26,6 +26,12 @@ namespace DatabaseFunctionsGenerator
         public void Deploy()
         {
             IO.CreateDirectory($"{_serverPath}\\{_generator.Timestamp}");
+            IO.Copy("GeneratorResult\\20180916213520426\\Typescript\\user\\user.component.html",
+                @"D:\Beni\angular\BackEndGeneratorAngularSample\src\app\user\\user.component.html");
+            IO.Copy("GeneratorResult\\20180916213520426\\Typescript\\user\\user.component.ts",
+                @"D:\Beni\angular\BackEndGeneratorAngularSample\src\app\user\\user.component.ts");
+            IO.Copy("GeneratorResult\\20180916213520426\\Typescript\\Models\\User.ts",
+                @"D:\Beni\angular\BackEndGeneratorAngularSample\src\app\Models\User.ts");
         }
     }
 }
