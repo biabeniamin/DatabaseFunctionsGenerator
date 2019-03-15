@@ -9,6 +9,7 @@ namespace DatabaseFunctionsGenerator
     public class Deployer
     {
         private Generator _generator;
+        private DatabaseOperations _database;
         private string _serverPath = @"D:\xampp\htdocs";
 
         public string ServerPath
@@ -21,6 +22,7 @@ namespace DatabaseFunctionsGenerator
         public Deployer(Generator generator)
         {
             _generator = generator;
+            _database = new DatabaseOperations();
         }
 
         public void Deploy()
@@ -32,6 +34,8 @@ namespace DatabaseFunctionsGenerator
                 @"D:\Beni\angular\BackEndGeneratorAngularSample\src\app\user\\user.component.ts");
             IO.Copy("GeneratorResult\\20180916213520426\\Typescript\\Models\\User.ts",
                 @"D:\Beni\angular\BackEndGeneratorAngularSample\src\app\Models\User.ts");
+
+            _database.ExecuteQuery(IO.ReadFile("GeneratorResult\\20180916213520426\\sqlDatabase.sql"));
         }
     }
 }
