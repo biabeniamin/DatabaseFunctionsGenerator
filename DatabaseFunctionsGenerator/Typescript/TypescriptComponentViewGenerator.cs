@@ -132,8 +132,15 @@ namespace DatabaseFunctionsGenerator
         {
             StringBuilder builder = new StringBuilder();
 
-            builder.AppendLine(GenerateAddForm(table));
-            builder.AppendLine(GenerateListView(table));
+            builder.AppendLine("<div class=\"container\">");
+            builder.AppendLine("\t<div class=\"card rerun\">");
+            builder.AppendLine(Helpers.AddIndentation(GenerateAddForm(table),
+                                                      2));
+
+            builder.AppendLine(Helpers.AddIndentation(GenerateListView(table),
+                                                      2));
+            builder.AppendLine("\t</div>");
+            builder.AppendLine("</div>");
 
             IO.WriteFile($"{path}\\{table.LowerCaseSingularName}.component.html",
                 builder.ToString());
