@@ -108,9 +108,14 @@ namespace DatabaseFunctionsGenerator
             {
                 foreach (Column column in table.EditableColumns.Where(col => { return false == col.Type.IsForeignKey; }))
                 {
-                    tableBody.AppendLine($"{column.Name}");
-                    tableBody.AppendLine($"<input type=\"text\" id=\"{column.Name}\"><br>");
-
+                    //          < div class="input-container">
+                    //<input type = "text" placeholder="Nume" id="Nume"/>
+                    //<div class="bar"></div>
+                    //</div>
+                    tableBody.AppendLine("<div class=\"input-container\">");
+                    tableBody.AppendLine($"\t{column.Name}");
+                    tableBody.AppendLine($"\t<input type=\"text\" id=\"{column.Name}\"><br>");
+                    tableBody.AppendLine("</div>");
                 }
 
                 foreach (Table parentTable in table.Parents)
