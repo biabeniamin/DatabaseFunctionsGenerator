@@ -120,7 +120,9 @@ namespace DatabaseFunctionsGenerator
                 }
 
                 tableBody.AppendLine("<div class=\"button-container\">");
-                     tableBody.AppendLine("\t<input type=\"submit\" value=\"Add\">");
+                {
+                    tableBody.AppendLine("\t<input type=\"submit\" style=\"padding:20px; background:white;color:tomato;border:2px solid tomato;\" value=\"Add\">");
+                }
                 tableBody.AppendLine("</div>");
 
                 builder.Append(Helpers.AddIndentation(tableBody.ToString(), 1));
