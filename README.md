@@ -28,5 +28,5 @@ Open it with Visual Studio 2017 and commpile it. You can run either:<br />
 
 ## Author
 
-* **Beniamin Bia
+* **Beniamin Bia**
 
