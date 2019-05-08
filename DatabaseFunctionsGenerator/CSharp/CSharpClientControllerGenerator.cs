@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace DatabaseFunctionsGenerator
 {
-    public class CSharpControllerGenerator:IGenerator
+    public class CSharpClientControllerGenerator:IGenerator
     {
         private Database _database;
 
-        public CSharpControllerGenerator(Database database)
+        public CSharpClientControllerGenerator(Database database)
         {
             _database = database;
         }
