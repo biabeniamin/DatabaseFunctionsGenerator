@@ -13,6 +13,7 @@ namespace DatabaseFunctionsGenerator
 
         private CSharpModelsGenerator _cSharpModelsGenerator;
         private CSharpClientControllerGenerator _cSharpClientControllerGenerator;
+        private CSharpServerControllerGenerator _cSharpServerControllerGenerator;
         private CSharpHelpersGenerator _cSharpHelpersGenerator;
 
         public CSharpGenerator(Database database)
@@ -21,6 +22,7 @@ namespace DatabaseFunctionsGenerator
 
             _cSharpModelsGenerator = new CSharpModelsGenerator(_database);
             _cSharpClientControllerGenerator = new CSharpClientControllerGenerator(_database);
+            _cSharpServerControllerGenerator = new CSharpServerControllerGenerator(_database);
             _cSharpHelpersGenerator = new CSharpHelpersGenerator(_database);
         }
 
@@ -39,6 +41,7 @@ namespace DatabaseFunctionsGenerator
 
             _cSharpModelsGenerator.Generate(cSharpPath);
             _cSharpClientControllerGenerator.Generate(cSharpClientPath);
+            _cSharpServerControllerGenerator.Generate(cSharpServerPath);
             _cSharpHelpersGenerator.Generate(cSharpClientPath);
 
         }
