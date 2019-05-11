@@ -77,10 +77,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Compile Include="Constants.cs" />
-    <Compile Include="CSharp\CSharpControllerGenerator.cs" />
+    <Compile Include="CSharp\CSharpClientControllerGenerator.cs" />
     <Compile Include="CSharp\CSharpGenerator.cs" />
     <Compile Include="CSharp\CSharpHelpersGenerator.cs" />
     <Compile Include="CSharp\CSharpModelsGenerator.cs" />
+    <Compile Include="CSharp\CSharpServerControllerGenerator.cs" />
     <Compile Include="DatabaseOperations.cs" />
     <Compile Include="DelegateCommand.cs" />
     <Compile Include="Deployer.cs" />

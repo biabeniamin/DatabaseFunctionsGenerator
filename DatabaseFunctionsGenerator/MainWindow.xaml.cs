@@ -67,44 +67,36 @@ namespace DatabaseFunctionsGenerator
             DataContext = this;
 
             Database = new Database();
+            /*
+                        Database.Tables.Add(new Table("Users"));
 
-            Database.Tables.Add(new Table("Users"));
 
+                        Database.Tables[0].Columns.Add(new Column("Nume", new ColumnType(Types.Varchar, 20)));
+                        Database.Tables[0].Columns.Add(new Column("Prenume", new ColumnType(Types.Varchar, 20)));
+                        //Database.Tables[0].Columns.Add(new Column("Password", new ColumnType(Types.Varchar, 20)));
+                        Database.Tables[0].Columns.Add(new Column("Email", new ColumnType(Types.Varchar, 20)));
+                        //Database.Tables[0].Columns.Add(new Column("Age", new ColumnType(Types.Integer)));
+                        //Database.Tables[0].Columns.Add(new Column("Description", new ColumnType(Types.Text)));
+                        Database.Tables[0].Columns.Add(new Column("CNP", new ColumnType(Types.Varchar, 20)));
+                        Database.Tables[0].Columns.Add(new Column("NumberTelefon", new ColumnType(Types.Varchar, 20 )));*/
 
-            Database.Tables[0].Columns.Add(new Column("Nume", new ColumnType(Types.Varchar, 20)));
-            Database.Tables[0].Columns.Add(new Column("Prenume", new ColumnType(Types.Varchar, 20)));
-            //Database.Tables[0].Columns.Add(new Column("Password", new ColumnType(Types.Varchar, 20)));
-            Database.Tables[0].Columns.Add(new Column("Email", new ColumnType(Types.Varchar, 20)));
-            //Database.Tables[0].Columns.Add(new Column("Age", new ColumnType(Types.Integer)));
-            //Database.Tables[0].Columns.Add(new Column("Description", new ColumnType(Types.Text)));
-            Database.Tables[0].Columns.Add(new Column("CNP", new ColumnType(Types.Varchar, 20)));
-            Database.Tables[0].Columns.Add(new Column("NumberTelefon", new ColumnType(Types.Varchar, 20 )));
-
-            /*Database.Tables.Add(new Table("Users"));
-            Database.Tables.Add(new Table("Locations"));
-            Database.Tables.Add(new Table("AccessLogs"));
-            Database.Tables.Add(new Table("Doors"));
-            Database.Tables.Add(new Table("Pins"));
-            Database.Tables.Add(new Table("Empty"));
+            Database.Tables.Add(new Table("Messages"));
+            //Database.Tables.Add(new Table("Prezenta"));
+            //Database.Tables.Add(new Table("Locations"));
+            //Database.Tables.Add(new Table("AccessLogs"));
+            //Database.Tables.Add(new Table("Doors"));
+            //Database.Tables.Add(new Table("Pins"));
+            //Database.Tables.Add(new Table("Empty"));
 
             //            Database.Tables[0].Columns.Add(new Column("Id", new ColumnType(Types.Integer, true, true)));
-            Database.Tables[0].Columns.Add(new Column("Username", new ColumnType(Types.Varchar, 20)));
-            Database.Tables[0].Columns.Add(new Column("Age", new ColumnType(Types.Integer)));
-            Database.Tables[0].Columns.Add(new Column("Description", new ColumnType(Types.Text)));
-            Database.Tables[0].Columns.Add(new Column("CNP", new ColumnType(Types.Varchar, 20)));
-            Database.Tables[0].Columns.Add(new Column("DateOfBirth", new ColumnType(Types.DateTime)));
-
-            Database.Tables[2].Columns.Add(new Column("CardValue", new ColumnType(Types.Varchar, 20)));
-
-            Database.Tables[3].Columns.Add(new Column("Name", new ColumnType(Types.Varchar, 20)));
-
-            Database.Tables[4].Columns.Add(new Column("Pin", new ColumnType(Types.Varchar, 20)));
+            Database.Tables[0].Columns.Add(new Column("Content", new ColumnType(Types.Text, 20)));
+            Database.Tables[0].Columns.Add(new Column("Source", new ColumnType(Types.Integer)));
 
 
-            Database.Relations.Add(new Relation(Database.Tables[0], Database.Tables[2], RelationType.OneToMany));
-            Database.Relations.Add(new Relation(Database.Tables[3], Database.Tables[2], RelationType.OneToMany));
-            Database.Relations.Add(new Relation(Database.Tables[2], Database.Tables[4], RelationType.OneToMany));
-            Database.Relations.Add(new Relation(Database.Tables[4], Database.Tables[5], RelationType.OneToMany));*/
+            //Database.Relations.Add(new Relation(Database.Tables[0], Database.Tables[1], RelationType.OneToMany));
+            //Database.Relations.Add(new Relation(Database.Tables[3], Database.Tables[2], RelationType.OneToMany));
+            //Database.Relations.Add(new Relation(Database.Tables[2], Database.Tables[4], RelationType.OneToMany));
+            //Database.Relations.Add(new Relation(Database.Tables[4], Database.Tables[5], RelationType.OneToMany));
 
 
             //SelectedTable = Database.Tables[0];
@@ -113,8 +105,8 @@ namespace DatabaseFunctionsGenerator
             Generator generator = new Generator(_database);
             generator.Generate();
 
-            Deployer deployer = new Deployer(generator);
-            deployer.Deploy();
+            //Deployer deployer = new Deployer(generator);
+            //deployer.Deploy();
 
             _generateDelegateCommand = new DelegateCommand(GenerateCommand);
 
