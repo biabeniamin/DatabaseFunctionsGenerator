@@ -138,6 +138,17 @@ namespace DatabaseFunctionsGenerator
         }
 
         [JsonIgnore]
+        public IEnumerable<Column> DataColumns
+        {
+            get
+            {
+                return _columns.Where((column) => {
+                    return (false == column.Type.IsPrimaryKey);
+                });
+            }
+        }
+
+        [JsonIgnore]
         public IEnumerable<Column> NonEditableColumns
         {
             get
