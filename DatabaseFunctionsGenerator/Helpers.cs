@@ -205,6 +205,19 @@ namespace DatabaseFunctionsGenerator
 
             return stringBuilder.ToString();
         }
+
+        public static string ConcatenateList<T>(ICollection<T> list, string separator, string start)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            foreach (var item in list)
+            {
+                stringBuilder.Append($"{start}{item}{separator} ");
+            }
+            RemoveLastApparition(stringBuilder, $"{separator} ");
+
+            return stringBuilder.ToString();
+        }
     }
 
 }
