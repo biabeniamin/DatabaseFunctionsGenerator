@@ -193,7 +193,7 @@ namespace DatabaseFunctionsGenerator
             }
         }
 
-        public static string ConcatenateList(ICollection<object> list, string separator)
+        public static string ConcatenateList<T>(ICollection<T> list, string separator)
         {
             StringBuilder stringBuilder = new StringBuilder();
 
