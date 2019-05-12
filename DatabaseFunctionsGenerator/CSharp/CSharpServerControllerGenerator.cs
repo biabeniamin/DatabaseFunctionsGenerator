@@ -55,6 +55,38 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
+        private string GeneratePostRequest(Table table)
+        {
+            StringBuilder builder;
+
+            builder = new StringBuilder();
+
+            builder.AppendLine($"// POST {table.LowerCaseName}/values");
+            builder.AppendLine($"public void Post([FromBody]string value66)");
+            builder.AppendLine("{");
+            {
+                StringBuilder blockBuilder = new StringBuilder();
+
+                blockBuilder.AppendLine($"DatabaseOperations db = new DatabaseOperations();");
+                blockBuilder.AppendLine($"MySqlCommand command = new MySqlCommand(\"INSERT INTO {table.Name}({Helpers.ConcatenateList<Column>(table.DataColumns, ", ")})" +
+                    $" VALUES({Helpers.ConcatenateList<Column>(table.DataColumns, ", ", "@")})\");");
+                blockBuilder.AppendLine();
+
+                foreach (Column column in table.DataColumns)
+                {
+                    blockBuilder.AppendLine($"command.Parameters.AddWithValue(\"@{column.Name}\", \"test\");");
+                }
+
+                blockBuilder.AppendLine("");
+                blockBuilder.AppendLine("db.ExecuteQuery(command);");
+
+                builder.Append(Helpers.AddIndentation(blockBuilder, 1));
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
         private void GenerateController(Table table, string path)
         {
             StringBuilder builder;
@@ -83,7 +115,8 @@ namespace DatabaseFunctionsGenerator
                 namespaceBuilder.AppendLine("{");
                 {
                     classBuilder.AppendLine(GenerateGetRequest(table));
-                    
+                    classBuilder.AppendLine(GeneratePostRequest(table));
+
 
                     namespaceBuilder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(),
                         1));
