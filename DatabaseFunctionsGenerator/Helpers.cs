@@ -192,6 +192,19 @@ namespace DatabaseFunctionsGenerator
                 builder.Remove(builder.ToString().LastIndexOf(deleted), deleted.Length);
             }
         }
+
+        public static string ConcatenateList(ICollection<object> list, string separator)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            foreach (var item in list)
+            {
+                stringBuilder.Append($"{item}{separator} ");
+            }
+            RemoveLastApparition(stringBuilder, $"{separator} ");
+
+            return stringBuilder.ToString();
+        }
     }
 
 }
