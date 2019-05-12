@@ -48,5 +48,9 @@ namespace DatabaseFunctionsGenerator
             _type = type;
         }
 
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }
