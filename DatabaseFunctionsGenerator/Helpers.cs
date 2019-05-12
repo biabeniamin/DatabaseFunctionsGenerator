@@ -193,7 +193,7 @@ namespace DatabaseFunctionsGenerator
             }
         }
 
-        public static string ConcatenateList<T>(ICollection<T> list, string separator)
+        public static string ConcatenateList<T>(IEnumerable<T> list, string separator)
         {
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -206,7 +206,7 @@ namespace DatabaseFunctionsGenerator
             return stringBuilder.ToString();
         }
 
-        public static string ConcatenateList<T>(ICollection<T> list, string separator, string start)
+        public static string ConcatenateList<T>(IEnumerable<T> list, string separator, string start)
         {
             StringBuilder stringBuilder = new StringBuilder();
 
