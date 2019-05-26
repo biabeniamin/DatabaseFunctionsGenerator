@@ -87,6 +87,35 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
+        private string GenerateDeleteRequest(Table table)
+        {
+            StringBuilder builder;
+
+            builder = new StringBuilder();
+
+            builder.AppendLine($"// DELETE {table.LowerCaseName}/values/id");
+            builder.AppendLine($"public void Delete(int id)");
+            builder.AppendLine("{");
+            {
+                StringBuilder blockBuilder = new StringBuilder();
+
+                blockBuilder.AppendLine($"DatabaseOperations db = new DatabaseOperations();");
+                blockBuilder.AppendLine($"MySqlCommand command = new MySqlCommand(\"DELETE FROM {table.Name}" +
+                    $" WHERE {table.PrimaryKeyColumn.Name}=@Id\");");
+                blockBuilder.AppendLine();
+
+                blockBuilder.AppendLine($"command.Parameters.AddWithValue(\"@Id\", id);");
+
+                blockBuilder.AppendLine("");
+                blockBuilder.AppendLine("db.ExecuteQuery(command);");
+
+                builder.Append(Helpers.AddIndentation(blockBuilder, 1));
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
         private void GenerateController(Table table, string path)
         {
             StringBuilder builder;
@@ -116,6 +145,7 @@ namespace DatabaseFunctionsGenerator
                 {
                     classBuilder.AppendLine(GenerateGetRequest(table));
                     classBuilder.AppendLine(GeneratePostRequest(table));
+                    classBuilder.AppendLine(GenerateDeleteRequest(table));
 
 
                     namespaceBuilder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(),
