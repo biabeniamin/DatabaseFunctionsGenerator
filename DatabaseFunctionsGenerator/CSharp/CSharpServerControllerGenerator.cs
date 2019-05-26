@@ -36,7 +36,7 @@ namespace DatabaseFunctionsGenerator
                 {
                     blockBuilder.AppendLine($"\tlist.Add(new {table.SingularName}(");
 
-                    foreach(Column column in table.EditableColumns)
+                    foreach(Column column in table.Columns)
                     {
                         blockBuilder.AppendLine($"\t\t({column.Type.GetCSharpType()})reader[\"{column.Name}\"],");
                     }
