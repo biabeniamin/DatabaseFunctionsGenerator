@@ -134,6 +134,8 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine("using System.Linq;");
             builder.AppendLine("using System.Net;");
             builder.AppendLine("using System.Net.Http;");
+            builder.AppendLine("using System.Web.Http;");
+            builder.AppendLine("using Server.Controllers;");
 
 
             builder.AppendLine("namespace DatabaseFunctionsGenerator");
