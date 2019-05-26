@@ -75,7 +75,7 @@ namespace DatabaseFunctionsGenerator
                 foreach (Column column in table.DataColumns)
                 {
                     if(column.IsCreationTimeColumn)
-                        blockBuilder.AppendLine($"command.Parameters.AddWithValue(\"@{column.Name}\", \"NOW()\");");
+                        blockBuilder.AppendLine($"command.Parameters.AddWithValue(\"@{column.Name}\", DateTime.Now.ToString(\"yyyy-MM-dd HH:mm:ss\"));");
                     else
                         blockBuilder.AppendLine($"command.Parameters.AddWithValue(\"@{column.Name}\", data.{column.Name});");
                 }
