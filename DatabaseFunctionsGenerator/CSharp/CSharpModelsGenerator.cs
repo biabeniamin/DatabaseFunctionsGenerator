@@ -101,6 +101,40 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
+        private string GenerateFullConstructor(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder columnsCommaSeparated;
+
+            builder = new StringBuilder();
+            columnsCommaSeparated = new StringBuilder();
+
+            //generate columnsCommaSeparated
+            foreach (Column column in table.Columns)
+            {
+                columnsCommaSeparated.Append($"{column.Type.GetCSharpType()} {column.LowerCaseName}, ");
+            }
+
+            if (1 < columnsCommaSeparated.Length)
+            {
+                columnsCommaSeparated = columnsCommaSeparated.Remove(columnsCommaSeparated.Length - 2, 2);
+            }
+
+            builder.AppendLine($"public {table.SingularName}({columnsCommaSeparated.ToString()})");
+            builder.AppendLine("{");
+            {
+
+                foreach (Column column in table.Columns)
+                {
+                    builder.AppendLine($"\t_{column.LowerCaseName} = {column.LowerCaseName};");
+                }
+
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
         private string GenerateConstructor(Table table)
         {
             StringBuilder builder;
@@ -252,6 +286,7 @@ namespace DatabaseFunctionsGenerator
                 {
                     classBuilder.AppendLine(GenerateFields(table));
                     classBuilder.AppendLine(GenerateGettersSetters(table));
+                    classBuilder.AppendLine(GenerateFullConstructor(table));
                     classBuilder.AppendLine(GenerateConstructor(table));
 
                     if (0 < table.Parents.Count)
