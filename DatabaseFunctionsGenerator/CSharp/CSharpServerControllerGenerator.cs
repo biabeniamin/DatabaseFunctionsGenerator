@@ -62,7 +62,7 @@ namespace DatabaseFunctionsGenerator
             builder = new StringBuilder();
 
             builder.AppendLine($"// POST {table.LowerCaseName}/values");
-            builder.AppendLine($"public void Post([FromBody]string value66)");
+            builder.AppendLine($"public void Post([FromBody]{table.SingularName} data)");
             builder.AppendLine("{");
             {
                 StringBuilder blockBuilder = new StringBuilder();
