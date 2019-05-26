@@ -74,7 +74,7 @@ namespace DatabaseFunctionsGenerator
 
                 foreach (Column column in table.DataColumns)
                 {
-                    blockBuilder.AppendLine($"command.Parameters.AddWithValue(\"@{column.Name}\", \"test\");");
+                        blockBuilder.AppendLine($"command.Parameters.AddWithValue(\"@{column.Name}\", data.{column.Name});");
                 }
 
                 blockBuilder.AppendLine("");
