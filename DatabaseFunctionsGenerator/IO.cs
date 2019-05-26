@@ -34,9 +34,25 @@ namespace DatabaseFunctionsGenerator
             return Directory.Exists(GetPath(path));
         }
 
-        public static void Copy(string source, string destination)
+        public static void CopyFile(string source, string destination)
         {
             File.Copy(GetPath(source), GetPath(destination), true);
+        }
+
+        public static void CopyDirectory(string source, string destination)
+        {
+            foreach(string directory in Directory.GetDirectories(source))
+            {
+                string newPath = $"{destination}\\{new DirectoryInfo(directory).Name}";
+                if (!DoesDirectoryExists(newPath))
+                    CreateDirectory(newPath);
+                CopyDirectory(directory, newPath);
+            }
+
+            foreach(string file in Directory.GetFiles(source))
+            {
+                CopyFile(file, $"{destination}\\{Path.GetFileName(file)}");
+            }
         }
 
         public static string ReadFile(string path)
