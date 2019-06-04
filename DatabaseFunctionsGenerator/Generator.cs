@@ -119,6 +119,11 @@ namespace DatabaseFunctionsGenerator
                 IO.CreateDirectory("GeneratorResult");
             }
 
+            if (IO.DoesDirectoryExists(path))
+            {
+                IO.DeleteDirectory(path);
+            }
+
             IO.CreateDirectory(path);
             IO.CreateDirectory($"{path}\\Php");
             IO.CreateDirectory($"{path}\\Typescript");
