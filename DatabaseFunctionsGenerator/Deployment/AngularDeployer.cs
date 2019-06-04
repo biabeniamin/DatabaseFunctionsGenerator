@@ -21,9 +21,16 @@ namespace DatabaseFunctionsGenerator.Deployment
                 $@"{Constants.AngularPath}\Models");
         }
 
+        private void DeployControllers()
+        {
+            IO.CopyDirectory($"GeneratorResult\\{_generator.Timestamp}\\Typescript\\Components",
+                $@"{Constants.AngularPath}");
+        }
+
         public void Deploy()
         {
             DeployModels();
+            DeployControllers();
         }
     }
 }
