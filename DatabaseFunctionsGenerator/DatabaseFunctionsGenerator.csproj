@@ -86,6 +86,7 @@
     <Compile Include="DelegateCommand.cs" />
     <Compile Include="Deployment\AngularDeployer.cs" />
     <Compile Include="Deployment\Deployer.cs" />
+    <Compile Include="Deployment\PhpDeployer.cs" />
     <Compile Include="Documentation\DocumentationGenerator.cs" />
     <Compile Include="Generator.cs" />
     <Compile Include="GeneratorConfigGenerator.cs" />
