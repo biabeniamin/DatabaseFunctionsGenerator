@@ -19,7 +19,7 @@ namespace DatabaseFunctionsGenerator
             _database = database;
 
             _phpModelsGenerator = new PhpModelsGenerator(_database);
-            _phpHelpersGenerator = new PhpHelpersGenerator();
+            _phpHelpersGenerator = new PhpHelpersGenerator(_database);
             _phpDatabaseFunctionGenerator = new PhpDatabaseFunctionGenerator(_database);
         }
 
