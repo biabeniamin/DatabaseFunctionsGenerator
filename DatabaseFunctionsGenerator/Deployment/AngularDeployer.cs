@@ -12,12 +12,18 @@ namespace DatabaseFunctionsGenerator.Deployment
 
         public AngularDeployer(Generator generator)
         {
-            generator = _generator;
+            _generator = generator;
+        }
+
+        private void DeployModels()
+        {
+            IO.CopyDirectory($"GeneratorResult\\{_generator.Timestamp}\\Typescript\\Models",
+                $@"{Constants.AngularPath}\Models");
         }
 
         public void Deploy()
         {
-
+            DeployModels();
         }
     }
 }
