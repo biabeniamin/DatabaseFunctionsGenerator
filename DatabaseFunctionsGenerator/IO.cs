@@ -41,11 +41,11 @@ namespace DatabaseFunctionsGenerator
 
         public static void CopyDirectory(string source, string destination)
         {
-            foreach(string directory in Directory.GetDirectories(source))
+            if (!DoesDirectoryExists(destination))
+                CreateDirectory(destination);
+            foreach (string directory in Directory.GetDirectories(source))
             {
                 string newPath = $"{destination}\\{new DirectoryInfo(directory).Name}";
-                if (!DoesDirectoryExists(newPath))
-                    CreateDirectory(newPath);
                 CopyDirectory(directory, newPath);
             }
 
