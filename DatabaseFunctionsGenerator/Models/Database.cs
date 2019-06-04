@@ -14,6 +14,14 @@ namespace DatabaseFunctionsGenerator
         private ObservableCollection<Relation> _relations;
         private string _serverUrl = "http://192.168.0.100/messages";
         private string _javaPackageName= "com.example.biabe.DatabaseFunctionsGenerator";
+        private string _databaseName = "gen";
+
+        public string DatabaseName
+        {
+            get { return _databaseName; }
+            set { _databaseName = value; }
+        }
+
 
         public string JavaPackageName
         {
