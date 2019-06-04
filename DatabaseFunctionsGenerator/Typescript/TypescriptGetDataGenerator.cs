@@ -292,9 +292,14 @@ namespace DatabaseFunctionsGenerator
 
         public void Generate(string path)
         {
+            string controllersPath;
+
+            controllersPath = $"{path}\\Controllers";
+
+            IO.CreateDirectory(controllersPath);
             foreach (Table table in _database.Tables)
             {
-                GenerateFunctionsForTable(path, table);
+                GenerateFunctionsForTable(controllersPath, table);
             }
         }
     }
