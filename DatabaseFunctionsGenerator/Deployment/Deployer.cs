@@ -9,17 +9,17 @@ namespace DatabaseFunctionsGenerator.Deployment
     public class Deployer:IDeployer
     {
         private Generator _generator;
-        private DatabaseOperations _database;
         private AngularDeployer _angularDeployer;
         private PhpDeployer _phpDeployer;
+        private DatabaseDeployer _databaseDeployer;
         
 
         public Deployer(Generator generator)
         {
             _generator = generator;
-            _database = new DatabaseOperations();
             _angularDeployer = new AngularDeployer(_generator);
             _phpDeployer = new PhpDeployer(_generator);
+            _databaseDeployer = new DatabaseDeployer(_generator);
         }
 
 
@@ -27,6 +27,7 @@ namespace DatabaseFunctionsGenerator.Deployment
         {
             _angularDeployer.Deploy();
             _phpDeployer.Deploy();
+            _databaseDeployer.Deploy();
             //IO.CreateDirectory($@"{Constants.ServerPath}\\{_generator.Timestamp}");
             //    IO.CopyFile($"GeneratorResult\\{_generator.Timestamp}\\Typescript\\user\\user.component.html",
             //     $@"{Constants.AngularPath}\user\\user.component.html");
