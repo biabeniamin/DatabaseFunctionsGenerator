@@ -28,11 +28,16 @@ namespace DatabaseFunctionsGenerator
 
         public void Generate(string path)
         {
+            string componentPath;
+
+            componentPath = $"{path}\\Components";
+
+            IO.CreateDirectory(componentPath);
             foreach (Table table in _database.Tables)
             {
                 string tableComponentPath;
 
-                tableComponentPath = $"{path}\\{table.LowerCaseSingularName}";
+                tableComponentPath = $"{componentPath}\\{table.LowerCaseSingularName}";
 
                 IO.CreateDirectory(tableComponentPath);
                 GenerateComponentForTable(table, tableComponentPath);
