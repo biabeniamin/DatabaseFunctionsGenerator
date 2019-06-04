@@ -33,11 +33,18 @@ namespace DatabaseFunctionsGenerator.Deployment
                 $@"{Constants.AngularPath}");
         }
 
+        private void DeployHelpers()
+        {
+            IO.CopyDirectory($"GeneratorResult\\{_generator.Timestamp}\\Typescript\\Helpers",
+                $@"{Constants.AngularPath}");
+        }
+
         public void Deploy()
         {
             DeployModels();
             DeployComponents();
             DeployControllers();
+            DeployHelpers();
         }
     }
 }
