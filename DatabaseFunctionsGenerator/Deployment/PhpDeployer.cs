@@ -17,7 +17,8 @@ namespace DatabaseFunctionsGenerator.Deployment
 
         public void Deploy()
         {
-            throw new NotImplementedException();
+            IO.CopyDirectory($"GeneratorResult\\{_generator.Timestamp}\\Php",
+                $@"{Constants.ServerPath}");
         }
     }
 }
