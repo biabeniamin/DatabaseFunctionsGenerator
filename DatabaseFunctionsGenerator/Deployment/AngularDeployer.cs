@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DatabaseFunctionsGenerator.Deployment
 {
-    public class AngularDeployer
+    public class AngularDeployer:IDeployer
     {
         private Generator _generator;
 

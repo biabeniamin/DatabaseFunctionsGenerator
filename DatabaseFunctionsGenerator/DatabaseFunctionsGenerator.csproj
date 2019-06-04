@@ -84,11 +84,13 @@
     <Compile Include="CSharp\CSharpServerControllerGenerator.cs" />
     <Compile Include="DatabaseOperations.cs" />
     <Compile Include="DelegateCommand.cs" />
+    <Compile Include="Deployment\AngularDeployer.cs" />
     <Compile Include="Deployment\Deployer.cs" />
     <Compile Include="Documentation\DocumentationGenerator.cs" />
     <Compile Include="Generator.cs" />
     <Compile Include="GeneratorConfigGenerator.cs" />
     <Compile Include="Helpers.cs" />
+    <Compile Include="IDeployer.cs" />
     <Compile Include="IGenerator.cs" />
     <Compile Include="IO.cs" />
     <Compile Include="Java\JavaAdapterGenerator.cs" />

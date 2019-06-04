@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DatabaseFunctionsGenerator.Deployment
 {
-    public class Deployer
+    public class Deployer:IDeployer
     {
         private Generator _generator;
         private DatabaseOperations _database;
