@@ -10,22 +10,20 @@ namespace DatabaseFunctionsGenerator.Deployment
     {
         private Generator _generator;
         private DatabaseOperations _database;
+        private AngularDeployer _angularDeployer;
         
 
         public Deployer(Generator generator)
         {
             _generator = generator;
             _database = new DatabaseOperations();
+            _angularDeployer = new AngularDeployer(_generator);
         }
 
-        private void DeployAngularComponents()
-        {
-            //foreach()
-        }
 
         public void Deploy()
         {
-
+            _angularDeployer.Deploy();
             //IO.CreateDirectory($@"{Constants.ServerPath}\\{_generator.Timestamp}");
              IO.CopyFile($"GeneratorResult\\{_generator.Timestamp}\\Typescript\\user\\user.component.html",
                $@"{Constants.AngularPath}\user\\user.component.html");
