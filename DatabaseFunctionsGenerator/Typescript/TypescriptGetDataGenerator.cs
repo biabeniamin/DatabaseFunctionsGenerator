@@ -51,7 +51,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine("{");
             {
 
-                functionBody.AppendLine($"return this.http.get<{table.SingularName}[]>(ServerUrl.GetUrl()  + \"{table.Name}.php?cmd=get{table.Name}\");");
+                functionBody.AppendLine($"return this.http.get<{table.SingularName}[]>(ServerUrl.GetUrl()  + \"{table.Name}.php?cmd=getLast{table.SingularName}\");");
 
                 builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
             }
