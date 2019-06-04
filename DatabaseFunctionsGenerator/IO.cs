@@ -29,6 +29,11 @@ namespace DatabaseFunctionsGenerator
             Directory.CreateDirectory(GetPath(path));
         }
 
+        public static void DeleteDirectory(string path)
+        {
+            Directory.Delete(GetPath(path), true);
+        }
+
         public static bool DoesDirectoryExists(string path)
         {
             return Directory.Exists(GetPath(path));
