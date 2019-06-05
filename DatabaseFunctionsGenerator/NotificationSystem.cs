@@ -15,7 +15,8 @@ namespace DatabaseFunctionsGenerator
 
             columns = new List<Column>();
 
-            columns.Add(new Column("Title", new ColumnType(Types.Varchar, 15)));
+            columns.Add(new Column("Title", new ColumnType(Types.Varchar, 20)));
+            columns.Add(new Column("Message", new ColumnType(Types.Text)));
 
             table = new Table("Notifications", columns);
 
