@@ -199,37 +199,37 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine("{");
             {
 
-                functionBody.AppendLine($"${table.LowerCaseName} = Get{table.Name}($database);");
+                functionBody.AppendLine($"${table.LowerCaseName}List = Get{table.Name}($database);");
 
                 functionBody.AppendLine($"foreach(${table.LowerCaseName} as ${table.LowerCaseSingularName})");
                 functionBody.AppendLine("{");
                 {
                     functionBody.AppendLine("\t$start = 0;");
-                    functionBody.AppendLine($"\t$end = count(${table.LowerCaseName}) - 1;");
+                    functionBody.AppendLine($"\t$end = count(${table.LowerCaseName}List) - 1;");
                     functionBody.AppendLine("\tdo");
                     functionBody.AppendLine("\t{");
                     {
                         doWhilenBody.AppendLine("$mid = floor(($start + $end) / 2);");
-                        doWhilenBody.AppendLine($"if(${table.LowerCaseSingularName}->Get{table.SingularName}Id() > ${table.LowerCaseName}[$mid]->Get{table.PrimaryKeyColumn.Name}())");
+                        doWhilenBody.AppendLine($"if(${table.LowerCaseSingularName}->Get{table.SingularName}Id() > ${table.LowerCaseName}List[$mid]->Get{table.PrimaryKeyColumn.Name}())");
                         doWhilenBody.AppendLine("{");
                         {
                             doWhilenBody.AppendLine("\t$start = $mid + 1;");
                         }
                         doWhilenBody.AppendLine("}");
 
-                        doWhilenBody.AppendLine($"else if(${table.LowerCaseSingularName}->Get{table.SingularName}Id() < ${table.LowerCaseName}[$mid]->Get{table.PrimaryKeyColumn.Name}())");
+                        doWhilenBody.AppendLine($"else if(${table.LowerCaseSingularName}->Get{table.SingularName}Id() < ${table.LowerCaseName}List[$mid]->Get{table.PrimaryKeyColumn.Name}())");
                         doWhilenBody.AppendLine("{");
                         {
                             doWhilenBody.AppendLine("\t$end = $mid - 1;");
                         }
                         doWhilenBody.AppendLine("}");
 
-                        doWhilenBody.AppendLine($"else if(${table.LowerCaseSingularName}->Get{table.SingularName}Id() == ${table.LowerCaseName}[$mid]->Get{table.PrimaryKeyColumn.Name}())");
+                        doWhilenBody.AppendLine($"else if(${table.LowerCaseSingularName}->Get{table.SingularName}Id() == ${table.LowerCaseName}List[$mid]->Get{table.PrimaryKeyColumn.Name}())");
                         doWhilenBody.AppendLine("{");
                         {
                             doWhilenBody.AppendLine("\t$start = $mid + 1;");
                             doWhilenBody.AppendLine("\t$end = $mid - 1;");
-                            doWhilenBody.AppendLine($"\t${table.LowerCaseSingularName}->Set{table.SingularName}(${table.LowerCaseName}[$mid]);");
+                            doWhilenBody.AppendLine($"\t${table.LowerCaseSingularName}->Set{table.SingularName}(${table.LowerCaseName}List[$mid]);");
                         }
                         doWhilenBody.AppendLine("}");
                         functionBody.AppendLine();
