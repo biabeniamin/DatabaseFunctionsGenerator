@@ -261,15 +261,16 @@ namespace DatabaseFunctionsGenerator
 
         }
 
-        public Table(string name)
-            :this(name, new ObservableCollection<Column>())
+        public Table(string name, string singularName = null)
+            :this(name,  new ObservableCollection<Column>(), singularName)
         {
 
         }
 
-        public Table(string name, IEnumerable<Column> columns)
+        public Table(string name, IEnumerable<Column> columns, string singularName = null)
         {
             _name = name;
+            _singularName = singularName;
             _columns = new ObservableCollection<Column>(columns);
             _parents = new ObservableCollection<Table>();
             _childs = new ObservableCollection<Table>();
