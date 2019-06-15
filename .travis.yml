@@ -1,6 +1,7 @@
 language: csharp
 
 before_script:
+    - sudo chmod 777 build.sh
     - sudo apt-get install apache2
 script:
   - ./build.sh
