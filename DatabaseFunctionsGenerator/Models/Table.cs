@@ -217,7 +217,6 @@ namespace DatabaseFunctionsGenerator
             {
                 return Helpers.GetLowerCaseString(Helpers.GetSingular(_name));
             }
-            set { _singularName = value; }
         }
 
         [JsonIgnore]
