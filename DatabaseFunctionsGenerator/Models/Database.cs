@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DatabaseFunctionsGenerator.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,6 +16,13 @@ namespace DatabaseFunctionsGenerator
         private string _serverUrl = "http://192.168.0.100/messages";
         private string _javaPackageName= "com.example.biabe.DatabaseFunctionsGenerator";
         private string _databaseName = "gen";
+        private DatabaseType _type;
+
+        public DatabaseType Type
+        {
+            get { return _type; }
+            set { _type = value; }
+        }
 
         public string DatabaseName
         {
