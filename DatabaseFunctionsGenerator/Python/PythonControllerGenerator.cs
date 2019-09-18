@@ -25,12 +25,13 @@ namespace DatabaseFunctionsGenerator.Python
 
             foreach(Column column in table.Columns)
             {
-                builder.Append($"{column.LowerCaseName} = Column({Helpers.GetSqlAlchemyType(column.Type)}");
+                builder.Append($"{column.LowerCaseName} = Column({column.Type.GetSqlAlchemyType()}");
 
-                if(column.Type.IsPrimaryKey)
+                if (column.Type.IsPrimaryKey)
                 {
                     builder.Append(", primary_key=True");
                 }
+
                 builder.AppendLine(")");
             }
 

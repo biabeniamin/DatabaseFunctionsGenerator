@@ -178,6 +178,24 @@ namespace DatabaseFunctionsGenerator
             return "NOT_EXISTING";
         }
 
+        public string GetSqlAlchemyType()
+        {
+            switch (Type)
+            {
+                case Types.Varchar:
+                    return $"String({Length})";
+                case Types.Integer:
+                    return $"Integer";
+                case Types.Text:
+                    return $"Text";
+                case Types.DateTime:
+                    return $"DateTime";
+                case Types.Double:
+                    return $"DOUBLE";
+            }
+            return "NOT_EXISTING";
+        }
+
         public override string ToString()
         {
             return _type.ToString();
