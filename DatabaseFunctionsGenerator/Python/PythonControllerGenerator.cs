@@ -27,11 +27,11 @@ namespace DatabaseFunctionsGenerator.Python
             {
                 builder.Append($"{column.LowerCaseName} = Column({column.Type.GetSqlAlchemyType()}");
 
-                builder.Append($", ForeignKey(\"{column.ParentTable.Name}.{column.ParentTable.PrimaryKeyColumn}\")");
+                builder.Append($", ForeignKey(\"{column.ParentTable.LowerCaseName}.{column.ParentTable.PrimaryKeyColumn.LowerCaseName}\")");
                 builder.AppendLine(")");
 
                 builder.Append($"{column.ParentTable.LowerCaseName} = relationship({column.ParentTable.Name},");
-                builder.Append($"backref = backref('{table.Name}'))");
+                builder.Append($"backref = backref('{table.LowerCaseName}'))");
             }
 
             return builder.ToString();
