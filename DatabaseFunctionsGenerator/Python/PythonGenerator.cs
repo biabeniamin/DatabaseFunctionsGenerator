@@ -12,12 +12,14 @@ namespace DatabaseFunctionsGenerator.Python
         private Database _database;
 
         private PythonModelsGenerator _pythonModelsGenerator;
+        private PythonControllerGenerator _pythonControllerGenerator;
 
         public PythonGenerator(Database database)
         {
             _database = database;
 
             _pythonModelsGenerator = new PythonModelsGenerator(_database);
+            _pythonControllerGenerator = new PythonControllerGenerator(_database);
         }
 
         public void Generate(string path)
@@ -34,6 +36,7 @@ namespace DatabaseFunctionsGenerator.Python
             IO.CreateDirectory(pythonClientPath);
 
             _pythonModelsGenerator.Generate(pythonClientPath);
+            _pythonControllerGenerator.Generate(pythonServerPath);
         }
     }
 }
