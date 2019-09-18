@@ -15,6 +15,28 @@ namespace DatabaseFunctionsGenerator.Python
             _database = database;
         }
 
+        private string GenerateForeignKeyFields(Table table)
+        {
+            StringBuilder builder;
+
+            builder = new StringBuilder();
+
+            builder.AppendLine("#Foreign Fields");
+
+            foreach (Column column in table.Columns.Where(col => col.Type.IsForeignKey))
+            {
+                builder.Append($"{column.LowerCaseName} = Column({column.Type.GetSqlAlchemyType()}");
+
+                builder.Append($", ForeignKey(\"{column.ParentTable.Name}.{column.ParentTable.PrimaryKeyColumn}\")");
+                builder.AppendLine(")");
+
+                builder.Append($"{column.ParentTable.LowerCaseName} = relationship({column.ParentTable.Name},");
+                builder.Append($"backref = backref('{table.Name}'))");
+            }
+
+            return builder.ToString();
+        }
+
         private string GenerateFields(Table table)
         {
             StringBuilder builder;
@@ -23,7 +45,7 @@ namespace DatabaseFunctionsGenerator.Python
 
             builder.AppendLine("#Fields");
 
-            foreach(Column column in table.Columns)
+            foreach(Column column in table.Columns.Where(col => !col.Type.IsForeignKey))
             {
                 builder.Append($"{column.LowerCaseName} = Column({column.Type.GetSqlAlchemyType()}");
 
@@ -34,6 +56,7 @@ namespace DatabaseFunctionsGenerator.Python
 
                 builder.AppendLine(")");
             }
+            builder.AppendLine(GenerateForeignKeyFields(table));
 
             return builder.ToString();
         }
