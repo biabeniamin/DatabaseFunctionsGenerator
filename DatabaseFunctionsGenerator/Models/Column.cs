@@ -11,6 +11,13 @@ namespace DatabaseFunctionsGenerator
     {
         private string _name;
         private ColumnType _type;
+        private Table _parentTable;
+
+        public Table ParentTable
+        {
+            get { return _parentTable; }
+            set { _parentTable = value; }
+        }
 
         public ColumnType Type
         {
@@ -46,6 +53,12 @@ namespace DatabaseFunctionsGenerator
         {
             _name = name;
             _type = type;
+        }
+
+        public Column(string name, ColumnType type, Table parentTable)
+            :this(name, type)
+        {
+            _parentTable = parentTable;
         }
 
         public override string ToString()
