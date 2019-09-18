@@ -23,13 +23,21 @@ namespace DatabaseFunctionsGenerator.Python
             builder = new StringBuilder();
             classBuilder = new StringBuilder();
 
+            //imports
+            builder.AppendLine("#generated automatically");
+            builder.AppendLine("from sqlalchemy.orm import backref, relationship");
+            builder.AppendLine("from ValidationError import ValidationError");
+            builder.AppendLine("from sqlalchemy.orm import validates");
+            builder.AppendLine("from SqlAlchemy import Base");
+            builder.AppendLine("from sqlalchemy.ext.declarative import declared_attr");
+            builder.AppendLine("from sqlalchemy import *");
+
             //class content
             {
                 builder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(),
                      1));
             }
 
-            builder.AppendLine("#generated automatically");
 
             IO.WriteFile($"{path}\\{table.Name}.py", (builder.ToString()));
 
