@@ -35,8 +35,13 @@ namespace DatabaseFunctionsGenerator.Python
             foreach(Table parentTable in table.Parents)
                 builder.AppendLine($"from {parentTable.Name} import {parentTable.Name}");
 
+            builder.AppendLine($"class {table.Name}(Base):");
             //class content
             {
+                classBuilder.AppendLine("@declared_attr");
+                classBuilder.AppendLine("def __tablename__(cls):");
+                classBuilder.AppendLine("\treturn cls.__name__.lower()");
+
                 builder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(),
                      1));
             }
