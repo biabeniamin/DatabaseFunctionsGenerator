@@ -23,6 +23,11 @@ namespace DatabaseFunctionsGenerator.Python
 
             builder.AppendLine("#Fields");
 
+            foreach(Column column in table.Columns)
+            {
+                builder.AppendLine($"{column.LowerCaseName} = Column({Helpers.GetSqlAlchemyType(column.Type)})");
+            }
+
             return builder.ToString();
         }
 
