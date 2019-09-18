@@ -36,6 +36,12 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("s = scoped_session(Session)");
             builder.AppendLine("manager = flask_restless.APIManager(app, session = s)");
 
+            foreach(Table table in _database.Tables)
+            {
+                builder.AppendLine("manager.create_api(Author,");
+                builder.AppendLine("\tmethods =['GET', 'PUT', 'POST', 'DELETE'])");
+            }
+
             IO.WriteFile($"{path}\\main.py", (builder.ToString()));
         }
     }
