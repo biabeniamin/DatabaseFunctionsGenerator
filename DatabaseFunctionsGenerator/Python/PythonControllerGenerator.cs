@@ -15,6 +15,17 @@ namespace DatabaseFunctionsGenerator.Python
             _database = database;
         }
 
+        private string GenerateFields(Table table)
+        {
+            StringBuilder builder;
+
+            builder = new StringBuilder();
+
+            builder.AppendLine("#Fields");
+
+            return builder.ToString();
+        }
+
         private void GenerateController(Table table, string path)
         {
             StringBuilder builder;
@@ -41,6 +52,9 @@ namespace DatabaseFunctionsGenerator.Python
                 classBuilder.AppendLine("@declared_attr");
                 classBuilder.AppendLine("def __tablename__(cls):");
                 classBuilder.AppendLine("\treturn cls.__name__.lower()");
+
+                //generate fields
+                classBuilder.AppendLine(GenerateFields(table));
 
                 builder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(),
                      1));
