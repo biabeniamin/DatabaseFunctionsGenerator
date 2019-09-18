@@ -28,6 +28,13 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("from sqlalchemy import *");
             builder.AppendLine("from ValidationError import ValidationError");
             builder.AppendLine("from SqlAlchemy import Base, engine");
+            builder.AppendLine();
+
+            //create session
+            builder.AppendLine("app = flask.Flask(__name__)");
+            builder.AppendLine("Session = sessionmaker(bind = engine, autocommit = False, autoflush = False)");
+            builder.AppendLine("s = scoped_session(Session)");
+            builder.AppendLine("manager = flask_restless.APIManager(app, session = s)");
 
             IO.WriteFile($"{path}\\main.py", (builder.ToString()));
         }
