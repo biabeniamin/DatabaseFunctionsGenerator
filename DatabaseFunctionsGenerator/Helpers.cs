@@ -218,6 +218,32 @@ namespace DatabaseFunctionsGenerator
 
             return stringBuilder.ToString();
         }
+
+        public static string GetSqlAlchemyType(ColumnType colType)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            switch(colType.Type)
+            {
+                case Types.Varchar:
+                    builder.Append($"String({colType.Length})");
+                    break;
+                case Types.Integer:
+                    builder.Append($"Integer");
+                    break;
+                case Types.Text:
+                    builder.Append($"Text");
+                    break;
+                case Types.DateTime:
+                    builder.Append($"DateTime");
+                    break;
+                case Types.Double:
+                    builder.Append($"DOUBLE");
+                    break;
+            }
+
+            return builder.ToString();
+        }
     }
 
 }
