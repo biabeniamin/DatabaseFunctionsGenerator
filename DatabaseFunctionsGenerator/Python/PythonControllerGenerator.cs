@@ -31,6 +31,9 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("from SqlAlchemy import Base");
             builder.AppendLine("from sqlalchemy.ext.declarative import declared_attr");
             builder.AppendLine("from sqlalchemy import *");
+            //import parent tables
+            foreach(Table parentTable in table.Parents)
+                builder.AppendLine($"from {parentTable.Name} import {parentTable.Name}");
 
             //class content
             {
