@@ -23,11 +23,17 @@ namespace DatabaseFunctionsGenerator.Python
         public void Generate(string path)
         {
             string pythonPath;
+            string pythonServerPath;
+            string pythonClientPath;
 
             pythonPath = $"{path}\\Python";
+            pythonServerPath = $"{pythonPath}\\Server";
+            pythonClientPath = $"{pythonPath}\\Client";
             IO.CreateDirectory(pythonPath);
+            IO.CreateDirectory(pythonServerPath);
+            IO.CreateDirectory(pythonClientPath);
 
-            _pythonModelsGenerator.Generate(pythonPath);
+            _pythonModelsGenerator.Generate(pythonClientPath);
         }
     }
 }

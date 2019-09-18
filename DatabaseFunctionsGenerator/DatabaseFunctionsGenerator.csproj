@@ -104,6 +104,7 @@
     <Compile Include="Models\Column.cs" />
     <Compile Include="Models\ColumnType.cs" />
     <Compile Include="Models\Database.cs" />
+    <Compile Include="Models\DatabaseType.cs" />
     <Compile Include="Models\DedicatedGetRequest.cs" />
     <Compile Include="Models\Relation.cs" />
     <Compile Include="Models\Table.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="Php\PhpModelsGenerator.cs" />
     <Compile Include="Documentation\RequestTextMenuGenerator.cs" />
     <Compile Include="Php\PhpRequestsGenerator.cs" />
+    <Compile Include="Python\PythonController.cs" />
     <Compile Include="Python\PythonGenerator.cs" />
     <Compile Include="Python\PythonModelsGenerator.cs" />
     <Compile Include="Typescript\TypescriptComponentGenerator.cs" />
