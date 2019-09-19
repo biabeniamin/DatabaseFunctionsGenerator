@@ -72,7 +72,6 @@ namespace DatabaseFunctionsGenerator.Python
             //imports
             builder.AppendLine("#generated automatically");
             builder.AppendLine("from sqlalchemy.orm import backref, relationship");
-            builder.AppendLine("from ValidationError import ValidationError");
             builder.AppendLine("from sqlalchemy.orm import validates");
             builder.AppendLine("from SqlAlchemy import Base");
             builder.AppendLine("from sqlalchemy.ext.declarative import declared_attr");

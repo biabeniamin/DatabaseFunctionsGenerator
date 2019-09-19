@@ -26,8 +26,9 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("from sqlalchemy.ext.declarative import declarative_base, declared_attr");
             builder.AppendLine("from sqlalchemy.orm import sessionmaker, scoped_session, validates");
             builder.AppendLine("from sqlalchemy import *");
-            builder.AppendLine("from ValidationError import ValidationError");
             builder.AppendLine("from SqlAlchemy import Base, engine");
+            foreach (Table table in _database.Tables)
+                builder.AppendLine($"from {table.Name} import {table.Name}");
             builder.AppendLine();
 
             //create session
@@ -38,7 +39,7 @@ namespace DatabaseFunctionsGenerator.Python
 
             foreach(Table table in _database.Tables)
             {
-                builder.AppendLine("manager.create_api(Author,");
+                builder.AppendLine($"manager.create_api({table.Name},");
                 builder.AppendLine("\tmethods =['GET', 'PUT', 'POST', 'DELETE'])");
             }
             builder.AppendLine();
