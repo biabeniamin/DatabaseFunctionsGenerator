@@ -41,6 +41,11 @@ namespace DatabaseFunctionsGenerator.Python
                 builder.AppendLine("manager.create_api(Author,");
                 builder.AppendLine("\tmethods =['GET', 'PUT', 'POST', 'DELETE'])");
             }
+            builder.AppendLine();
+
+            //create database
+            builder.AppendLine("Base.metadata.bind = engine");
+            builder.AppendLine("Base.metadata.create_all()");
 
             IO.WriteFile($"{path}\\main.py", (builder.ToString()));
         }
