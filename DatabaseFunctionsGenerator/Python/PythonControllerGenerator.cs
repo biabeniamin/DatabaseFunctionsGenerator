@@ -106,7 +106,7 @@ namespace DatabaseFunctionsGenerator.Python
         {
             string controllersPath;
 
-            controllersPath = $"{path}\\Controllers";
+            controllersPath = $"{path}";
 
             IO.CreateDirectory(controllersPath);
 
