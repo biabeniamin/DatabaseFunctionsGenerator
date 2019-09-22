@@ -45,7 +45,7 @@ namespace DatabaseFunctionsGenerator.Python
 
             builder.AppendLine("#Fields");
 
-            foreach(Column column in table.Columns.Where(col => !col.Type.IsForeignKey))
+            foreach (Column column in table.Columns.Where(col => !col.Type.IsForeignKey))
             {
                 builder.Append($"{column.LowerCaseName} = Column({column.Type.GetSqlAlchemyType()}");
 
@@ -57,6 +57,25 @@ namespace DatabaseFunctionsGenerator.Python
                 builder.AppendLine(")");
             }
             builder.AppendLine(GenerateForeignKeyFields(table));
+
+            return builder.ToString();
+        }
+
+        private string GenerateValidations(Table table)
+        {
+            StringBuilder builder;
+
+            builder = new StringBuilder();
+
+            builder.AppendLine("#Validation");
+
+            foreach (Column column in table.Columns.Where(col => col.Type.Type == Types.Integer && !col.Type.IsPrimaryKey))
+            {
+                builder.AppendLine($"@validates('{column.LowerCaseName}')");
+                builder.AppendLine($"def validate_{column.LowerCaseName}(self, key, value):");
+                builder.AppendLine($"\treturn validate_integer(key, value)");
+
+            }
 
             return builder.ToString();
         }
@@ -91,6 +110,9 @@ namespace DatabaseFunctionsGenerator.Python
 
                 //generate fields
                 classBuilder.AppendLine(GenerateFields(table));
+
+                //validation
+                classBuilder.AppendLine(GenerateValidations(table));
 
                 builder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(),
                      1));
