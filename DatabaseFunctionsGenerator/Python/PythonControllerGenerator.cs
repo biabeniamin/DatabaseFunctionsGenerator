@@ -77,6 +77,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("from sqlalchemy.ext.declarative import declared_attr");
             builder.AppendLine("from sqlalchemy import *");
             builder.AppendLine("from sqlalchemy.dialects.mysql import DOUBLE");
+            builder.AppendLine("from ValidationError import ValidationError");
             //import parent tables
             foreach (Table parentTable in table.Parents)
                 builder.AppendLine($"from {parentTable.Name} import {parentTable.Name}");
