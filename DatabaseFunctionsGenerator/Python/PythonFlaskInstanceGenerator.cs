@@ -41,7 +41,7 @@ namespace DatabaseFunctionsGenerator.Python
             foreach(Table table in _database.Tables)
             {
                 builder.AppendLine($"manager.create_api({table.Name},");
-                builder.AppendLine("\tmethods =['GET', 'PUT', 'POST', 'DELETE'], validation_exceptions=[ValidationError])");
+                builder.AppendLine("\tmethods =['GET', 'PUT', 'POST', 'DELETE'], validation_exceptions=[ValidationError], results_per_page=-1)");
             }
             builder.AppendLine();
 
