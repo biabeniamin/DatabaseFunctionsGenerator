@@ -27,6 +27,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("from sqlalchemy.orm import sessionmaker, scoped_session, validates");
             builder.AppendLine("from sqlalchemy import *");
             builder.AppendLine("from SqlAlchemy import Base, engine");
+            builder.AppendLine("from ValidationError import ValidationError");
             foreach (Table table in _database.Tables)
                 builder.AppendLine($"from {table.Name} import {table.Name}");
             builder.AppendLine();
@@ -40,7 +41,7 @@ namespace DatabaseFunctionsGenerator.Python
             foreach(Table table in _database.Tables)
             {
                 builder.AppendLine($"manager.create_api({table.Name},");
-                builder.AppendLine("\tmethods =['GET', 'PUT', 'POST', 'DELETE'])");
+                builder.AppendLine("\tmethods =['GET', 'PUT', 'POST', 'DELETE'], validation_exceptions=[ValidationError])");
             }
             builder.AppendLine();
 
