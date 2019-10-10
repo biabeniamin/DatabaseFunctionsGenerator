@@ -191,7 +191,7 @@ namespace DatabaseFunctionsGenerator
                 case Types.DateTime:
                     return $"DateTime";
                 case Types.Double:
-                    return $"DOUBLE";
+                    return $"Float";
             }
             return "NOT_EXISTING";
         }
