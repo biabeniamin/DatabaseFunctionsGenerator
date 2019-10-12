@@ -32,6 +32,14 @@ namespace DatabaseFunctionsGenerator.Python
                 builder.AppendLine($"from {table.Name} import {table.Name}");
             builder.AppendLine();
 
+            //add cors function
+
+            builder.AppendLine("def add_cors_headers(response):");
+            builder.AppendLine("\tresponse.headers['Access-Control-Allow-Origin'] = '*'");
+            builder.AppendLine("\tresponse.headers['Access-Control-Allow-Credentials'] = 'true'");
+            builder.AppendLine("\treturn response");
+            builder.AppendLine();
+
             //create session
             builder.AppendLine("app = flask.Flask(__name__)");
             builder.AppendLine("Session = sessionmaker(bind = engine, autocommit = False, autoflush = False)");
