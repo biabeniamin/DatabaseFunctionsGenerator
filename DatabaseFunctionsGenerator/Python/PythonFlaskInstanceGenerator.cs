@@ -42,6 +42,7 @@ namespace DatabaseFunctionsGenerator.Python
 
             //create session
             builder.AppendLine("app = flask.Flask(__name__)");
+            builder.AppendLine("app.after_request(add_cors_headers)");
             builder.AppendLine("Session = sessionmaker(bind = engine, autocommit = False, autoflush = False)");
             builder.AppendLine("s = scoped_session(Session)");
             builder.AppendLine("manager = flask_restless.APIManager(app, session = s)");
