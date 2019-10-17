@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DatabaseFunctionsGenerator.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,10 +29,16 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine("{");
             {
 
-                functionBody.AppendLine($"return this.http.get<{table.SingularName}[]>(ServerUrl.GetUrl()  + \"{table.Name}.php?cmd=get{table.Name}\").subscribe(data =>");
+                string url = table.Name;
+                if (_database.Type == DatabaseType.Php)
+                    url += $".php?cmd=get{ table.Name}";
+                functionBody.AppendLine($"return this.http.get<{table.SingularName}[]>(ServerUrl.GetUrl()  + \"{url}\").subscribe(data =>");
                 functionBody.AppendLine("{");
                 {
-                    functionBody.AppendLine($"\tthis.{table.LowerCaseName} = data;");
+                    if (_database.Type == DatabaseType.Php)
+                        functionBody.AppendLine($"\tthis.{table.LowerCaseName} = data;");
+                    else if (_database.Type == DatabaseType.Phyton)
+                        functionBody.AppendLine($"\tthis.{table.LowerCaseName} = data[\"objects\"];");
                 }
                 functionBody.AppendLine("});");
 
