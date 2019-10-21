@@ -29,9 +29,11 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine("{");
             {
 
-                string url = table.Name;
+                string url = "";
                 if (_database.Type == DatabaseType.Php)
-                    url += $".php?cmd=get{ table.Name}";
+                    url = $"{table.Name}.php?cmd=get{ table.Name}";
+                else if (_database.Type == DatabaseType.Phyton)
+                    url = $"api/{table.LowerCaseName}";
                 functionBody.AppendLine($"return this.http.get<{table.SingularName}[]>(ServerUrl.GetUrl()  + \"{url}\").subscribe(data =>");
                 functionBody.AppendLine("{");
                 {
@@ -174,8 +176,12 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine($"Add{table.SingularName}({table.LowerCaseSingularName})");
             builder.AppendLine("{");
             {
-
-                functionBody.AppendLine($"return this.http.post<{table.SingularName}>(ServerUrl.GetUrl()  + \"{table.Name}.php?cmd=add{table.SingularName}\", {table.LowerCaseSingularName}).subscribe({table.LowerCaseSingularName} =>");
+                string url = "";
+                if (_database.Type == DatabaseType.Php)
+                    url = $"{table.Name}.php?cmd=add{table.SingularName}";
+                else if (_database.Type == DatabaseType.Phyton)
+                    url = $"api/{table.LowerCaseName}";
+                functionBody.AppendLine($"return this.http.post<{table.SingularName}>(ServerUrl.GetUrl()  + \"{url}\", {table.LowerCaseSingularName}).subscribe({table.LowerCaseSingularName} =>");
                 functionBody.AppendLine("{");
                 {
                     functionBody.AppendLine($"\tconsole.log({table.LowerCaseSingularName});");
