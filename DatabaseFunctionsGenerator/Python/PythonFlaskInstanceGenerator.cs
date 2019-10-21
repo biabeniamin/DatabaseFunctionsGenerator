@@ -37,6 +37,8 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("def add_cors_headers(response):");
             builder.AppendLine("\tresponse.headers['Access-Control-Allow-Origin'] = '*'");
             builder.AppendLine("\tresponse.headers['Access-Control-Allow-Credentials'] = 'true'");
+            builder.AppendLine("\tresponse.headers['Access-Control-Allow-Headers'] = '*'");
+            //Access-Control-Allow-Headers
             builder.AppendLine("\treturn response");
             builder.AppendLine();
 
