@@ -16,7 +16,7 @@ namespace DatabaseFunctionsGenerator
             _database = database;
         }
 
-        private string GenerateFields(Table table)
+        private string GenerateFields(Table table, bool includePrimaryKey=true)
         {
             StringBuilder builder;
 
@@ -25,6 +25,8 @@ namespace DatabaseFunctionsGenerator
             //generate fields
             foreach (Column column in table.Columns)
             {
+                if (!includePrimaryKey && column.Type.IsPrimaryKey)
+                    continue;
                 builder.AppendLine($"{Helpers.GetLowerCaseString(column.Name)} : {column.Type.GetTypescriptType()};");
             }
 
@@ -36,7 +38,7 @@ namespace DatabaseFunctionsGenerator
 
             return builder.ToString();
         }
-        
+
         private void GenerateModel(Table table, string path)
         {
             StringBuilder builder;
@@ -52,15 +54,29 @@ namespace DatabaseFunctionsGenerator
                 builder.AppendLine($"import {{ {parentTable.SingularName} }} from './/{parentTable.SingularName}'");
             }
 
+            //generate main model
             builder.AppendLine($"export interface {table.SingularName}");
             builder.AppendLine("{");
             {
 
-                builder.AppendLine(Helpers.AddIndentation(GenerateFields(table),
+                builder.Append(Helpers.AddIndentation(GenerateFields(table),
                     1));
 
                 builder.AppendLine("}");
             }
+            builder.AppendLine();
+
+            //generate json model
+            builder.AppendLine($"export interface {table.SingularName}JSON");
+            builder.AppendLine("{");
+            {
+
+                builder.Append(Helpers.AddIndentation(GenerateFields(table,false),
+                    1));
+
+                builder.AppendLine("}");
+            }
+            builder.AppendLine();
 
             IO.WriteFile($"{path}\\{table.SingularName}.ts", (builder.ToString()));
 
