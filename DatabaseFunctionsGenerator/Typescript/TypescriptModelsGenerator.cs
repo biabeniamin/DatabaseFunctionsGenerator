@@ -16,7 +16,7 @@ namespace DatabaseFunctionsGenerator
             _database = database;
         }
 
-        private string GenerateFields(Table table, bool includePrimaryKey=true)
+        private string GenerateFields(Table table, bool includePrimaryKey = true)
         {
             StringBuilder builder;
 
@@ -35,6 +35,39 @@ namespace DatabaseFunctionsGenerator
                 builder.AppendLine($"{parentTable.LowerCaseSingularName} : {parentTable.SingularName};");
             }
 
+
+            return builder.ToString();
+        }
+
+        /*
+         export function encodeMessage(message: Message): MessageJSON {
+	return {
+	  content:    message.content,
+	  source:     message.source,
+	  creationTime: message.creationTime
+	};
+  }
+
+             */
+
+        private string GenerateConvertFunction(Table table)
+        {
+            StringBuilder builder;
+
+            builder = new StringBuilder();
+
+            builder.AppendLine($"export function encode{table.SingularName}({table.LowerCaseSingularName}: {table.SingularName}): {table.SingularName}JSON {{");
+            {
+                builder.AppendLine($"\treturn {{");
+                //generate fields
+                foreach (Column column in table.Columns.Where(col => !col.Type.IsPrimaryKey))
+                {
+                    builder.AppendLine($"\t\t{column.LowerCaseName}:\t{table.LowerCaseSingularName}.{column.LowerCaseName},");
+                }
+
+                builder.AppendLine($"\t}}");
+            }
+            builder.AppendLine($"}}");
 
             return builder.ToString();
         }
@@ -77,6 +110,8 @@ namespace DatabaseFunctionsGenerator
                 builder.AppendLine("}");
             }
             builder.AppendLine();
+
+            builder.AppendLine(GenerateConvertFunction(table));
 
             IO.WriteFile($"{path}\\{table.SingularName}.ts", (builder.ToString()));
 
