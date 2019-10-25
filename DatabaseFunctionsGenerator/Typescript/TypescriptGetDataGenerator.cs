@@ -177,11 +177,18 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine("{");
             {
                 string url = "";
+                string sentData = "";
                 if (_database.Type == DatabaseType.Php)
+                {
                     url = $"{table.Name}.php?cmd=add{table.SingularName}";
+                    sentData = table.LowerCaseSingularName;
+                }
                 else if (_database.Type == DatabaseType.Phyton)
+                {
                     url = $"api/{table.LowerCaseName}";
-                functionBody.AppendLine($"return this.http.post<{table.SingularName}>(ServerUrl.GetUrl()  + \"{url}\", {table.LowerCaseSingularName}).subscribe({table.LowerCaseSingularName} =>");
+                    sentData = $"encode{table.SingularName}({table.LowerCaseSingularName})";
+                }
+                functionBody.AppendLine($"return this.http.post<{table.SingularName}>(ServerUrl.GetUrl()  + \"{url}\", {sentData}).subscribe({table.LowerCaseSingularName} =>");
                 functionBody.AppendLine("{");
                 {
                     functionBody.AppendLine($"\tconsole.log({table.LowerCaseSingularName});");
@@ -264,7 +271,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine($"import {{HttpClient}} from '@angular/common/http';");
             builder.AppendLine($"import {{ ServerUrl }} from './ServerUrl'");
             builder.AppendLine("import { Injectable } from '@angular/core';");
-            builder.AppendLine($"import {{ {table.SingularName} }} from '../app/Models/{table.SingularName}'");
+            builder.AppendLine($"import {{ {table.SingularName}, encode{table.SingularName} }} from '../app/Models/{table.SingularName}'");
 
             foreach (Table parentTable in table.Parents)
             {
