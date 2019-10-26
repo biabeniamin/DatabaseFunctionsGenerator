@@ -216,11 +216,20 @@ namespace DatabaseFunctionsGenerator
 
             objectName = Helpers.GetLowerCaseString(table.SingularName);
 
+            string url = "";
+            if (_database.Type == DatabaseType.Php)
+            {
+                url = $"\"{table.Name}.php?cmd=update{table.SingularName}\"";
+            }
+            else if (_database.Type == DatabaseType.Phyton)
+            {
+                url = $"\"api/{table.LowerCaseName}/\" + {table.LowerCaseSingularName}.{table.PrimaryKeyColumn.LowerCaseName}";
+            }
             builder.AppendLine($"Update{table.SingularName}({table.LowerCaseSingularName})");
             builder.AppendLine("{");
             {
 
-                functionBody.AppendLine($"return this.http.put<{table.SingularName}>(ServerUrl.GetUrl()  + \"{table.Name}.php?cmd=update{table.SingularName}\", {table.LowerCaseSingularName}).subscribe({table.LowerCaseSingularName} =>");
+                functionBody.AppendLine($"return this.http.put<{table.SingularName}>(ServerUrl.GetUrl()  + {url}, {table.LowerCaseSingularName}).subscribe({table.LowerCaseSingularName} =>");
                 functionBody.AppendLine("{");
                 {
                     functionBody.AppendLine($"\tconsole.log({table.LowerCaseSingularName});");
