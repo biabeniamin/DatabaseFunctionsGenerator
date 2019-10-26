@@ -243,11 +243,21 @@ namespace DatabaseFunctionsGenerator
 
             objectName = Helpers.GetLowerCaseString(table.SingularName);
 
+            string url = "";
+            if (_database.Type == DatabaseType.Php)
+            {
+                url = $"\"{table.Name}.php?cmd=delete{table.SingularName}&{table.PrimaryKeyColumn.LowerCaseName}=\"";
+            }
+            else if (_database.Type == DatabaseType.Phyton)
+            {
+                url = $"\"api/{table.LowerCaseName}/\"";
+            }
+
             builder.AppendLine($"Delete{table.SingularName}({table.LowerCaseSingularName})");
             builder.AppendLine("{");
             {
 
-                functionBody.AppendLine($"return this.http.delete<{table.SingularName}>(ServerUrl.GetUrl()  + \"{table.Name}.php?cmd=delete{table.SingularName}&{table.PrimaryKeyColumn.LowerCaseName}=\" +  {table.LowerCaseSingularName}.{table.PrimaryKeyColumn.LowerCaseName}, ).subscribe({table.LowerCaseSingularName} =>");
+                functionBody.AppendLine($"return this.http.delete<{table.SingularName}>(ServerUrl.GetUrl()  + {url} +  {table.LowerCaseSingularName}.{table.PrimaryKeyColumn.LowerCaseName}).subscribe({table.LowerCaseSingularName} =>");
                 functionBody.AppendLine("{");
                 {
                     functionBody.AppendLine($"\tconsole.log({table.LowerCaseSingularName});");
