@@ -38,6 +38,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("\tresponse.headers['Access-Control-Allow-Origin'] = '*'");
             builder.AppendLine("\tresponse.headers['Access-Control-Allow-Credentials'] = 'true'");
             builder.AppendLine("\tresponse.headers['Access-Control-Allow-Headers'] = '*'");
+            builder.AppendLine("\tresponse.headers['Access-Control-Allow-Methods'] = '*'");
             //Access-Control-Allow-Headers
             builder.AppendLine("\treturn response");
             builder.AppendLine();
