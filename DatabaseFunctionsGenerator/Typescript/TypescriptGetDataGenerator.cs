@@ -89,14 +89,29 @@ namespace DatabaseFunctionsGenerator
                 foreach (Column column in request.Columns)
                 {
                     parameters.Append($"{column.LowerCaseName}, ");
-                    urlParameters.Append($"&{column.LowerCaseName}=${{{column.LowerCaseName}}}");
+                    if(_database.Type == DatabaseType.Php)
+                        urlParameters.Append($"&{column.LowerCaseName}=${{{column.LowerCaseName}}}");
+                    else if (_database.Type == DatabaseType.Phyton)
+                        urlParameters.Append($"{{\"name\":\"{column.LowerCaseName}\",\"op\":\"eq\",\"val\":\"${{{column.LowerCaseName}}}\"}}, ");
                 }
                 Helpers.RemoveLastApparition(parameters, ", ");
+                Helpers.RemoveLastApparition(urlParameters, ", ");
+
+                string url = "";
+                if (_database.Type == DatabaseType.Php)
+                {
+                    url = $"{table.Name}.php?cmd=get{table.Name}By{request.ToString("")}{urlParameters}";
+                }
+                else if (_database.Type == DatabaseType.Phyton)
+                {
+                    url = $"api/{table.LowerCaseName}?q={{\"filters\":[{urlParameters}]}}";
+                }
+
 
                 builder.AppendLine($"Get{table.Name}By{request.ToString("")}({parameters})");
                 builder.AppendLine("{");
                 {
-                    functionBody.AppendLine($"return this.http.get<{table.SingularName}[]>(ServerUrl.GetUrl()  + `{table.Name}.php?cmd=get{table.Name}By{request.ToString("")}{urlParameters}`);");
+                    functionBody.AppendLine($"return this.http.get<{table.SingularName}[]>(ServerUrl.GetUrl()  + `{url}`);");
 
                     builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
                 }
@@ -314,11 +329,11 @@ namespace DatabaseFunctionsGenerator
                 classBody.AppendLine(GenerateGetFunction(table));
                 classBody.AppendLine(GenerateGetLastFunction(table));
                 classBody.AppendLine(GenerateGetDefaultValueFunction(table));
+                classBody.AppendLine(GenerateDedicatedGetRequestsFunction(table));
                 classBody.AppendLine(GenerateConstructor(table));
                 classBody.AppendLine(GenerateAddFunction(table));
                 classBody.AppendLine(GenerateUpdateFunction(table));
                 classBody.AppendLine(GenerateDeleteFunction(table));
-                classBody.AppendLine(GenerateDedicatedGetRequestsFunction(table));
             }
             builder.AppendLine(Helpers.AddIndentation(classBody.ToString(), 1));
             builder.AppendLine("}");
