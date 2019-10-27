@@ -143,7 +143,10 @@ namespace DatabaseFunctionsGenerator
 
                 foreach (Table parentTable in table.Parents)
                 {
-                    functionBody.AppendLine($"{parentTable.LowerCaseSingularName} : {parentTable.SingularName}Service.GetDefault{parentTable.SingularName}(),");
+                    if(_database.Type == DatabaseType.Php)
+                        functionBody.AppendLine($"{parentTable.LowerCaseSingularName} : {parentTable.SingularName}Service.GetDefault{parentTable.SingularName}(),");
+                    else if (_database.Type == DatabaseType.Phyton)
+                        functionBody.AppendLine($"{parentTable.LowerCaseName} : {parentTable.SingularName}Service.GetDefault{parentTable.SingularName}(),");
                 }
 
                 functionBody.AppendLine("};");
