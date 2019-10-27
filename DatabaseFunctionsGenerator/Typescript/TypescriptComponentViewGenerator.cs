@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DatabaseFunctionsGenerator.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace DatabaseFunctionsGenerator
 {
     public class TypescriptComponentViewGenerator
     {
-        private static string GenerateListView(Table table)
+        private static string GenerateListView(Table table, DatabaseType type)
         {
             StringBuilder builder = new StringBuilder();
             StringBuilder tableBody = new StringBuilder();
@@ -59,7 +60,10 @@ namespace DatabaseFunctionsGenerator
                         {
                             tableBody.AppendLine("\t<td>");
                             {
-                                tableBody.AppendLine($"\t\t{{{{{table.LowerCaseSingularName}.{parentTable.LowerCaseSingularName}.{Helpers.GetLowerCaseString(column.Name)}}}}}");
+                                if (type == DatabaseType.Php)
+                                    tableBody.AppendLine($"\t\t{{{{{table.LowerCaseSingularName}.{parentTable.LowerCaseSingularName}.{Helpers.GetLowerCaseString(column.Name)}}}}}");
+                                else if (type == DatabaseType.Phyton)
+                                    tableBody.AppendLine($"\t\t{{{{{table.LowerCaseSingularName}.{parentTable.LowerCaseName}.{Helpers.GetLowerCaseString(column.Name)}}}}}");
                             }
                             tableBody.AppendLine("\t</td>");
                         }
@@ -133,7 +137,7 @@ namespace DatabaseFunctionsGenerator
         }
 
 
-        public static string GenerateViewForTable(Table table, string path)
+        public static string GenerateViewForTable(Table table, DatabaseType type, string path)
         {
             StringBuilder builder = new StringBuilder();
 
@@ -142,7 +146,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine(Helpers.AddIndentation(GenerateAddForm(table),
                                                       2));
 
-            builder.AppendLine(Helpers.AddIndentation(GenerateListView(table),
+            builder.AppendLine(Helpers.AddIndentation(GenerateListView(table, type),
                                                       2));
             builder.AppendLine("\t</div>");
             builder.AppendLine("</div>");

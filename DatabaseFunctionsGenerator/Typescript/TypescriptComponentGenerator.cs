@@ -22,7 +22,7 @@ namespace DatabaseFunctionsGenerator
 
             TypescriptControllerComponentGenerator.GenerateControllerComponentForTable(table, path);
             TypescriptComponentSpecGenerator.GenerateComponentSpec(table, path);
-            TypescriptComponentViewGenerator.GenerateViewForTable(table, path);
+            TypescriptComponentViewGenerator.GenerateViewForTable(table, _database.Type, path);
             TypescriptComponentStyleGenerator.GenerateStyleForTable(table, path);
         }
 
