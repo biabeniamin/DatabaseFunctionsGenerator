@@ -34,7 +34,10 @@ namespace DatabaseFunctionsGenerator
             {
                 foreach (Table parentTable in table.Parents)
                 {
-                    builder.AppendLine($"{parentTable.LowerCaseSingularName} : {parentTable.SingularName};");
+                    if(_database.Type == Models.DatabaseType.Php)
+                        builder.AppendLine($"{parentTable.LowerCaseSingularName} : {parentTable.SingularName};");
+                    else if (_database.Type == Models.DatabaseType.Phyton)
+                        builder.AppendLine($"{parentTable.LowerCaseName} : {parentTable.SingularName};");
                 }
             }
 
