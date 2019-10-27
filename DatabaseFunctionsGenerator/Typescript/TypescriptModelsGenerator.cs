@@ -16,7 +16,7 @@ namespace DatabaseFunctionsGenerator
             _database = database;
         }
 
-        private string GenerateFields(Table table, bool includePrimaryKey = true)
+        private string GenerateFields(Table table, bool includePrimaryKey = true, bool includeParentFields = true)
         {
             StringBuilder builder;
 
@@ -30,9 +30,12 @@ namespace DatabaseFunctionsGenerator
                 builder.AppendLine($"{Helpers.GetLowerCaseString(column.Name)} : {column.Type.GetTypescriptType()};");
             }
 
-            foreach (Table parentTable in table.Parents)
+            if (includeParentFields)
             {
-                builder.AppendLine($"{parentTable.LowerCaseSingularName} : {parentTable.SingularName};");
+                foreach (Table parentTable in table.Parents)
+                {
+                    builder.AppendLine($"{parentTable.LowerCaseSingularName} : {parentTable.SingularName};");
+                }
             }
 
 
@@ -104,7 +107,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine("{");
             {
 
-                builder.Append(Helpers.AddIndentation(GenerateFields(table,false),
+                builder.Append(Helpers.AddIndentation(GenerateFields(table,false, false),
                     1));
 
                 builder.AppendLine("}");
