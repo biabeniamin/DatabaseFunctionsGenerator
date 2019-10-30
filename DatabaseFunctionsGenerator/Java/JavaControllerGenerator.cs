@@ -333,15 +333,30 @@ namespace DatabaseFunctionsGenerator.Java
                     methodBody.AppendLine("{");
                     {
                         //get data from server
-                        methodBody.Append($"\tcall = service.get{table.Name}By{dedicatedRequest.ToString("")}(");
-
-                        foreach (Column column in dedicatedRequest.Columns)
+                        if (_database.Type == Models.DatabaseType.Php)
                         {
-                            methodBody.Append($"{column.LowerCaseName}, ");
+                            methodBody.Append($"\tcall = service.get{table.Name}By{dedicatedRequest.ToString("")}(");
+                            foreach (Column column in dedicatedRequest.Columns)
+                            {
+                                methodBody.Append($"{column.LowerCaseName}, ");
+                            }
+                            Helpers.RemoveLastApparition(methodBody, ", ");
                         }
-                        Helpers.RemoveLastApparition(methodBody, ", ");
+                        else if (_database.Type == Models.DatabaseType.Phyton)
+                        {
+                            StringBuilder urlParameters;
 
+                            urlParameters = new StringBuilder();
+
+                            foreach (Column column in dedicatedRequest.Columns)
+                            {
+                                urlParameters.Append($"{{\\\"name\\\":\\\"{column.LowerCaseName}\\\",\\\"op\\\":\\\"eq\\\",\\\"val\\\":\\\"\\\" + {column.LowerCaseName} + \\\"\\\"}}, ");
+                            }
+                            Helpers.RemoveLastApparition(urlParameters, ", ");
+                            methodBody.Append($"\tcall = service.get{table.Name}Filtered(\"{urlParameters.ToString()}\"");
+                        }
                         methodBody.AppendLine($");");
+
                         methodBody.AppendLine($"\tget{table.Name}(call, callback);");
                     }
                     methodBody.AppendLine("}");
@@ -491,27 +506,28 @@ namespace DatabaseFunctionsGenerator.Java
                     interfaceBuilder.AppendLine();
 
                 //dedicated request
-                foreach(DedicatedGetRequest dedicatedRequest in table.DedicatedGetRequests)
+                if (_database.Type == Models.DatabaseType.Php)
                 {
-                    if (_database.Type == Models.DatabaseType.Php)
+                    foreach (DedicatedGetRequest dedicatedRequest in table.DedicatedGetRequests)
                     {
+
                         interfaceBuilder.AppendLine($"@GET(\"{table.Name}.php?cmd=get{table.Name}By{dedicatedRequest.ToString("")}\")");
                         interfaceBuilder.Append($"Call<List<{table.SingularName}>> get{table.Name}By{dedicatedRequest.ToString("")}(");
-                    }
-                    else if (_database.Type == Models.DatabaseType.Phyton)
-                    {
-                        interfaceBuilder.AppendLine($"@GET(\"{table.Name}.php?cmd=get{table.Name}By{dedicatedRequest.ToString("")}\")");
-                        interfaceBuilder.Append($"Call<{table.SingularName}Response> get{table.Name}By{dedicatedRequest.ToString("")}(");
-                    }
 
-                    foreach (Column column in dedicatedRequest.Columns)
-                    {
-                        interfaceBuilder.Append($"@Query(\"{column.LowerCaseName}\"){column.Type.GetJavaType()} {column.LowerCaseName}, ");
-                    }
-                    Helpers.RemoveLastApparition(interfaceBuilder, ", ");
+                        foreach (Column column in dedicatedRequest.Columns)
+                        {
+                            interfaceBuilder.Append($"@Query(\"{column.LowerCaseName}\"){column.Type.GetJavaType()} {column.LowerCaseName}, ");
+                        }
+                        Helpers.RemoveLastApparition(interfaceBuilder, ", ");
 
-                    interfaceBuilder.AppendLine(");");
-                    interfaceBuilder.AppendLine();
+                        interfaceBuilder.AppendLine(");");
+                        interfaceBuilder.AppendLine();
+                    }
+                }
+                else
+                {
+                    interfaceBuilder.AppendLine($"@GET(\"api/{table.LowerCaseName}\")");
+                    interfaceBuilder.AppendLine($"Call<{table.SingularName}Response> get{table.Name}Filtered(@Query(\"q\") String q);");
                 }
 
                 //add metrhod
