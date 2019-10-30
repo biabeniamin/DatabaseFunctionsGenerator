@@ -20,15 +20,21 @@ namespace DatabaseFunctionsGenerator.Java
         {
             StringBuilder builder;
             StringBuilder methodBody;
+            string type = "";
 
             builder = new StringBuilder();
             methodBody = new StringBuilder();
 
-            builder.AppendLine($"public static List<{table.SingularName}> get{table.Name}(Call<List<{table.SingularName}>> call)");
+            if (_database.Type == Models.DatabaseType.Php)
+                type = $"List<{table.SingularName}>";
+            else if (_database.Type == Models.DatabaseType.Phyton)
+                type = $"{table.SingularName}Response";
+
+            builder.AppendLine($"public static {type} get{table.Name}(Call<{type}> call)");
             builder.AppendLine("{");
             {
                 //declaration
-                methodBody.AppendLine($"List<{table.SingularName}> {table.LowerCaseName};");
+                methodBody.AppendLine($"{type} {table.LowerCaseName};");
                 methodBody.AppendLine();
 
                 //initialization
@@ -63,13 +69,13 @@ namespace DatabaseFunctionsGenerator.Java
             methodBody.Clear();
 
             //generate the get to get all data
-            builder.AppendLine($"public static List<{table.SingularName}> get{table.Name}()");
+            builder.AppendLine($"public static {type} get{table.Name}()");
             builder.AppendLine("{");
             {
                 //declaration
-                methodBody.AppendLine($"List<{table.SingularName}> {table.LowerCaseName};");
+                methodBody.AppendLine($"{type} {table.LowerCaseName};");
                 methodBody.AppendLine($"{table.SingularName}Service service;");
-                methodBody.AppendLine($"Call<List<{table.SingularName}>> call;");
+                methodBody.AppendLine($"Call<{type}> call;");
                 methodBody.AppendLine();
 
                 //initialization
@@ -186,11 +192,17 @@ namespace DatabaseFunctionsGenerator.Java
         {
             StringBuilder builder;
             StringBuilder methodBody;
+            string type ="";
 
             builder = new StringBuilder();
             methodBody = new StringBuilder();
 
-            builder.AppendLine($"public static void get{table.Name}(Call<List<{table.SingularName}>> call, Callback<List<{table.SingularName}>> callback)");
+            if (_database.Type == Models.DatabaseType.Php)
+                type = $"List<{table.SingularName}>";
+            else if (_database.Type == Models.DatabaseType.Phyton)
+                type = $"{table.SingularName}Response";
+
+            builder.AppendLine($"public static void get{table.Name}(Call<{type}> call, Callback<{type}> callback)");
             builder.AppendLine("{");
             {
                 //declaration
@@ -224,13 +236,13 @@ namespace DatabaseFunctionsGenerator.Java
             methodBody.Clear();
 
             //generate the get to get all data
-            builder.AppendLine($"public static void get{table.Name}(Callback<List<{table.SingularName}>> callback)");
+            builder.AppendLine($"public static void get{table.Name}(Callback<{type}> callback)");
             builder.AppendLine("{");
             {
                 //declaration
-                methodBody.AppendLine($"List<{table.SingularName}> {table.LowerCaseName};");
+                methodBody.AppendLine($"{type} {table.LowerCaseName};");
                 methodBody.AppendLine($"{table.SingularName}Service service;");
-                methodBody.AppendLine($"Call<List<{table.SingularName}>> call;");
+                methodBody.AppendLine($"Call<{type}> call;");
                 methodBody.AppendLine();
 
                 //initialization
@@ -454,9 +466,17 @@ namespace DatabaseFunctionsGenerator.Java
             builder.AppendLine("{");
             {
                 //get all data
-                interfaceBuilder.AppendLine($"@GET(\"{table.Name}.php?cmd=get{table.Name}\")");
-                interfaceBuilder.AppendLine($"Call<List<{table.SingularName}>> get{table.Name}();");
-                interfaceBuilder.AppendLine();
+                if (_database.Type == Models.DatabaseType.Php)
+                {
+                    interfaceBuilder.AppendLine($"@GET(\"{table.Name}.php?cmd=get{table.Name}\")");
+                    interfaceBuilder.AppendLine($"Call<List<{table.SingularName}>> get{table.Name}();");
+                }
+                else if (_database.Type == Models.DatabaseType.Phyton)
+                {
+                    interfaceBuilder.AppendLine($"@GET(\"api/{table.LowerCaseName}\")");
+                    interfaceBuilder.AppendLine($"Call<{table.SingularName}Response> get{table.Name}();");
+                }
+                    interfaceBuilder.AppendLine();
 
                 //dedicated request
                 foreach(DedicatedGetRequest dedicatedRequest in table.DedicatedGetRequests)
