@@ -267,6 +267,37 @@ namespace DatabaseFunctionsGenerator.Java
             //return builder.ToString();
         }
 
+        private void GenerateModelResponse(Table table, string path, string packageName)
+        {
+            StringBuilder builder;
+            StringBuilder classBuilder;
+
+            builder = new StringBuilder();
+            classBuilder = new StringBuilder();
+
+            builder.AppendLine("//generated automatically");
+            builder.AppendLine($"package {packageName}.Models;");
+            builder.AppendLine("import java.util.ArrayList;");
+            builder.AppendLine();
+
+            builder.AppendLine($"public class {table.SingularName}Response");
+            builder.AppendLine("{");
+            {
+                classBuilder.AppendLine("private float num_results;");
+                classBuilder.AppendLine("public ArrayList< Message > objects = new ArrayList< Message >();");
+                classBuilder.AppendLine("private float page;");
+                classBuilder.AppendLine("private float total_pages;");
+
+                builder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(),
+                        1));
+            }
+            builder.AppendLine("}");
+
+            IO.WriteFile($"{path}\\{table.SingularName}Response.java", (builder.ToString()));
+
+            //return builder.ToString();
+        }
+
         public void Generate(string path)
         {
             string modelsPath;
@@ -278,6 +309,8 @@ namespace DatabaseFunctionsGenerator.Java
             foreach (Table table in _database.Tables)
             {
                 GenerateModel(table, modelsPath, _database.JavaPackageName);
+                if(_database.Type == Models.DatabaseType.Phyton)
+                    GenerateModelResponse(table, modelsPath, _database.JavaPackageName);
             }
         }
     }
