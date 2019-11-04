@@ -17,6 +17,14 @@ namespace DatabaseFunctionsGenerator
         private string _javaPackageName= "com.example.biabe.DatabaseFunctionsGenerator";
         private string _databaseName = "gen";
         private DatabaseType _type = DatabaseType.Php;
+        private bool _hasAuthenticationSystem;
+
+        public bool HasAuthenticationSystem
+        {
+            get { return _hasAuthenticationSystem; }
+            set { _hasAuthenticationSystem = value; }
+        }
+
 
         public DatabaseType Type
         {
