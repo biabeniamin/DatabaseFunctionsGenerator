@@ -76,6 +76,7 @@
     <Content Include="CodeHelpers\HttpRequestClient.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Compile Include="AuthenticationSystem.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CSharp\CSharpClientControllerGenerator.cs" />
     <Compile Include="CSharp\CSharpGenerator.cs" />
