@@ -22,6 +22,7 @@ namespace DatabaseFunctionsGenerator
         private JavaGenerator _javaGenerator;
         private PythonGenerator _pythonGenerator;
         private GeneratorConfigGenerator _generatorConfigGenerator;
+        private AuthenticationSystem _authenticationSystem;
         private string _timestamp;
 
         public string Timestamp
@@ -45,6 +46,7 @@ namespace DatabaseFunctionsGenerator
             _javaGenerator = new JavaGenerator(_database);
             _pythonGenerator = new PythonGenerator(_database);
             _generatorConfigGenerator = new GeneratorConfigGenerator(_database);
+            _authenticationSystem = new AuthenticationSystem();
         }
 
         private void AddMissingFields()
@@ -53,6 +55,12 @@ namespace DatabaseFunctionsGenerator
             if(!_database.HasNotificationSystem)
             {
                 _database.Tables.Add(_notificationSystem.GenerateNotificationTable());
+            }
+
+            //add authentication system
+            if(_database.HasAuthenticationSystem)
+            {
+                _database.Tables.Add(new Table("Tokens"));
             }
 
             foreach(Table table in _database.Tables)
