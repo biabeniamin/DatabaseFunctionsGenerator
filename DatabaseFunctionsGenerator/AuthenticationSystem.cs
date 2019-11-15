@@ -24,7 +24,7 @@ namespace DatabaseFunctionsGenerator
 
             columns.Add(new Column("Value", new ColumnType(Types.Varchar, 40)));
             columns.Add(new Column("Address", new ColumnType(Types.Varchar, 15)));
-            columns.Add(new Column("LastUpdate", new ColumnType(Types.Varchar, 15)));
+            columns.Add(new Column("LastUpdate", new ColumnType(Types.DateTime)));
 
             table = new Table("Tokens", columns);
 
