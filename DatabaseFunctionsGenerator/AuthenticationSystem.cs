@@ -47,7 +47,7 @@ namespace DatabaseFunctionsGenerator
             table = new Table("TokenUsers", columns);
 
             //add dedicated request to check token
-            table.DedicatedGetRequests.Add(new DedicatedGetRequest(columns[0]));
+            table.DedicatedGetRequests.Add(new DedicatedGetRequest(columns[0], columns[1]));
 
             return table;
         }
