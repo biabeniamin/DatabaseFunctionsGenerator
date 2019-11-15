@@ -8,6 +8,13 @@ namespace DatabaseFunctionsGenerator
 {
     class AuthenticationSystem
     {
+        private Database _database;
+
+        public AuthenticationSystem(Database database)
+        {
+            _database = database;
+        }
+
         private Table GenerateTokenTable()
         {
             Table table;
@@ -49,6 +56,9 @@ namespace DatabaseFunctionsGenerator
         {
             Table tokenUsersTable = GenerateTokenUsersTable();
             Table tokenTable = GenerateTokenTable();
+
+            _database.Relations.Add(new Relation(tokenUsersTable, tokenTable, RelationType.OneToMany));
+
             return new Table[] { tokenTable, tokenUsersTable };
         }
     }
