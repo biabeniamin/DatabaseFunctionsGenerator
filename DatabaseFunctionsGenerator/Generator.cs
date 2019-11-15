@@ -60,7 +60,7 @@ namespace DatabaseFunctionsGenerator
             //add authentication system
             if(_database.HasAuthenticationSystem)
             {
-                _database.Tables.Add(new Table("Tokens"));
+                _database.Tables.Add(_authenticationSystem.GenerateAuthenticationTable());
             }
 
             foreach(Table table in _database.Tables)
