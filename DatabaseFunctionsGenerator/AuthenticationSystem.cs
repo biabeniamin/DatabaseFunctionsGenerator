@@ -8,7 +8,7 @@ namespace DatabaseFunctionsGenerator
 {
     class AuthenticationSystem
     {
-        public Table GenerateAuthenticationTable()
+        public Table[] GenerateAuthenticationTables()
         {
             Table table;
             List<Column> columns;
@@ -24,7 +24,7 @@ namespace DatabaseFunctionsGenerator
             //add dedicated request to check token
             table.DedicatedGetRequests.Add(new DedicatedGetRequest(columns[0]));
 
-            return table;
+            return new Table[] { table };
         }
     }
 }
