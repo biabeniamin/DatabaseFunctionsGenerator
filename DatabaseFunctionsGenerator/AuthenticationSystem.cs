@@ -19,7 +19,10 @@ namespace DatabaseFunctionsGenerator
             columns.Add(new Column("Address", new ColumnType(Types.Varchar, 15)));
             columns.Add(new Column("LastUpdate", new ColumnType(Types.Varchar, 15)));
 
-            table = new Table("Notifications", columns);
+            table = new Table("Tokens", columns);
+
+            //add dedicated request to check token
+            table.DedicatedGetRequests.Add(new DedicatedGetRequest(columns[0]));
 
             return table;
         }
