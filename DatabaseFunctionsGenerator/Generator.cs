@@ -46,7 +46,7 @@ namespace DatabaseFunctionsGenerator
             _javaGenerator = new JavaGenerator(_database);
             _pythonGenerator = new PythonGenerator(_database);
             _generatorConfigGenerator = new GeneratorConfigGenerator(_database);
-            _authenticationSystem = new AuthenticationSystem();
+            _authenticationSystem = new AuthenticationSystem(_database);
         }
 
         private void AddMissingFields()
