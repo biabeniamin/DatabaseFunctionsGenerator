@@ -16,6 +16,14 @@ namespace DatabaseFunctionsGenerator
         private ObservableCollection<Table> _parents;
         private ObservableCollection<Table> _childs;
         private List<DedicatedGetRequest> _dedicatedGetRequests;
+        private bool _requiresSecurityToken;
+
+        public bool RequiresSecurityToken
+        {
+            get { return _requiresSecurityToken; }
+            set { _requiresSecurityToken = value; }
+        }
+
 
         public List<DedicatedGetRequest> DedicatedGetRequests
         {
