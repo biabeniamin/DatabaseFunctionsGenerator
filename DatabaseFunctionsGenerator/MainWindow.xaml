@@ -20,6 +20,13 @@
                     </GridViewColumn>
                     <GridViewColumn Header="Has prim key" DisplayMemberBinding="{Binding HasPrimaryKey}" />
                     <GridViewColumn Header="ParentTable" DisplayMemberBinding="{Binding Parent}" />
+                    <GridViewColumn Header="Has Sec Token">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding RequiresSecurityToken}"></CheckBox>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
