@@ -12,6 +12,7 @@ namespace DatabaseFunctionsGenerator
         Varchar,
         Text,
         DateTime,
-        Double
+        Double,
+        GUID
     }
 }
