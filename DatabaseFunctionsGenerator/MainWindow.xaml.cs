@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using DatabaseFunctionsGenerator.Deployment;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -27,6 +28,17 @@ namespace DatabaseFunctionsGenerator
         private Table _selectedTable;
         private DelegateCommand _generateDelegateCommand;
         private DelegateCommand _importDelegateCommand;
+        private bool _securityToken = true;
+
+        public bool SecurityToken
+        {
+            get { return _securityToken; }
+            set 
+            {
+                _securityToken = value;
+                OnPropertyChanged("SecurityToken");
+            }
+        }
 
         public DelegateCommand ImportDelegateCommand
         {
@@ -67,6 +79,8 @@ namespace DatabaseFunctionsGenerator
             DataContext = this;
 
             Database = new Database();
+            Database.DatabaseName = "scd";
+            Database.Type = Models.DatabaseType.Php;
             /*
                         Database.Tables.Add(new Table("Users"));
 
@@ -80,7 +94,10 @@ namespace DatabaseFunctionsGenerator
                         Database.Tables[0].Columns.Add(new Column("CNP", new ColumnType(Types.Varchar, 20)));
                         Database.Tables[0].Columns.Add(new Column("NumberTelefon", new ColumnType(Types.Varchar, 20 )));*/
 
-            Database.Tables.Add(new Table("Messages"));
+            Database.Tables.Add(new Table("Locations"));
+            Database.Tables.Last().Columns.Add(new Column("TerminalId", new ColumnType(Types.Integer)));
+            Database.Tables.Last().Columns.Add(new Column("Latitude", new ColumnType(Types.Double)));
+            Database.Tables.Last().Columns.Add(new Column("Longitude", new ColumnType(Types.Double)));
             //Database.Tables.Add(new Table("Prezenta"));
             //Database.Tables.Add(new Table("Locations"));
             //Database.Tables.Add(new Table("AccessLogs"));
@@ -89,8 +106,6 @@ namespace DatabaseFunctionsGenerator
             //Database.Tables.Add(new Table("Empty"));
 
             //            Database.Tables[0].Columns.Add(new Column("Id", new ColumnType(Types.Integer, true, true)));
-            Database.Tables[0].Columns.Add(new Column("Content", new ColumnType(Types.Text, 20)));
-            Database.Tables[0].Columns.Add(new Column("Source", new ColumnType(Types.Integer)));
 
 
             //Database.Relations.Add(new Relation(Database.Tables[0], Database.Tables[1], RelationType.OneToMany));
@@ -105,8 +120,8 @@ namespace DatabaseFunctionsGenerator
             Generator generator = new Generator(_database);
             generator.Generate();
 
-            //Deployer deployer = new Deployer(generator);
-            //deployer.Deploy();
+            Deployer deployer = new Deployer(generator);
+            deployer.Deploy();
 
             _generateDelegateCommand = new DelegateCommand(GenerateCommand);
 
@@ -131,6 +146,7 @@ namespace DatabaseFunctionsGenerator
         private void GenerateCommand()
         {
             Generator generator = new Generator(_database);
+            Database.HasAuthenticationSystem = SecurityToken;
             generator.Generate();
         }
 

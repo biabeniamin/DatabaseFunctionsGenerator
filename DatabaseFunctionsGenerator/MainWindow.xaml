@@ -91,5 +91,6 @@
         </ListView>
         <Button Content="Generate" Command="{Binding GenerateDelegateCommand}" HorizontalAlignment="Left" Margin="413,393,0,0" VerticalAlignment="Top" Width="75"/>
         <Button Content="Import" Command="{Binding ImportDelegateCommand}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="-0.493,-2.7"/>
+        <CheckBox Content="Api Security Token" HorizontalAlignment="Left" Margin="312,339,0,0" VerticalAlignment="Top" IsChecked="{Binding SecurityToken}"/>
     </Grid>
 </Window>
