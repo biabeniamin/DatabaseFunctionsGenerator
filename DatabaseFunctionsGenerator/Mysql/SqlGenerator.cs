@@ -27,7 +27,9 @@ namespace DatabaseFunctionsGenerator
             }
 
             builder.Append(column.Type.GetMysqlType());
-            builder.Append($"  NOT NULL,");
+            if(column.Type.IsMandatory)
+                builder.Append($"  NOT NULL");
+            builder.Append($",");
 
             return builder.ToString();
         }
