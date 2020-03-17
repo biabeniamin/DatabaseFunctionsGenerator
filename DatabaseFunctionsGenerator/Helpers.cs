@@ -86,6 +86,8 @@ namespace DatabaseFunctionsGenerator
                 case Types.Text:
                 case Types.Varchar:
                     return "\'Test\'";
+                case Types.GUID:
+                    return "\'00000000-0000-0000-0000-000000000000\'";
                 default:
                     return "";
             }
@@ -159,6 +161,7 @@ namespace DatabaseFunctionsGenerator
                 case Types.Text:
                     return "\'\'";
                 case Types.Varchar:
+                case Types.GUID:
                     return "\'\'";
                 default:
                     return "";
