@@ -12,7 +12,15 @@ namespace DatabaseFunctionsGenerator
         private int _length;
         private bool _isPrimaryKey;
         private bool _autoIncrement;
-        private bool _isForeignKey; 
+        private bool _isForeignKey;
+        private bool _isMandatory;
+
+        public bool IsMandatory
+        {
+            get { return _isMandatory; }
+            set { _isMandatory = value; }
+        }
+
 
         public bool IsForeignKey
         {
