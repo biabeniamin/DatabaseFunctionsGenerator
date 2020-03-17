@@ -18,16 +18,20 @@ namespace DatabaseFunctionsGenerator
             StringBuilder builder;
             string databaseOperations;
             string helpers;
+            string authentication;
 
             builder = new StringBuilder();
             databaseOperations = IO.ReadFile("CodeHelpers\\DatabaseOperations.php");
             helpers = IO.ReadFile("CodeHelpers\\Helpers.php");
+            authentication = IO.ReadFile("CodeHelpers\\Authentication.php");
 
             //replace databaseName
             databaseOperations = databaseOperations.Replace("!--databaseName--!", _database.DatabaseName);
 
             IO.WriteFile($"{path}\\Php\\DatabaseOperations.php", databaseOperations);
             IO.WriteFile($"{path}\\Php\\Helpers.php", helpers);
+            if (_database.HasAuthenticationSystem)
+                IO.WriteFile($"{path}\\Php\\Authentication.php", authentication);
 
 
             //builder.AppendLine()
