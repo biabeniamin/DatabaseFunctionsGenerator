@@ -77,7 +77,12 @@ namespace DatabaseFunctionsGenerator
         }
 
         public ColumnType(Types type, int length)
-            : this(type, length, false, false, false,false)
+            : this(type, length, false, false, false, false)
+        {
+        }
+
+        public ColumnType(Types type, int length, bool isMandatory)
+            : this(type, length, false, false, false, isMandatory)
         {
         }
 

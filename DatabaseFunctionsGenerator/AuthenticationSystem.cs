@@ -41,8 +41,8 @@ namespace DatabaseFunctionsGenerator
 
             columns = new List<Column>();
 
-            columns.Add(new Column("Username", new ColumnType(Types.Varchar, 40)));
-            columns.Add(new Column("Password", new ColumnType(Types.Varchar, 40)));
+            columns.Add(new Column("Username", new ColumnType(Types.Varchar, 40, true)));
+            columns.Add(new Column("Password", new ColumnType(Types.Varchar, 40, true)));
 
             table = new Table("TokenUsers", columns);
 
