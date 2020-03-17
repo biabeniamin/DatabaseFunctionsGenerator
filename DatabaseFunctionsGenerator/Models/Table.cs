@@ -146,6 +146,17 @@ namespace DatabaseFunctionsGenerator
         }
 
         [JsonIgnore]
+        public IEnumerable<Column> EditableMandatoryColumns
+        {
+            get
+            {
+                return _columns.Where((column) => {
+                    return (false == column.Type.IsPrimaryKey) && (false == column.IsCreationTimeColumn) && column.Type.IsMandatory;
+                });
+            }
+        }
+
+        [JsonIgnore]
         public IEnumerable<Column> DataColumns
         {
             get
