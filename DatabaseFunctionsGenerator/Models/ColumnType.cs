@@ -65,29 +65,30 @@ namespace DatabaseFunctionsGenerator
 
         }
 
-        public ColumnType(Types type, bool isForeignKey)
-            : this(type, 0, false, true, false)
+        public ColumnType(Types type, bool isForeignKey, bool isMandatory)
+            : this(type, 0, false, true, false, isMandatory)
         {
         }
 
-        public ColumnType(Types type, bool isPrimaryKey, bool autoIncrement)
-            : this(type, 0, isPrimaryKey, false, autoIncrement)
+        public ColumnType(Types type, bool isPrimaryKey, bool autoIncrement, bool isMandatory)
+            : this(type, 0, isPrimaryKey, false, autoIncrement, isMandatory)
         {
             
         }
 
         public ColumnType(Types type, int length)
-            : this(type, length, false, false, false)
+            : this(type, length, false, false, false,false)
         {
         }
 
-        public ColumnType(Types type, int length, bool isPrimaryKey, bool isForeignKey, bool autoIncrement)
+        public ColumnType(Types type, int length, bool isPrimaryKey, bool isForeignKey, bool autoIncrement, bool isMandatory)
         {
             _type = type;
             _length = length;
             _isPrimaryKey = isPrimaryKey;
             _autoIncrement = autoIncrement;
             _isForeignKey = isForeignKey;
+            _isMandatory = isMandatory;
         }
 
         public string GetMysqlType()

@@ -71,7 +71,7 @@ namespace DatabaseFunctionsGenerator
                     Column column;
                     ColumnType type;
 
-                    type = new ColumnType(Types.Integer, true, true);
+                    type = new ColumnType(Types.Integer, true, true, true);
                     column = new Column($"{table.SingularName}Id", type);
 
                     table.Columns.Insert(0, column);
@@ -83,6 +83,7 @@ namespace DatabaseFunctionsGenerator
                     ColumnType type;
 
                     type = new ColumnType(Types.DateTime);
+                    type.IsMandatory = true;
                     column = new Column($"CreationTime", type);
 
                     table.Columns.Add(column);
@@ -110,7 +111,7 @@ namespace DatabaseFunctionsGenerator
                         relation.Table1.Childs.Add(relation.Table2);
                         relation.Table2.Parents.Add(relation.Table1);
 
-                        relation.Table2.Columns.Insert(1, new Column($"{relation.Table1.SingularName}Id", new ColumnType(Types.Integer, true), relation.Table1));
+                        relation.Table2.Columns.Insert(1, new Column($"{relation.Table1.SingularName}Id", new ColumnType(Types.Integer, true,true), relation.Table1));
                         break;
                 }
             }
