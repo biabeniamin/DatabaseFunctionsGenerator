@@ -176,13 +176,16 @@ namespace DatabaseFunctionsGenerator
         {
             switch (type)
             {
-                case Types.DateTime:
-                case Types.Text:
-                case Types.Varchar:
-                    return $"\'{startCharacter}{input}\'";
                 case Types.Integer:
                 case Types.Double:
                     return $"{startCharacter}{input}";
+                case Types.DateTime:
+                case Types.Text:
+                case Types.Varchar:
+                case Types.GUID:
+                default:
+                    return $"\'{startCharacter}{input}\'";
+                
             }
 
             return "";
