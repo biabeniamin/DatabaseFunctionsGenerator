@@ -110,7 +110,7 @@ namespace DatabaseFunctionsGenerator.Php
                 {
 
                     addBlock.AppendLine("if(CheckGetParameters([");
-                    foreach (Column column in table.EditableColumns)
+                    foreach (Column column in table.EditableMandatoryColumns)
                     {
                         addBlock.AppendLine($"\t\'{column.LowerCaseName}\',");
                     }
@@ -199,7 +199,7 @@ namespace DatabaseFunctionsGenerator.Php
                 {
 
                     addBlock.AppendLine("\tif(CheckPostParameters([");
-                    foreach (Column column in table.EditableColumns)
+                    foreach (Column column in table.EditableMandatoryColumns)
                     {
                         addBlock.AppendLine($"\t\t\'{column.LowerCaseName}\',");
                     }
