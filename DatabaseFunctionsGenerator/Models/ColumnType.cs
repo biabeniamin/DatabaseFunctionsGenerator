@@ -96,6 +96,8 @@ namespace DatabaseFunctionsGenerator
                     return $"VARCHAR({_length})";
                 case Types.Double:
                     return $"DOUBLE";
+                case Types.GUID:
+                    return $"VARCHAR(40)";
                     break;
             }
 

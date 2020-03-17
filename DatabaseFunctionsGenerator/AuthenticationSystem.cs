@@ -22,7 +22,7 @@ namespace DatabaseFunctionsGenerator
 
             columns = new List<Column>();
 
-            columns.Add(new Column("Value", new ColumnType(Types.Varchar, 40)));
+            columns.Add(new Column("Value", new ColumnType(Types.GUID)));
             columns.Add(new Column("Address", new ColumnType(Types.Varchar, 15)));
             columns.Add(new Column("LastUpdate", new ColumnType(Types.DateTime)));
 

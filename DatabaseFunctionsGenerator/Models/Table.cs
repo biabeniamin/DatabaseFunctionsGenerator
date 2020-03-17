@@ -140,7 +140,7 @@ namespace DatabaseFunctionsGenerator
             get
             {
                 return _columns.Where((column) => {
-                    return (false == column.Type.IsPrimaryKey) && (false == column.IsCreationTimeColumn);
+                    return (false == column.Type.IsPrimaryKey) && (false == column.IsCreationTimeColumn) && (Types.GUID != column.Type.Type);
                 });
             }
         }

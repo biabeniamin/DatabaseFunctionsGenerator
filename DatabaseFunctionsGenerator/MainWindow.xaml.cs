@@ -81,6 +81,7 @@ namespace DatabaseFunctionsGenerator
             Database = new Database();
             Database.DatabaseName = "scd";
             Database.Type = Models.DatabaseType.Php;
+            Database.HasAuthenticationSystem = true;
             /*
                         Database.Tables.Add(new Table("Users"));
 
@@ -95,6 +96,7 @@ namespace DatabaseFunctionsGenerator
                         Database.Tables[0].Columns.Add(new Column("NumberTelefon", new ColumnType(Types.Varchar, 20 )));*/
 
             Database.Tables.Add(new Table("Locations"));
+            Database.Tables.Last().RequiresSecurityToken = true;
             Database.Tables.Last().Columns.Add(new Column("TerminalId", new ColumnType(Types.Integer)));
             Database.Tables.Last().Columns.Add(new Column("Latitude", new ColumnType(Types.Double)));
             Database.Tables.Last().Columns.Add(new Column("Longitude", new ColumnType(Types.Double)));
