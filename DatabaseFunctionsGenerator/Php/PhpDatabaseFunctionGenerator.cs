@@ -552,7 +552,10 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine($"require_once \'DatabaseOperations.php\';");
             builder.AppendLine($"require_once \'Helpers.php\';");
 
-            foreach(Table parentTable in table.Parents)
+            if(table.RequiresSecurityToken)
+                builder.AppendLine($"require_once \'Authentication.php\';");
+
+            foreach (Table parentTable in table.Parents)
             {
                 builder.AppendLine($"require_once \'{parentTable.Name}.php\';");
             }
