@@ -14,6 +14,6 @@ namespace DatabaseFunctionsGenerator
         public static string MysqlPassword => "";
 
         public static string ServerPath => @"D:\xampp\htdocs\generator";
-        public static string AngularPath => @"D:\Beni\angular\BackEndGeneratorAngularSample22\src\app";
+        public static string AngularPath => @"D:\Beni\angular\BackEndGeneratorAngularSample\src\app";
     }
 }

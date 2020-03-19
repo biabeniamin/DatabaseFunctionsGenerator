@@ -126,10 +126,10 @@ namespace DatabaseFunctionsGenerator
                     return "string";
                 case Types.Integer:
                     return "number";
+                case Types.GUID:
+                case Types.Varchar:
                 case Types.Text:
                     return "string";
-                case Types.Varchar:
-                    return $"string";
                 case Types.Double:
                     return $"number";
                     break;
