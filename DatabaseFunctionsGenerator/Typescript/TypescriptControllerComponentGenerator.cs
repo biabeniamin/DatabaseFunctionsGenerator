@@ -58,6 +58,38 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
+        private static string GenerateGetDedicatedRequestEventHandlers(Table table)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            foreach (DedicatedGetRequest request in table.DedicatedGetRequests)
+            {
+                StringBuilder functionBody = new StringBuilder();
+
+                builder.AppendLine($"get{table.Name}By{request.ToString("")}(event)");
+                builder.AppendLine("{");
+                {
+                    functionBody.AppendLine("event.preventDefault();");
+                    functionBody.AppendLine("const target = event.target;");
+                    foreach (Column column in request.Columns)
+                    {
+                        functionBody.Append($"let {column.LowerCaseName} = target.querySelector('");
+                        functionBody.Append($"#{column.Name}");
+
+                        functionBody.AppendLine($"').value;");
+                        functionBody.AppendLine($"console.log({column.LowerCaseName});");
+                    }
+
+                    //functionBody.AppendLine($"this.{table.LowerCaseSingularName}Service.Add{table.SingularName}({table.LowerCaseSingularName});");
+
+                    builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
+                }
+                builder.AppendLine("}");
+            }
+
+            return builder.ToString();
+        }
+
         private static string GenerateDropDownChangeEventHandler(Table table)
         {
             StringBuilder builder = new StringBuilder();
@@ -145,6 +177,8 @@ namespace DatabaseFunctionsGenerator
                 classBuilder.AppendLine(GenerateConstructor(table));
                 classBuilder.AppendLine(GenerateNgOnInit(table));
                 classBuilder.AppendLine(GenerateAddEventHandler(table));
+                classBuilder.AppendLine(GenerateGetDedicatedRequestEventHandlers(table));
+
 
                 foreach (Table parentTable in table.Parents)
                 {
