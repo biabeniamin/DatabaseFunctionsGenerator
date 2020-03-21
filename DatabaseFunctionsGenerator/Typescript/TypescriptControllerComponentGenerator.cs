@@ -80,7 +80,8 @@ namespace DatabaseFunctionsGenerator
                         functionBody.AppendLine($"console.log({column.LowerCaseName});");
                     }
 
-                    //functionBody.AppendLine($"this.{table.LowerCaseSingularName}Service.Add{table.SingularName}({table.LowerCaseSingularName});");
+                    string parameters = string.Join(", ", request.Columns.Select(e => e.LowerCaseName));
+                    functionBody.AppendLine($"this.{table.LowerCaseSingularName}Service.Get{table.Name}By{request.ToString("")}({parameters});");
 
                     builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
                 }
