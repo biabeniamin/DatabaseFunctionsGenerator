@@ -86,5 +86,7 @@ $result = CheckToken($database, $_GET["token"]);
 if(!$result['isAuthorized'])
     die(json_encode(["error"=>"Wrong token."]));
 
+if("checkToken" == $_GET["cmd"])
+    die(json_encode(["status"=>"ok"]));
 
 ?>
