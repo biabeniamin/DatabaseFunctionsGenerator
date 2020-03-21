@@ -81,7 +81,9 @@ namespace DatabaseFunctionsGenerator
                     }
 
                     string parameters = string.Join(", ", request.Columns.Select(e => e.LowerCaseName));
-                    functionBody.AppendLine($"this.{table.LowerCaseSingularName}Service.Get{table.Name}By{request.ToString("")}({parameters});");
+                    functionBody.AppendLine($"this.{table.LowerCaseSingularName}Service.Get{table.Name}By{request.ToString("")}({parameters}).subscribe(data =>{{");
+                    functionBody.AppendLine($"\tthis.{table.LowerCaseSingularName}Service.{table.LowerCaseName} = data;");
+                    functionBody.AppendLine("});");
 
                     builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
                 }
