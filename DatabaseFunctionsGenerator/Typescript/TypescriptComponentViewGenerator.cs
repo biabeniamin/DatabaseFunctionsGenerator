@@ -136,6 +136,39 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
+        private static string GenerateCustomRequestsForm(Table table)
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (DedicatedGetRequest request in table.DedicatedGetRequests)
+            {
+                StringBuilder formBuilder = new StringBuilder();
+                StringBuilder tableBody = new StringBuilder();
+
+                formBuilder.AppendLine($"<form (submit)=\"get{table.Name}By{request.ToString("")}($event)\">");
+                {
+                    tableBody.AppendLine($"<h3>Get {table.Name} by {request.ToString(", ")}</h3>");
+                    foreach (Column column in request.Columns)
+                    {
+                        tableBody.AppendLine("<div class=\"input-container\">");
+                        tableBody.AppendLine($"<input type=\"text\" placeholder= \"{column.Name}\" id=\"{column.Name}\" />");
+                        tableBody.AppendLine("<div class=\"bar\"></div>");
+                        tableBody.AppendLine("</div>");
+                    }
+
+                    tableBody.AppendLine("<div class=\"button-container\">");
+                    {
+                        tableBody.AppendLine($"\t<input type=\"submit\" style=\"padding:20px; background:white;color:tomato;border:2px solid tomato;\" value=\"Get by {request.ToString(" ")}\">");
+                    }
+                    tableBody.AppendLine("</div>");
+
+                    formBuilder.Append(Helpers.AddIndentation(tableBody.ToString(), 1));
+                }
+                formBuilder.AppendLine($"</form>");
+                builder.AppendLine(formBuilder.ToString());
+            }
+            return builder.ToString();
+        }
+
 
         public static string GenerateViewForTable(Table table, DatabaseType type, string path)
         {
@@ -148,6 +181,10 @@ namespace DatabaseFunctionsGenerator
 
             builder.AppendLine(Helpers.AddIndentation(GenerateListView(table, type),
                                                       2));
+
+            builder.AppendLine(Helpers.AddIndentation(GenerateCustomRequestsForm(table),
+                                                      2));
+
             builder.AppendLine("\t</div>");
             builder.AppendLine("</div>");
 
