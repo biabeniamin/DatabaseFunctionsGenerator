@@ -136,6 +136,26 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
+        private static string GenerateRefreshButton(Table table)
+        {
+            StringBuilder builder = new StringBuilder();
+            StringBuilder tableBody = new StringBuilder();
+
+            builder.AppendLine($"<form (submit)=\"{table.LowerCaseSingularName}Service.Get{table.Name}()\">");
+            {
+                tableBody.AppendLine("<div class=\"button-container\">");
+                {
+                    tableBody.AppendLine("\t<input type=\"submit\" style=\"padding:20px; background:white;color:tomato;border:2px solid tomato;\" value=\"Update\">");
+                }
+                tableBody.AppendLine("</div>");
+
+                builder.Append(Helpers.AddIndentation(tableBody.ToString(), 1));
+            }
+            builder.AppendLine($"</form>");
+
+            return builder.ToString();
+        }
+
         private static string GenerateCustomRequestsForm(Table table)
         {
             StringBuilder builder = new StringBuilder();
@@ -176,6 +196,8 @@ namespace DatabaseFunctionsGenerator
 
             builder.AppendLine("<div class=\"container\">");
             builder.AppendLine("\t<div class=\"card rerun\">");
+            builder.AppendLine(Helpers.AddIndentation(GenerateRefreshButton(table),
+                                                      2));
             builder.AppendLine(Helpers.AddIndentation(GenerateAddForm(table),
                                                       2));
 
