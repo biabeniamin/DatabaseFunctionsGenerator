@@ -13,7 +13,7 @@ namespace DatabaseFunctionsGenerator
     {
         private ObservableCollection<Table> _tables;
         private ObservableCollection<Relation> _relations;
-        private string _serverUrl = "http://192.168.0.100/messages";
+        private string _serverUrl = "http://localhost/generator";
         private string _javaPackageName= "com.example.biabe.DatabaseFunctionsGenerator";
         private string _databaseName = "gen";
         private DatabaseType _type = DatabaseType.Php;
