@@ -63,8 +63,11 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine($"GetLast{table.SingularName}()");
             builder.AppendLine("{");
             {
+                string url = $"{table.Name}.php?cmd=getLast{table.SingularName}";
+                if (table.RequiresSecurityToken)
+                    url += "&token=${this.token}";
 
-                functionBody.AppendLine($"return this.http.get<{table.SingularName}[]>(ServerUrl.GetUrl()  + \"{table.Name}.php?cmd=getLast{table.SingularName}\");");
+                functionBody.AppendLine($"return this.http.get<{table.SingularName}[]>(ServerUrl.GetUrl()  + `{url}`);");
 
                 builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
             }
@@ -97,6 +100,7 @@ namespace DatabaseFunctionsGenerator
                         urlParameters.Append($"&{column.LowerCaseName}=${{{column.LowerCaseName}}}");
                     else if (_database.Type == DatabaseType.Phyton)
                         urlParameters.Append($"{{\"name\":\"{column.LowerCaseName}\",\"op\":\"eq\",\"val\":\"${{{column.LowerCaseName}}}\"}}, ");
+
                 }
                 Helpers.RemoveLastApparition(parameters, ", ");
                 Helpers.RemoveLastApparition(urlParameters, ", ");
@@ -111,6 +115,8 @@ namespace DatabaseFunctionsGenerator
                     url = $"api/{table.LowerCaseName}?q={{\"filters\":[{urlParameters}]}}";
                 }
 
+                if (table.RequiresSecurityToken)
+                    url += "&token=${this.token}";
 
                 builder.AppendLine($"Get{table.Name}By{request.ToString("")}({parameters})");
                 builder.AppendLine("{");
