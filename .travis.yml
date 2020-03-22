@@ -1,5 +1,6 @@
 language: csharp
 solution: DatabaseFunctionsGenerator.sln
+dotnet: 2.0.0
 
 before_script:
     - sudo chmod 777 build.sh
