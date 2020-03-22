@@ -34,7 +34,11 @@ namespace DatabaseFunctionsGenerator
                     url = $"{table.Name}.php?cmd=get{ table.Name}";
                 else if (_database.Type == DatabaseType.Phyton)
                     url = $"api/{table.LowerCaseName}";
-                functionBody.AppendLine($"return this.http.get<{table.SingularName}[]>(ServerUrl.GetUrl()  + \"{url}\").subscribe(data =>");
+
+                if (table.RequiresSecurityToken)
+                    url += "&token=${this.token}";
+
+                functionBody.AppendLine($"return this.http.get<{table.SingularName}[]>(ServerUrl.GetUrl()  + `{url}`).subscribe(data =>");
                 functionBody.AppendLine("{");
                 {
                     if (_database.Type == DatabaseType.Php)
