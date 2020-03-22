@@ -170,7 +170,10 @@ namespace DatabaseFunctionsGenerator
 
             objectName = Helpers.GetLowerCaseString(table.SingularName);
 
-            builder.AppendLine($"constructor(private http:HttpClient)");
+            builder.Append($"constructor(private http:HttpClient");
+            if(table.RequiresSecurityToken)
+                builder.Append($", private auth : AuthenticationService");
+            builder.AppendLine($")");
             builder.AppendLine("{");
             {
                 functionBody.AppendLine($"this.{table.LowerCaseName} = [{table.SingularName}Service.GetDefault{table.SingularName}()];");
@@ -315,6 +318,11 @@ namespace DatabaseFunctionsGenerator
                 builder.AppendLine($"import {{ {parentTable.SingularName} }} from '../app/Models/{parentTable.SingularName}'");
                 builder.AppendLine($"import {{ {parentTable.SingularName}Service }} from './{parentTable.SingularName}Service'");
             }
+
+            if (table.RequiresSecurityToken)
+                builder.AppendLine("import { AuthenticationService } from './AuthenticationService';");
+
+
             builder.AppendLine();
 
             //make it injectable
