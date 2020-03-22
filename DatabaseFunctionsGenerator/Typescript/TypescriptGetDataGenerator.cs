@@ -176,6 +176,11 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine($")");
             builder.AppendLine("{");
             {
+                if (table.RequiresSecurityToken)
+                {
+                    functionBody.AppendLine("this.auth.CheckToken();");
+                    functionBody.AppendLine("this.token = this.auth.GetToken();");
+                }
                 functionBody.AppendLine($"this.{table.LowerCaseName} = [{table.SingularName}Service.GetDefault{table.SingularName}()];");
                 functionBody.AppendLine($"this.Get{table.Name}();");
             }
@@ -336,6 +341,8 @@ namespace DatabaseFunctionsGenerator
 
 
                 classBody.AppendLine($"public {table.LowerCaseName} : {table.SingularName}[];");
+                if(table.RequiresSecurityToken)
+                    classBody.AppendLine($"private token : string;");
 
                 classBody.AppendLine(GenerateGetFunction(table));
                 classBody.AppendLine(GenerateGetLastFunction(table));
