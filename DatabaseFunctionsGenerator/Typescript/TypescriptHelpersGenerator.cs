@@ -19,19 +19,21 @@ namespace DatabaseFunctionsGenerator
         {
             StringBuilder builder;
             string serverUrl;
+            string authentication;
             string helpersPath;
 
             builder = new StringBuilder();
             serverUrl = IO.ReadFile("CodeHelpers\\ServerUrl.ts");
+            authentication = IO.ReadFile("CodeHelpers\\Authentication.ts");
             helpersPath = $"{path}\\Helpers";
 
             IO.CreateDirectory(helpersPath);
-
 
             //replace url
             serverUrl = serverUrl.Replace("!--url--!", _database.ServerUrl);
 
             IO.WriteFile($"{helpersPath}\\ServerUrl.ts", serverUrl);
+            IO.WriteFile($"{helpersPath}\\Authentication.ts", authentication);
         }
     }
 }
