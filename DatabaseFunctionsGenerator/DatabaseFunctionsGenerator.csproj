@@ -121,6 +121,7 @@
     <Compile Include="Php\PhpModelsGenerator.cs" />
     <Compile Include="Documentation\RequestTextMenuGenerator.cs" />
     <Compile Include="Php\PhpRequestsGenerator.cs" />
+    <Compile Include="Python\PythonSqlAlchemyInstanceGenerator.cs" />
     <Compile Include="Python\PythonControllerGenerator.cs" />
     <Compile Include="Python\PythonFlaskInstanceGenerator.cs" />
     <Compile Include="Python\PythonGenerator.cs" />
