@@ -80,6 +80,38 @@ namespace DatabaseFunctionsGenerator.Python
             return builder.ToString();
         }
 
+        private string GenerateAddFunction(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder function;
+
+            builder = new StringBuilder();
+            function = new StringBuilder(); 
+
+            builder.AppendLine("#add funtion");
+
+            builder.AppendLine($"def add{table.SingularName}({table.LowerCaseSingularName}):");
+            function.AppendLine($"session.add({table.LowerCaseSingularName})");
+            function.AppendLine($"session.commit()");
+
+            builder.AppendLine(Helpers.AddIndentation(function, 1));
+
+            return builder.ToString();
+        }
+
+        private string GenerateFunctions(Table table)
+        {
+            StringBuilder builder;
+
+            builder = new StringBuilder();
+
+            builder.AppendLine("#Functions");
+
+            builder.AppendLine(GenerateAddFunction(table)); 
+
+            return builder.ToString();
+        }
+
         private void GenerateController(Table table, string path)
         {
             StringBuilder builder;
@@ -117,6 +149,9 @@ namespace DatabaseFunctionsGenerator.Python
                 builder.AppendLine(Helpers.AddIndentation(classBuilder.ToString(),
                      1));
             }
+
+            //functions
+            builder.AppendLine(GenerateFunctions(table));
 
 
             IO.WriteFile($"{path}\\{table.Name}.py", (builder.ToString()));
