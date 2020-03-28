@@ -12,6 +12,7 @@ namespace DatabaseFunctionsGenerator.Deployment
         private AngularDeployer _angularDeployer;
         private PhpDeployer _phpDeployer;
         private DatabaseDeployer _databaseDeployer;
+        private PythonDeployer _pythonDeployer;
         
 
         public Deployer(Generator generator)
@@ -20,6 +21,7 @@ namespace DatabaseFunctionsGenerator.Deployment
             _angularDeployer = new AngularDeployer(_generator);
             _phpDeployer = new PhpDeployer(_generator);
             _databaseDeployer = new DatabaseDeployer(_generator);
+            _pythonDeployer = new PythonDeployer(_generator);
         }
 
 
@@ -28,6 +30,7 @@ namespace DatabaseFunctionsGenerator.Deployment
             _angularDeployer.Deploy();
             _phpDeployer.Deploy();
             _databaseDeployer.Deploy();
+            _pythonDeployer.Deploy();
         }
     }
 }

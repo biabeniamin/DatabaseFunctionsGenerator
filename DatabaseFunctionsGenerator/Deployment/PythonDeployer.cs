@@ -17,7 +17,7 @@ namespace DatabaseFunctionsGenerator.Deployment
 
         public void Deploy()
         {
-            IO.CopyDirectory($"GeneratorResult\\{_generator.Timestamp}\\Python",
+            IO.CopyDirectory($"GeneratorResult\\{_generator.Timestamp}\\Python\\Server",
                 $@"{Constants.PythonServerPath}");
         }
     }
