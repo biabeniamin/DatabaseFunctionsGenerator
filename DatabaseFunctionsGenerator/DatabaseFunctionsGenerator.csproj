@@ -92,6 +92,7 @@
     <Compile Include="Deployment\DatabaseDeployer.cs" />
     <Compile Include="Deployment\Deployer.cs" />
     <Compile Include="Deployment\PhpDeployer.cs" />
+    <Compile Include="Deployment\PythonDeployer.cs" />
     <Compile Include="Documentation\DocumentationGenerator.cs" />
     <Compile Include="Generator.cs" />
     <Compile Include="GeneratorConfigGenerator.cs" />
