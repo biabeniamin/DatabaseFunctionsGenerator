@@ -161,6 +161,36 @@ namespace DatabaseFunctionsGenerator.Python
             return builder.ToString();
         }
 
+        private string GenerateGetDedicatedRequestFunctions(Table table)
+        {
+            StringBuilder builder;
+
+            builder = new StringBuilder();
+
+            builder.AppendLine("#get dedicated request funtions");
+            foreach (DedicatedGetRequest request in table.DedicatedGetRequests)
+            {
+                StringBuilder function;
+
+                function = new StringBuilder();
+
+                builder.AppendLine($"def get{table.Name}By{request.ToString("")}(session):");
+
+                function.AppendLine($"result = session.query({table.Name}).all()");
+
+                foreach (Column column in table.ForeignKeyColumns)
+                {
+                    function.AppendLine($"result = complete{column.ParentTable.Name}(session, result)");
+                }
+
+                function.AppendLine($"return result");
+
+                builder.AppendLine(Helpers.AddIndentation(function, 1));
+            }
+
+            return builder.ToString();
+        }
+
         private string GenerateAddFunction(Table table)
         {
             StringBuilder builder;
@@ -210,6 +240,7 @@ namespace DatabaseFunctionsGenerator.Python
 
             builder.AppendLine(GenerateCompleteParentFunctions(table));
             builder.AppendLine(GenerateGetFunction(table));
+            builder.AppendLine(GenerateGetDedicatedRequestFunctions(table));
             builder.AppendLine(GenerateAddFunction(table));
             builder.AppendLine(GenerateUpdateFunction(table));
 
