@@ -191,7 +191,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("import datetime");
             //import parent tables
             foreach (Table parentTable in table.Parents)
-                builder.AppendLine($"from {parentTable.Name} import {parentTable.Name}");
+                builder.AppendLine($"from {parentTable.Name} import {parentTable.Name}, get{parentTable.Name}");
 
             builder.AppendLine($"class {table.Name}(Base):");
             //class content
