@@ -180,6 +180,25 @@ namespace DatabaseFunctionsGenerator.Python
             return builder.ToString();
         }
 
+        private string GenerateUpdateFunction(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder function;
+
+            builder = new StringBuilder();
+            function = new StringBuilder();
+
+            builder.AppendLine("#update funtion");
+
+            builder.AppendLine($"def update{table.SingularName}(session, {table.LowerCaseSingularName}):");
+            function.AppendLine($"session.add({table.LowerCaseSingularName})");
+            function.AppendLine($"session.commit()");
+
+            builder.AppendLine(Helpers.AddIndentation(function, 1));
+
+            return builder.ToString();
+        }
+
         private string GenerateFunctions(Table table)
         {
             StringBuilder builder;
@@ -191,6 +210,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine(GenerateCompleteParentFunctions(table));
             builder.AppendLine(GenerateGetFunction(table));
             builder.AppendLine(GenerateAddFunction(table));
+            builder.AppendLine(GenerateUpdateFunction(table));
 
             return builder.ToString();
         }
