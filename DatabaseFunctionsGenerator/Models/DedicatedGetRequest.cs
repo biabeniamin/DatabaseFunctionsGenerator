@@ -33,7 +33,7 @@ namespace DatabaseFunctionsGenerator
             _columns.Add(column2);
         }
 
-        public string ToString(string delimitator)
+        public string ToString(string delimitator, bool withLowerCase = false)
         {
             StringBuilder builder;
 
@@ -41,7 +41,10 @@ namespace DatabaseFunctionsGenerator
 
             foreach (Column column in _columns)
             {
-                builder.Append($"{column.Name}{delimitator}");
+                if(withLowerCase)
+                    builder.Append($"{column.LowerCaseName}{delimitator}");
+                else
+                    builder.Append($"{column.Name}{delimitator}");
             }
 
             if (builder.ToString().Contains(delimitator))
