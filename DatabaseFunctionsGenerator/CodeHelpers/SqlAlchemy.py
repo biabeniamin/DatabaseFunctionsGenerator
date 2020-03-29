@@ -12,8 +12,8 @@ database="!--databaseName--!"
 engine = create_engine('mysql+mysqlconnector://%s@%s:%d/%s'%(username, server, port, database), echo=True)
 
 def object_as_dict(obj):
-    return {c.key: getattr(obj, c.key)
-            for c in inspect(obj).mapper.column_attrs}
+    return {c: getattr(obj, c)
+            for c in obj.__dict__.keys() if c[0]!='_'}
 
 def alchemyencoder(obj):
     """JSON encoder function for SQLAlchemy special classes."""
