@@ -124,6 +124,12 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine($"def get{table.Name}(session):");
 
             function.AppendLine($"result = session.query({table.Name}).all()");
+
+            foreach(Column column in table.ForeignKeyColumns)
+            {
+                function.AppendLine($"result = complete{column.ParentTable.Name}(session, result)");
+            }
+
             function.AppendLine($"return result");
 
             builder.AppendLine(Helpers.AddIndentation(function, 1));
