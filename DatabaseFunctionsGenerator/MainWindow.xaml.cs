@@ -95,11 +95,18 @@ namespace DatabaseFunctionsGenerator
                         Database.Tables[0].Columns.Add(new Column("CNP", new ColumnType(Types.Varchar, 20)));
                         Database.Tables[0].Columns.Add(new Column("NumberTelefon", new ColumnType(Types.Varchar, 20 )));*/
 
+            Database.Tables.Add(new Table("Phones"));
+            Database.Tables.Last().RequiresSecurityToken = false;
+            Database.Tables.Last().Columns.Add(new Column("Name", new ColumnType(Types.Varchar, 10)));
+            Database.Tables.Last().Columns.Add(new Column("Type", new ColumnType(Types.Varchar, 10)));
+
             Database.Tables.Add(new Table("Locations"));
             Database.Tables.Last().RequiresSecurityToken = false;
             Database.Tables.Last().Columns.Add(new Column("TerminalId", new ColumnType(Types.Integer)));
             Database.Tables.Last().Columns.Add(new Column("Latitude", new ColumnType(Types.Double)));
             Database.Tables.Last().Columns.Add(new Column("Longitude", new ColumnType(Types.Double)));
+
+            Database.Relations.Add(new Relation(Database.Tables[0], Database.Tables[1], RelationType.OneToMany));
             //Database.Tables.Add(new Table("Prezenta"));
             //Database.Tables.Add(new Table("Locations"));
             //Database.Tables.Add(new Table("AccessLogs"));

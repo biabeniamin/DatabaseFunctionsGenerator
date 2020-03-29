@@ -95,9 +95,7 @@ namespace DatabaseFunctionsGenerator.Python
 
             builder.AppendLine($"def get{table.Name}(session):");
 
-            function.AppendLine($"result = session.query(Locations).all()");
-            function.AppendLine($"for row in result:");
-            function.AppendLine($"\tprint (row)");
+            function.AppendLine($"result = session.query({table.Name}).all()");
             function.AppendLine($"return result");
 
             builder.AppendLine(Helpers.AddIndentation(function, 1));
