@@ -84,6 +84,33 @@ namespace DatabaseFunctionsGenerator.Python
             return builder.ToString();
         }
 
+        private string GenerateCompleteParentFunctions(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder function;
+
+            builder = new StringBuilder();
+
+            foreach (Column column in table.ForeignKeyColumns)
+            {
+                Table parentTable = column.ParentTable;
+                function = new StringBuilder();
+
+                builder.AppendLine($"#complete {parentTable.LowerCaseName} funtion");
+
+                builder.AppendLine($"def complete{parentTable.Name}(session, {table.LowerCaseName}):");
+
+                function.AppendLine($"{parentTable.LowerCaseName} = get{parentTable.Name}(session)");
+                function.AppendLine($"for row in {parentTable.LowerCaseName}:");
+                function.AppendLine($"\trow.{parentTable.LowerCaseSingularName} = {parentTable.LowerCaseName}[0]");
+                function.AppendLine($"return {table.LowerCaseName}");
+
+                builder.AppendLine(Helpers.AddIndentation(function, 1));
+            }
+
+            return builder.ToString();
+        }
+
         private string GenerateGetFunction(Table table)
         {
             StringBuilder builder;
@@ -131,6 +158,7 @@ namespace DatabaseFunctionsGenerator.Python
 
             builder.AppendLine("#Functions");
 
+            builder.AppendLine(GenerateCompleteParentFunctions(table));
             builder.AppendLine(GenerateGetFunction(table));
             builder.AppendLine(GenerateAddFunction(table));
 
