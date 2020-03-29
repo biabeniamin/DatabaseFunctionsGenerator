@@ -32,6 +32,7 @@ namespace DatabaseFunctionsGenerator.Python
 
                 builder.Append($"{column.ParentTable.LowerCaseName} = relationship({column.ParentTable.Name},");
                 builder.AppendLine($"backref = backref('{table.LowerCaseName}'))");
+                builder.AppendLine($"{column.ParentTable.LowerCaseSingularName} = null");
             }
 
             return builder.ToString();
