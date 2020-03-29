@@ -174,9 +174,14 @@ namespace DatabaseFunctionsGenerator.Python
 
                 function = new StringBuilder();
 
-                builder.AppendLine($"def get{table.Name}By{request.ToString("")}(session):");
+                builder.AppendLine($"def get{table.Name}By{request.ToString("")}(session, {request.ToString(", ", true)}):");
 
-                function.AppendLine($"result = session.query({table.Name}).all()");
+                function.Append($"result = session.query({table.Name}).filter(");
+                foreach(Column column in request.Columns)
+                    function.Append($"{table.Name}.{column.LowerCaseName} == {column.LowerCaseName}, ");
+                Helpers.RemoveLastApparition(function, ", ");
+
+                function.AppendLine($").all()");
 
                 foreach (Column column in table.ForeignKeyColumns)
                 {
