@@ -101,8 +101,32 @@ namespace DatabaseFunctionsGenerator.Python
                 builder.AppendLine($"def complete{parentTable.Name}(session, {table.LowerCaseName}):");
 
                 function.AppendLine($"{parentTable.LowerCaseName} = get{parentTable.Name}(session)");
-                function.AppendLine($"for row in {parentTable.LowerCaseName}:");
-                function.AppendLine($"\trow.{parentTable.LowerCaseSingularName} = {parentTable.LowerCaseName}[0]");
+                function.AppendLine($"for row in {table.LowerCaseName}:");
+                function.AppendLine($"\tstart = 0");
+                function.AppendLine($"\tend = len({parentTable.LowerCaseName})");
+                function.AppendLine($"\twhile True:");
+                {
+                    StringBuilder whileBlock = new StringBuilder();
+
+                    whileBlock.AppendLine("mid = floor((start + end) / 2)");
+                    whileBlock.AppendLine("if(row.phoneId > phones[mid].phoneId):");
+                    whileBlock.AppendLine("\tstart = mid + 1");
+
+                    whileBlock.AppendLine("elif(row.phoneId < phones[mid].phoneId):");
+                    whileBlock.AppendLine("\tend = mid - 1");
+
+                    whileBlock.AppendLine("elif(row.phoneId == phones[mid].phoneId):");
+                    whileBlock.AppendLine("\tstart = mid + 1");
+                    whileBlock.AppendLine("\tend = mid - 1");
+                    whileBlock.AppendLine($"\trow.{parentTable.LowerCaseSingularName} = {parentTable.LowerCaseName}[mid]");
+                    whileBlock.AppendLine();
+
+                    whileBlock.AppendLine("if(start > end):");
+                    whileBlock.AppendLine("\tbreak");
+
+
+                    function.AppendLine(Helpers.AddIndentation(whileBlock, 2));
+                }
                 function.AppendLine($"return {table.LowerCaseName}");
 
                 builder.AppendLine(Helpers.AddIndentation(function, 1));
@@ -189,6 +213,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("from sqlalchemy.dialects.mysql import DOUBLE");
             builder.AppendLine("from ValidationError import ValidationError, validate_integer");
             builder.AppendLine("import datetime");
+            builder.AppendLine("from math import floor");
             //import parent tables
             foreach (Table parentTable in table.Parents)
                 builder.AppendLine($"from {parentTable.Name} import {parentTable.Name}, get{parentTable.Name}");
