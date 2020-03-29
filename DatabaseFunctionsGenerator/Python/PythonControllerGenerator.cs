@@ -191,7 +191,8 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("#update funtion");
 
             builder.AppendLine($"def update{table.SingularName}(session, {table.LowerCaseSingularName}):");
-            function.AppendLine($"session.add({table.LowerCaseSingularName})");
+            function.AppendLine($"result = session.query(Locations).filter(Locations.locationId == location.locationId).first()");
+            function.AppendLine($"result = {table.LowerCaseSingularName}");
             function.AppendLine($"session.commit()");
 
             builder.AppendLine(Helpers.AddIndentation(function, 1));
