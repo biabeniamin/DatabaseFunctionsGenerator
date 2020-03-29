@@ -83,6 +83,28 @@ namespace DatabaseFunctionsGenerator.Python
             return builder.ToString();
         }
 
+        private string GenerateGetFunction(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder function;
+
+            builder = new StringBuilder();
+            function = new StringBuilder();
+
+            builder.AppendLine("#get funtion");
+
+            builder.AppendLine($"def get{table.Name}(session):");
+
+            function.AppendLine($"result = session.query(Locations).all()");
+            function.AppendLine($"for row in result:");
+            function.AppendLine($"\tprint (row)");
+            function.AppendLine($"return result");
+
+            builder.AppendLine(Helpers.AddIndentation(function, 1));
+
+            return builder.ToString();
+        }
+
         private string GenerateAddFunction(Table table)
         {
             StringBuilder builder;
@@ -110,7 +132,8 @@ namespace DatabaseFunctionsGenerator.Python
 
             builder.AppendLine("#Functions");
 
-            builder.AppendLine(GenerateAddFunction(table)); 
+            builder.AppendLine(GenerateGetFunction(table));
+            builder.AppendLine(GenerateAddFunction(table));
 
             return builder.ToString();
         }
