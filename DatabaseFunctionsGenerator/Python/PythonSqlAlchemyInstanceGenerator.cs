@@ -31,7 +31,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine();
 
             builder.AppendLine("Session = sessionmaker(bind = engine, autocommit = False, autoflush = False)");
-            builder.AppendLine("s = scoped_session(Session)");
+            builder.AppendLine("session = scoped_session(Session)");
 
             //create database
             builder.AppendLine("Base.metadata.bind = engine");
