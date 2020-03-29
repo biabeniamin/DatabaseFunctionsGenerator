@@ -54,6 +54,9 @@ namespace DatabaseFunctionsGenerator.Python
                     builder.Append(", primary_key=True");
                 }
 
+                if (column == table.CreationTimeColumn)
+                    builder.Append(", default=datetime.datetime.utcnow");
+
                 builder.AppendLine(")");
             }
             builder.AppendLine(GenerateForeignKeyFields(table));
@@ -129,6 +132,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("from sqlalchemy import *");
             builder.AppendLine("from sqlalchemy.dialects.mysql import DOUBLE");
             builder.AppendLine("from ValidationError import ValidationError, validate_integer");
+            builder.AppendLine("import datetime");
             //import parent tables
             foreach (Table parentTable in table.Parents)
                 builder.AppendLine($"from {parentTable.Name} import {parentTable.Name}");
