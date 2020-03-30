@@ -27,7 +27,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("#get endpoint");
 
             builder.AppendLine($"def get(self):");
-            function.AppendLine($"return {table.Name}.get{table.Name}(session)");
+            function.AppendLine($"return {table.SingularName}.get{table.Name}(session)");
 
             builder.AppendLine(Helpers.AddIndentation(function, 1));
 
@@ -58,7 +58,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("#generated automatically");
             builder.AppendLine("from flask_restful import Resource");
             builder.AppendLine("from SqlAlchemyMain import *");
-            builder.AppendLine($"import {table.Name}");
+            builder.AppendLine($"import {table.SingularName}");
 
             builder.AppendLine($"class {table.SingularName}List(Resource):");
             //endpoints

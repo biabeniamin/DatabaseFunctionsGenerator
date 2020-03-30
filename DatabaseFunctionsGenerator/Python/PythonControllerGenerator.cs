@@ -30,7 +30,7 @@ namespace DatabaseFunctionsGenerator.Python
                 builder.Append($", ForeignKey(\"{column.ParentTable.LowerCaseName}.{column.ParentTable.PrimaryKeyColumn.LowerCaseName}\")");
                 builder.AppendLine(")");
 
-                builder.Append($"{column.ParentTable.LowerCaseName} = relationship({column.ParentTable.Name},");
+                builder.Append($"{column.ParentTable.LowerCaseName} = relationship({column.ParentTable.SingularName},");
                 builder.AppendLine($"backref = backref('{table.LowerCaseName}'))");
                 builder.AppendLine($"{column.ParentTable.LowerCaseSingularName} = null");
             }
@@ -147,7 +147,7 @@ namespace DatabaseFunctionsGenerator.Python
 
             builder.AppendLine($"def get{table.Name}(session):");
 
-            function.AppendLine($"result = session.query({table.Name}).all()");
+            function.AppendLine($"result = session.query({table.SingularName}).all()");
 
             foreach(Column column in table.ForeignKeyColumns)
             {
@@ -330,9 +330,9 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("from math import floor");
             //import parent tables
             foreach (Table parentTable in table.Parents)
-                builder.AppendLine($"from {parentTable.Name} import {parentTable.Name}, get{parentTable.Name}");
+                builder.AppendLine($"from {parentTable.SingularName} import {parentTable.SingularName}, get{parentTable.Name}");
 
-            builder.AppendLine($"class {table.Name}(Base):");
+            builder.AppendLine($"class {table.SingularName}(Base):");
             //class content
             {
                 classBuilder.AppendLine("@declared_attr");
@@ -355,7 +355,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine(GenerateAPIEndpoints(table));
 
 
-            IO.WriteFile($"{path}\\{table.Name}.py", (builder.ToString()));
+            IO.WriteFile($"{path}\\{table.SingularName}.py", (builder.ToString()));
 
             //return builder.ToString();
         }
