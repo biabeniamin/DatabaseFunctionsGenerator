@@ -15,6 +15,16 @@ namespace DatabaseFunctionsGenerator.Python
             _database = database;
         }
 
+        private string GenerateAPIEndpoints(Table table)
+        {
+            StringBuilder builder;
+
+            builder = new StringBuilder();
+
+            builder.AppendLine("#API endpoints");
+
+            return builder.ToString();
+        }
 
         private void GenerateController(Table table, string path)
         {
@@ -24,6 +34,9 @@ namespace DatabaseFunctionsGenerator.Python
 
             //imports
             builder.AppendLine("#generated automatically");
+
+            //endpoints
+            builder.AppendLine(GenerateAPIEndpoints(table));
 
             IO.WriteFile($"{path}\\{table.SingularName}Endpoints.py", (builder.ToString()));
         }
