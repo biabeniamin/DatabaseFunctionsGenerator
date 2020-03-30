@@ -255,6 +255,29 @@ namespace DatabaseFunctionsGenerator.Python
             return builder.ToString();
         }
 
+        private string GenerateRequestParserArgumentsFunction(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder function;
+
+            builder = new StringBuilder();
+            function = new StringBuilder();
+
+            builder.AppendLine("#request parser funtion");
+
+            builder.AppendLine($"def get{table.LowerCaseSingularName}RequestArguments():");
+            function.AppendLine($"parser = reqparse.RequestParser()");
+            foreach (Column column in table.EditableColumns)
+            {
+                function.AppendLine($"parser.add_argument('{column.LowerCaseName}')");
+            }
+            function.AppendLine($"return parser");
+
+            builder.AppendLine(Helpers.AddIndentation(function, 1));
+
+            return builder.ToString();
+        }
+
         private string GenerateFunctions(Table table)
         {
             StringBuilder builder;
@@ -280,6 +303,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder = new StringBuilder();
 
             builder.AppendLine("#API endpoints");
+            builder.AppendLine(GenerateRequestParserArgumentsFunction(table));
 
             return builder.ToString();
         }
@@ -301,6 +325,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("from sqlalchemy import *");
             builder.AppendLine("from sqlalchemy.dialects.mysql import DOUBLE");
             builder.AppendLine("from ValidationError import ValidationError, validate_integer");
+            builder.AppendLine("from flask_restful import reqparse");
             builder.AppendLine("import datetime");
             builder.AppendLine("from math import floor");
             //import parent tables
