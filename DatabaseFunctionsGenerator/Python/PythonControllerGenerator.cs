@@ -273,6 +273,17 @@ namespace DatabaseFunctionsGenerator.Python
             return builder.ToString();
         }
 
+        private string GenerateAPIEndpoints(Table table)
+        {
+            StringBuilder builder;
+
+            builder = new StringBuilder();
+
+            builder.AppendLine("#API endpoints");
+
+            return builder.ToString();
+        }
+
         private void GenerateController(Table table, string path)
         {
             StringBuilder builder;
@@ -315,6 +326,8 @@ namespace DatabaseFunctionsGenerator.Python
 
             //functions
             builder.AppendLine(GenerateFunctions(table));
+            //endpoints
+            builder.AppendLine(GenerateAPIEndpoints(table));
 
 
             IO.WriteFile($"{path}\\{table.Name}.py", (builder.ToString()));
