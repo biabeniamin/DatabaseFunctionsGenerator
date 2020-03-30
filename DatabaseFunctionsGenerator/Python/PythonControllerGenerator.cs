@@ -235,6 +235,26 @@ namespace DatabaseFunctionsGenerator.Python
             return builder.ToString();
         }
 
+        private string GenerateDeleteFunction(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder function;
+
+            builder = new StringBuilder();
+            function = new StringBuilder();
+
+            builder.AppendLine("#delete funtion");
+
+            builder.AppendLine($"def delete{table.SingularName}(session, {table.LowerCaseSingularName}):");
+            function.AppendLine($"result = session.query(Locations).filter(Locations.locationId == location.locationId).first()");
+            function.AppendLine($"session.delete(result)");
+            function.AppendLine($"session.commit()");
+
+            builder.AppendLine(Helpers.AddIndentation(function, 1));
+
+            return builder.ToString();
+        }
+
         private string GenerateFunctions(Table table)
         {
             StringBuilder builder;
@@ -248,6 +268,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine(GenerateGetDedicatedRequestFunctions(table));
             builder.AppendLine(GenerateAddFunction(table));
             builder.AppendLine(GenerateUpdateFunction(table));
+            builder.AppendLine(GenerateDeleteFunction(table));
 
             return builder.ToString();
         }
