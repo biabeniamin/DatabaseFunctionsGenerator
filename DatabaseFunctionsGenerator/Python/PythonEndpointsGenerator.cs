@@ -29,14 +29,18 @@ namespace DatabaseFunctionsGenerator.Python
         private void GenerateController(Table table, string path)
         {
             StringBuilder builder;
+            StringBuilder classBuilder;
 
             builder = new StringBuilder();
+            classBuilder = new StringBuilder();
 
             //imports
             builder.AppendLine("#generated automatically");
 
+            builder.AppendLine($"class {table.SingularName}List(Resource):");
             //endpoints
-            builder.AppendLine(GenerateAPIEndpoints(table));
+            classBuilder.AppendLine(GenerateAPIEndpoints(table));
+            builder.AppendLine(Helpers.AddIndentation(classBuilder, 1));
 
             IO.WriteFile($"{path}\\{table.SingularName}Endpoints.py", (builder.ToString()));
         }
