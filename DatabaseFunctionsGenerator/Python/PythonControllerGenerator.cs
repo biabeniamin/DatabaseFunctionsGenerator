@@ -337,7 +337,7 @@ namespace DatabaseFunctionsGenerator.Python
             {
                 classBuilder.AppendLine("@declared_attr");
                 classBuilder.AppendLine("def __tablename__(cls):");
-                classBuilder.AppendLine("\treturn cls.__name__.lower()");
+                classBuilder.AppendLine($"\treturn '{table.LowerCaseName}'");
 
                 //generate fields
                 classBuilder.AppendLine(GenerateFields(table));
