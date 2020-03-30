@@ -226,7 +226,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("#update funtion");
 
             builder.AppendLine($"def update{table.SingularName}(session, {table.LowerCaseSingularName}):");
-            function.AppendLine($"result = session.query(Locations).filter(Locations.locationId == location.locationId).first()");
+            function.AppendLine($"result = session.query({table.Name}).filter({table.Name}.{table.PrimaryKeyColumn.LowerCaseName} == {table.LowerCaseSingularName}.{table.PrimaryKeyColumn.LowerCaseName}).first()");
             function.AppendLine($"result = {table.LowerCaseSingularName}");
             function.AppendLine($"session.commit()");
 
@@ -246,7 +246,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("#delete funtion");
 
             builder.AppendLine($"def delete{table.SingularName}(session, {table.LowerCaseSingularName}):");
-            function.AppendLine($"result = session.query(Locations).filter(Locations.locationId == location.locationId).first()");
+            function.AppendLine($"result = session.query({table.Name}).filter({table.Name}.{table.PrimaryKeyColumn.LowerCaseName} == {table.LowerCaseSingularName}.{table.PrimaryKeyColumn.LowerCaseName}).first()");
             function.AppendLine($"session.delete(result)");
             function.AppendLine($"session.commit()");
 
