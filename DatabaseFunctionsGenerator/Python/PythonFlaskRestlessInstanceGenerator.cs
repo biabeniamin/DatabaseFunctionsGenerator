@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace DatabaseFunctionsGenerator.Python
 {
-    class PythonFlaskInstanceGenerator : IGenerator
+    class PythonFlaskRestlessInstanceGenerator : IGenerator
     {
         private Database _database;
 
-        public PythonFlaskInstanceGenerator(Database database)
+        public PythonFlaskRestlessInstanceGenerator(Database database)
         {
             _database = database;
         }
@@ -64,7 +64,7 @@ namespace DatabaseFunctionsGenerator.Python
             //start the server
             builder.AppendLine("app.run(debug=True, host='0.0.0.0', port=5000)");
 
-            IO.WriteFile($"{path}\\main.py", (builder.ToString()));
+            IO.WriteFile($"{path}\\flaskRestless.py", (builder.ToString()));
         }
     }
 }

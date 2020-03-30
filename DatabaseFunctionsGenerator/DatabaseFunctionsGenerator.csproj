@@ -124,7 +124,7 @@
     <Compile Include="Php\PhpRequestsGenerator.cs" />
     <Compile Include="Python\PythonSqlAlchemyInstanceGenerator.cs" />
     <Compile Include="Python\PythonControllerGenerator.cs" />
-    <Compile Include="Python\PythonFlaskInstanceGenerator.cs" />
+    <Compile Include="Python\PythonFlaskRestlessInstanceGenerator.cs" />
     <Compile Include="Python\PythonGenerator.cs" />
     <Compile Include="Python\PythonHelpersGenerator.cs" />
     <Compile Include="Python\PythonModelsGenerator.cs" />
