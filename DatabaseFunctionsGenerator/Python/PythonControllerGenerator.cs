@@ -250,9 +250,10 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("#delete funtion");
 
             builder.AppendLine($"def delete{table.SingularName}(session, {table.PrimaryKeyColumn.LowerCaseName}):");
-            function.AppendLine($"result = session.query({table.Name}).filter({table.SingularName}.{table.PrimaryKeyColumn.LowerCaseName} == {table.PrimaryKeyColumn.LowerCaseName}).first()");
+            function.AppendLine($"result = session.query({table.SingularName}).filter({table.SingularName}.{table.PrimaryKeyColumn.LowerCaseName} == {table.PrimaryKeyColumn.LowerCaseName}).first()");
             function.AppendLine($"session.delete(result)");
             function.AppendLine($"session.commit()");
+            function.AppendLine($"return result");
 
             builder.AppendLine(Helpers.AddIndentation(function, 1));
 
