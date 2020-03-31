@@ -65,6 +65,26 @@ namespace DatabaseFunctionsGenerator.Python
             return builder.ToString();
         }
 
+        private string GenerateDeleteEndpoint(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder function;
+
+            builder = new StringBuilder();
+            function = new StringBuilder();
+
+            builder.AppendLine("#delete endpoint");
+
+            builder.AppendLine($"def delete(self):");
+            function.AppendLine($"requestedArgs = getArguments(['{table.PrimaryKeyColumn.LowerCaseName}'])");
+            function.AppendLine($"args  = requestedArgs.parse_args()");
+            function.AppendLine($"return [{table.SingularName}.delete{table.SingularName}(session, args['{table.PrimaryKeyColumn.LowerCaseName}'])]");
+
+            builder.AppendLine(Helpers.AddIndentation(function, 1));
+
+            return builder.ToString();
+        }
+
         private string GenerateAPIEndpoints(Table table)
         {
             StringBuilder builder;
@@ -74,6 +94,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("#API endpoints");
             builder.AppendLine(GenerateGetEndpoint(table));
             builder.AppendLine(GeneratePostEndpoint(table));
+            builder.AppendLine(GenerateDeleteEndpoint(table));
 
             return builder.ToString();
         }
