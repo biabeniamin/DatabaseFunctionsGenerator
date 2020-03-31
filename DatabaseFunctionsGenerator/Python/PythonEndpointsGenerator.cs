@@ -48,8 +48,7 @@ namespace DatabaseFunctionsGenerator.Python
             function.AppendLine($"requestedArgs = getArguments(['{table.ToString("', '", true)}'])");
             function.AppendLine($"args  = requestedArgs.parse_args()");
             function.AppendLine($"{table.LowerCaseSingularName}  = dict_as_obj(args, {table.SingularName}.{table.SingularName})");
-            function.AppendLine($"{table.SingularName}.add{table.SingularName}(session, {table.LowerCaseSingularName})");
-            function.AppendLine($"return {table.SingularName}.get{table.Name}(session)");
+            function.AppendLine($"return [{table.SingularName}.add{table.SingularName}(session, {table.LowerCaseSingularName})]");
 
             builder.AppendLine(Helpers.AddIndentation(function, 1));
 
