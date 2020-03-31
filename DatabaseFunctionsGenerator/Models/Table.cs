@@ -303,13 +303,13 @@ namespace DatabaseFunctionsGenerator
             return Name;
         }
 
-        public string ToString(string delimitator, bool withLowerCase = false)
+        public string ToString(string delimitator, bool withLowerCase = false, bool onlyEditable = false)
         {
             StringBuilder builder;
 
             builder = new StringBuilder();
 
-            foreach (Column column in _columns)
+            foreach (Column column in onlyEditable? EditableColumns: Columns)
             {
                 if (withLowerCase)
                     builder.Append($"{column.LowerCaseName}{delimitator}");
