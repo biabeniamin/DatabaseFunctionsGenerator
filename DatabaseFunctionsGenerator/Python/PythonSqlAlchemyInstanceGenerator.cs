@@ -26,8 +26,6 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("from sqlalchemy import *");
             builder.AppendLine("from SqlAlchemy import Base, engine");
             builder.AppendLine("from ValidationError import ValidationError");
-            foreach (Table table in _database.Tables)
-                builder.AppendLine($"from {table.Name} import {table.Name}");
             builder.AppendLine();
 
             builder.AppendLine("Session = sessionmaker(bind = engine, autocommit = False, autoflush = False)");
