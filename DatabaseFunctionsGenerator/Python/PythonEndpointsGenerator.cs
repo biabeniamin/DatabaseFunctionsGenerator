@@ -34,6 +34,27 @@ namespace DatabaseFunctionsGenerator.Python
             return builder.ToString();
         }
 
+        private string GeneratePostEndpoint(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder function;
+
+            builder = new StringBuilder();
+            function = new StringBuilder();
+
+            builder.AppendLine("#post endpoint");
+
+            builder.AppendLine($"def post(self):");
+            function.AppendLine($"requestedArgs = getArguments(['{table.ToString("', '", true)}'])");
+            function.AppendLine($"args  = requestedArgs.parse_args()");
+            function.AppendLine($"print(args)");
+            function.AppendLine($"return {table.SingularName}.get{table.Name}(session)");
+
+            builder.AppendLine(Helpers.AddIndentation(function, 1));
+
+            return builder.ToString();
+        }
+
         private string GenerateAPIEndpoints(Table table)
         {
             StringBuilder builder;
@@ -42,6 +63,7 @@ namespace DatabaseFunctionsGenerator.Python
 
             builder.AppendLine("#API endpoints");
             builder.AppendLine(GenerateGetEndpoint(table));
+            builder.AppendLine(GeneratePostEndpoint(table));
 
             return builder.ToString();
         }
@@ -58,6 +80,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("#generated automatically");
             builder.AppendLine("from flask_restful import Resource");
             builder.AppendLine("from SqlAlchemyMain import *");
+            builder.AppendLine("from FlaskRestfulHelpers import getArguments");
             builder.AppendLine($"import {table.SingularName}");
 
             builder.AppendLine($"class {table.SingularName}List(Resource):");
