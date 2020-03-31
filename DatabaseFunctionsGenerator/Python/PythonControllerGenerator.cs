@@ -176,9 +176,9 @@ namespace DatabaseFunctionsGenerator.Python
 
                 builder.AppendLine($"def get{table.Name}By{request.ToString("")}(session, {request.ToString(", ", true)}):");
 
-                function.Append($"result = session.query({table.Name}).filter(");
+                function.Append($"result = session.query({table.SingularName}).filter(");
                 foreach(Column column in request.Columns)
-                    function.Append($"{table.Name}.{column.LowerCaseName} == {column.LowerCaseName}, ");
+                    function.Append($"{table.SingularName}.{column.LowerCaseName} == {column.LowerCaseName}, ");
                 Helpers.RemoveLastApparition(function, ", ");
 
                 function.AppendLine($").all()");
