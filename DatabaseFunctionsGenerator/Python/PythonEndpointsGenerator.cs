@@ -27,6 +27,16 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("#get endpoint");
 
             builder.AppendLine($"def get(self):");
+            function.AppendLine($"requestedArgs = getArguments(['cmd', '{table.ToString("', '", true)}'])");
+            function.AppendLine($"args  = requestedArgs.parse_args()");
+
+            //dedicated requests
+            foreach(DedicatedGetRequest request in table.DedicatedGetRequests)
+            {
+                function.AppendLine($"if args['cmd'] == 'get{table.Name}By{request.ToString("")}':");
+                function.AppendLine($"\treturn {table.SingularName}.get{table.Name}By{request.ToString("")}(session, args['{request.ToString(", args['",true)}'])");
+            }
+
             function.AppendLine($"return {table.SingularName}.get{table.Name}(session)");
 
             builder.AppendLine(Helpers.AddIndentation(function, 1));
