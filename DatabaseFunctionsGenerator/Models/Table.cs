@@ -302,5 +302,27 @@ namespace DatabaseFunctionsGenerator
         {
             return Name;
         }
+
+        public string ToString(string delimitator, bool withLowerCase = false)
+        {
+            StringBuilder builder;
+
+            builder = new StringBuilder();
+
+            foreach (Column column in _columns)
+            {
+                if (withLowerCase)
+                    builder.Append($"{column.LowerCaseName}{delimitator}");
+                else
+                    builder.Append($"{column.Name}{delimitator}");
+            }
+
+            if (builder.ToString().Contains(delimitator))
+            {
+                builder.Remove(builder.ToString().LastIndexOf(delimitator), delimitator.Length);
+            }
+
+            return builder.ToString();
+        }
     }
 }
