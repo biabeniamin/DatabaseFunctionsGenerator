@@ -17,16 +17,19 @@ namespace DatabaseFunctionsGenerator.Python
         {
             StringBuilder builder;
             string sqlAlchemy;
+            string restfulHelpers;
             string validationError;
 
             builder = new StringBuilder();
             sqlAlchemy = IO.ReadFile("CodeHelpers\\SqlAlchemy.py");
-            validationError= IO.ReadFile("CodeHelpers\\ValidationError.py"); ;
+            restfulHelpers = IO.ReadFile("CodeHelpers\\FlaskRestfulHelpers.py");
+            validationError = IO.ReadFile("CodeHelpers\\ValidationError.py"); ;
 
             //replace databaseName
             sqlAlchemy = sqlAlchemy.Replace("!--databaseName--!", _database.DatabaseName);
 
             IO.WriteFile($"{path}\\SqlAlchemy.py", sqlAlchemy);
+            IO.WriteFile($"{path}\\FlaskRestfulHelpers.py", restfulHelpers);
             IO.WriteFile($"{path}\\ValidationError.py", validationError);
 
             return builder.ToString();
