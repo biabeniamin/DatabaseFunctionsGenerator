@@ -249,8 +249,8 @@ namespace DatabaseFunctionsGenerator.Python
 
             builder.AppendLine("#delete funtion");
 
-            builder.AppendLine($"def delete{table.SingularName}(session, {table.LowerCaseSingularName}):");
-            function.AppendLine($"result = session.query({table.Name}).filter({table.Name}.{table.PrimaryKeyColumn.LowerCaseName} == {table.LowerCaseSingularName}.{table.PrimaryKeyColumn.LowerCaseName}).first()");
+            builder.AppendLine($"def delete{table.SingularName}(session, {table.PrimaryKeyColumn.LowerCaseName}):");
+            function.AppendLine($"result = session.query({table.Name}).filter({table.SingularName}.{table.PrimaryKeyColumn.LowerCaseName} == {table.PrimaryKeyColumn.LowerCaseName}).first()");
             function.AppendLine($"session.delete(result)");
             function.AppendLine($"session.commit()");
 
