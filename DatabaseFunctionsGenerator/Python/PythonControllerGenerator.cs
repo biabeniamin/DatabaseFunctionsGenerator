@@ -210,6 +210,9 @@ namespace DatabaseFunctionsGenerator.Python
             function.AppendLine($"{table.LowerCaseSingularName}.{table.CreationTimeColumn.LowerCaseName} = datetime.datetime.utcnow()");
             function.AppendLine($"session.add({table.LowerCaseSingularName})");
             function.AppendLine($"session.commit()");
+            function.AppendLine($"#this must stay because sqlalchemy query the database because of this line");
+            function.AppendLine($"print('Value inserted with {table.PrimaryKeyColumn.LowerCaseName}=', {table.LowerCaseSingularName}.{table.PrimaryKeyColumn.LowerCaseName})");
+            function.AppendLine($"return {table.LowerCaseSingularName}");
 
             builder.AppendLine(Helpers.AddIndentation(function, 1));
 
