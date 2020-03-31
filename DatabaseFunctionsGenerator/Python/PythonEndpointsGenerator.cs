@@ -47,7 +47,8 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine($"def post(self):");
             function.AppendLine($"requestedArgs = getArguments(['{table.ToString("', '", true)}'])");
             function.AppendLine($"args  = requestedArgs.parse_args()");
-            function.AppendLine($"print(args)");
+            function.AppendLine($"{table.LowerCaseSingularName}  = dict_as_obj(args, 0, {table.SingularName}.{table.SingularName})");
+            function.AppendLine($"{table.SingularName}.add{table.SingularName}(session, {table.LowerCaseSingularName})");
             function.AppendLine($"return {table.SingularName}.get{table.Name}(session)");
 
             builder.AppendLine(Helpers.AddIndentation(function, 1));
@@ -79,6 +80,7 @@ namespace DatabaseFunctionsGenerator.Python
             //imports
             builder.AppendLine("#generated automatically");
             builder.AppendLine("from flask_restful import Resource");
+            builder.AppendLine("from SqlAlchemy import dict_as_obj");
             builder.AppendLine("from SqlAlchemyMain import *");
             builder.AppendLine("from FlaskRestfulHelpers import getArguments");
             builder.AppendLine($"import {table.SingularName}");
