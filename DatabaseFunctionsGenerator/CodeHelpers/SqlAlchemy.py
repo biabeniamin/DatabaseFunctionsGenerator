@@ -15,6 +15,12 @@ def object_as_dict(obj):
     return {c: getattr(obj, c)
             for c in obj.__dict__.keys() if c[0]!='_'}
 
+def dict_as_obj(args, loc2, obj):
+	loc = obj()
+	for arg in args:
+		setattr(loc, arg, args[arg])
+	return loc 
+
 def alchemyencoder(obj):
     """JSON encoder function for SQLAlchemy special classes."""
     if isinstance(obj, datetime.date):
