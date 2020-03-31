@@ -207,6 +207,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("#add funtion");
 
             builder.AppendLine($"def add{table.SingularName}(session, {table.LowerCaseSingularName}):");
+            function.AppendLine($"{table.LowerCaseSingularName}.{table.CreationTimeColumn.LowerCaseName} = datetime.datetime.utcnow()");
             function.AppendLine($"session.add({table.LowerCaseSingularName})");
             function.AppendLine($"session.commit()");
 
