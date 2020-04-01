@@ -233,6 +233,8 @@ namespace DatabaseFunctionsGenerator.Python
             function.AppendLine($"result = session.query({table.SingularName}).filter({table.SingularName}.{table.PrimaryKeyColumn.LowerCaseName} == {table.LowerCaseSingularName}.{table.PrimaryKeyColumn.LowerCaseName}).first()");
             function.AppendLine($"result = {table.LowerCaseSingularName}");
             function.AppendLine($"session.commit()");
+            function.AppendLine($"result = session.query({table.SingularName}).filter({table.SingularName}.{table.PrimaryKeyColumn.LowerCaseName} == {table.LowerCaseSingularName}.{table.PrimaryKeyColumn.LowerCaseName}).first()");
+            function.AppendLine($"return result");
 
             builder.AppendLine(Helpers.AddIndentation(function, 1));
 
