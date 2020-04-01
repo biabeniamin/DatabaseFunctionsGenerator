@@ -230,7 +230,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("#update funtion");
 
             builder.AppendLine($"def update{table.SingularName}(session, {table.LowerCaseSingularName}):");
-            function.AppendLine($"result = session.query({table.SingularName}).filter({table.Name}.{table.PrimaryKeyColumn.LowerCaseName} == {table.LowerCaseSingularName}.{table.PrimaryKeyColumn.LowerCaseName}).first()");
+            function.AppendLine($"result = session.query({table.SingularName}).filter({table.SingularName}.{table.PrimaryKeyColumn.LowerCaseName} == {table.LowerCaseSingularName}.{table.PrimaryKeyColumn.LowerCaseName}).first()");
             function.AppendLine($"result = {table.LowerCaseSingularName}");
             function.AppendLine($"session.commit()");
 
