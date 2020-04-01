@@ -96,10 +96,11 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("#patch endpoint");
 
             builder.AppendLine($"def patch(self):");
-            function.AppendLine($"requestedArgs = getArguments(['{table.ToString("', '", true, onlyEditable: true)}'])");
+            function.AppendLine($"requestedArgs = getArguments(['{table.ToString("', '", true)}'])");
             function.AppendLine($"args  = requestedArgs.parse_args()");
-            function.AppendLine($"{table.LowerCaseSingularName}  = dict_as_obj(args, {table.SingularName}.{table.SingularName}())");
-            function.AppendLine($"return []");
+            function.AppendLine($"{table.LowerCaseSingularName}  = {table.SingularName}.get{table.Name}By{table.PrimaryKeyColumn.Name}(session, args['{table.PrimaryKeyColumn.LowerCaseName}'])[0]");
+            function.AppendLine($"{table.LowerCaseSingularName}  = dict_as_obj(args, {table.LowerCaseSingularName})");
+            function.AppendLine($"return [{table.SingularName}.update{table.SingularName}(session, {table.LowerCaseSingularName})]");
 
             builder.AppendLine(Helpers.AddIndentation(function, 1));
 
