@@ -85,6 +85,27 @@ namespace DatabaseFunctionsGenerator.Python
             return builder.ToString();
         }
 
+        private string GeneratePatchEndpoint(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder function;
+
+            builder = new StringBuilder();
+            function = new StringBuilder();
+
+            builder.AppendLine("#patch endpoint");
+
+            builder.AppendLine($"def patch(self):");
+            function.AppendLine($"requestedArgs = getArguments(['{table.ToString("', '", true, onlyEditable: true)}'])");
+            function.AppendLine($"args  = requestedArgs.parse_args()");
+            function.AppendLine($"{table.LowerCaseSingularName}  = dict_as_obj(args, {table.SingularName}.{table.SingularName}())");
+            function.AppendLine($"return []");
+
+            builder.AppendLine(Helpers.AddIndentation(function, 1));
+
+            return builder.ToString();
+        }
+
         private string GenerateAPIEndpoints(Table table)
         {
             StringBuilder builder;
@@ -95,6 +116,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine(GenerateGetEndpoint(table));
             builder.AppendLine(GeneratePostEndpoint(table));
             builder.AppendLine(GenerateDeleteEndpoint(table));
+            builder.AppendLine(GeneratePatchEndpoint(table));
 
             return builder.ToString();
         }
