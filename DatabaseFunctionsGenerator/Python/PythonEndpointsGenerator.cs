@@ -57,7 +57,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine($"def post(self):");
             function.AppendLine($"requestedArgs = getArguments(['{table.ToString("', '", true, onlyEditable:true)}'])");
             function.AppendLine($"args  = requestedArgs.parse_args()");
-            function.AppendLine($"{table.LowerCaseSingularName}  = dict_as_obj(args, {table.SingularName}.{table.SingularName})");
+            function.AppendLine($"{table.LowerCaseSingularName}  = dict_as_obj(args, {table.SingularName}.{table.SingularName}())");
             function.AppendLine($"return [{table.SingularName}.add{table.SingularName}(session, {table.LowerCaseSingularName})]");
 
             builder.AppendLine(Helpers.AddIndentation(function, 1));
