@@ -187,6 +187,9 @@
     <None Include="CodeHelpers\Authentication.php">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="CodeHelpers\Authentication.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="CodeHelpers\FlaskRestfulHelpers.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
