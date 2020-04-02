@@ -81,7 +81,7 @@ namespace DatabaseFunctionsGenerator
             Database = new Database();
             Database.DatabaseName = "scd";
             Database.Type = Models.DatabaseType.Php;
-            Database.HasAuthenticationSystem = false;
+            Database.HasAuthenticationSystem = true;
             /*
                         Database.Tables.Add(new Table("Users"));
 

@@ -200,6 +200,8 @@ namespace DatabaseFunctionsGenerator
             {
                 case Types.Varchar:
                     return $"String({Length})";
+                case Types.GUID:
+                    return $"String({40})";
                 case Types.Integer:
                     return $"Integer";
                 case Types.Text:
