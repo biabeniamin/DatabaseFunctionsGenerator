@@ -28,6 +28,8 @@ def alchemyencoder(obj):
         return object_as_dict(obj)
 
 def convertToJson(data):
+	if isinstance(data, dict):
+		return data
 	objects = []
 	for row in data:
 		objects.append(object_as_dict(row))
