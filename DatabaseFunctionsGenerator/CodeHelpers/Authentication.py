@@ -13,11 +13,9 @@ def login(session):
 		print("invalid credentials")
 		return []
 
-	token = Token.Token(value=uuid.uuid4()), address = request.remote_addr, lastUpdate = datetime.utcnow(), tokenUserId = tokenUser[0].tokenUserId)
+	token = Token.Token(value=str(uuid.uuid4()), address = request.remote_addr, lastUpdate = datetime.utcnow(), tokenUserId = tokenUser[0].tokenUserId)
 	Token.addToken(session, token)
-	print(args)
-	print(tokenUser)
-	return tokenUser
+	return [token]
 
 def checkToken(session):
 	isAuthorized = 1
