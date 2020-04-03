@@ -3,6 +3,7 @@ import TokenUser
 from FlaskRestfulHelpers import getArguments
 from flask import request
 from datetime import datetime
+import uuid
 
 def login(session):
 	requestedArgs = getArguments(['username', 'password'])
@@ -12,8 +13,7 @@ def login(session):
 		print("invalid credentials")
 		return []
 
-	ip = request.remote_addr
-	token = Token.Token(value='asd', address = request.remote_addr, lastUpdate = datetime.utcnow(), tokenUserId = tokenUser[0].tokenUserId)
+	token = Token.Token(value=uuid.uuid4()), address = request.remote_addr, lastUpdate = datetime.utcnow(), tokenUserId = tokenUser[0].tokenUserId)
 	Token.addToken(session, token)
 	print(args)
 	print(tokenUser)
