@@ -109,13 +109,13 @@ namespace DatabaseFunctionsGenerator.Python
                     StringBuilder whileBlock = new StringBuilder();
 
                     whileBlock.AppendLine("mid = floor((start + end) / 2)");
-                    whileBlock.AppendLine("if(row.phoneId > phones[mid].phoneId):");
+                    whileBlock.AppendLine($"if(row.{column.LowerCaseName} > {parentTable.LowerCaseName}[mid].{column.LowerCaseName}):");
                     whileBlock.AppendLine("\tstart = mid + 1");
 
-                    whileBlock.AppendLine("elif(row.phoneId < phones[mid].phoneId):");
+                    whileBlock.AppendLine($"elif(row.{column.LowerCaseName} < {parentTable.LowerCaseName}[mid].{column.LowerCaseName}):");
                     whileBlock.AppendLine("\tend = mid - 1");
 
-                    whileBlock.AppendLine("elif(row.phoneId == phones[mid].phoneId):");
+                    whileBlock.AppendLine($"elif(row.{column.LowerCaseName} == {parentTable.LowerCaseName}[mid].{column.LowerCaseName}):");
                     whileBlock.AppendLine("\tstart = mid + 1");
                     whileBlock.AppendLine("\tend = mid - 1");
                     whileBlock.AppendLine($"\trow.{parentTable.LowerCaseSingularName} = {parentTable.LowerCaseName}[mid]");
