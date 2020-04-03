@@ -11,17 +11,23 @@ def checkToken(session):
 	token = Token.getTokensByValue(session, args['token'])
 	if len(token) == 0:
 		isAuthorized = 0
+		return []
 	token = token[0]
 	diff = datetime.utcnow() - token.lastUpdate
 	days, seconds = diff.days, diff.seconds
 	hours = days * 24 + seconds // 3600
 	if hours > 1:
 		isAuthorized = 0
+		print("token timeouted")
 
 	if token.address != request.remote_addr:
 		isAuthorized = 0
+		print("different address")
 
 	if isAuthorized == 0:
 		Token.deleteToken(session, token.tokenId)
-	print(request.remote_addr)
+		return []
+
+	token.lastUpdate = datetime.utcnow()
+	Token.updateToken(session, token)	
 	return [] 
