@@ -4,6 +4,17 @@ from FlaskRestfulHelpers import getArguments
 from flask import request
 from datetime import datetime
 
+def login(session):
+	requestedArgs = getArguments(['username', 'password'])
+	args  = requestedArgs.parse_args()
+	tokenUser = TokenUser.getTokenUsersByUsernamePassword(session, args['username'], args['password'])
+	if len(tokenUser) == 0:
+		print("invalid credentials")
+		return []
+	print(args)
+	print(tokenUser)
+	return tokenUser
+
 def checkToken(session):
 	isAuthorized = 1
 	requestedArgs = getArguments(['token'])
