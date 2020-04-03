@@ -20,5 +20,8 @@ def checkToken(session):
 
 	if token.address != request.remote_addr:
 		isAuthorized = 0
+
+	if isAuthorized == 0:
+		Token.deleteToken(session, token.tokenId)
 	print(request.remote_addr)
 	return [] 
