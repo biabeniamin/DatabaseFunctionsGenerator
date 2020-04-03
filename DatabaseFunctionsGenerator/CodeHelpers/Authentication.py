@@ -11,6 +11,10 @@ def login(session):
 	if len(tokenUser) == 0:
 		print("invalid credentials")
 		return []
+
+	ip = request.remote_addr
+	token = Token.Token(value='asd', address = request.remote_addr, lastUpdate = datetime.utcnow(), tokenUserId = tokenUser[0].tokenUserId)
+	Token.addToken(session, token)
 	print(args)
 	print(tokenUser)
 	return tokenUser
