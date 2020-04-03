@@ -17,5 +17,8 @@ def checkToken(session):
 	hours = days * 24 + seconds // 3600
 	if hours > 1:
 		isAuthorized = 0
+
+	if token.address != request.remote_addr:
+		isAuthorized = 0
 	print(request.remote_addr)
 	return [] 
