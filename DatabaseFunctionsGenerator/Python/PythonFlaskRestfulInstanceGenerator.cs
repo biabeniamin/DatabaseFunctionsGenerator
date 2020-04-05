@@ -15,6 +15,24 @@ namespace DatabaseFunctionsGenerator.Python
             _database = database;
         }
 
+        public string GenerateJsonSerializer()
+        {
+            StringBuilder builder = new StringBuilder();
+            StringBuilder function = new StringBuilder();
+
+            builder.AppendLine("@api.representation('application/json')");
+            builder.AppendLine("def output_json(data, code, headers=None):");
+            {
+                function.AppendLine("print(data)");
+                function.AppendLine("resp = make_response(convertToJson(data), code)");
+                function.AppendLine("resp.headers.extend(headers or {})");
+                function.AppendLine("return resp");
+            }
+
+            builder.AppendLine(Helpers.AddIndentation(function, 1));
+            return builder.ToString();
+        }
+
         public void Generate(string path)
         {
             StringBuilder builder = new StringBuilder();
@@ -42,6 +60,8 @@ namespace DatabaseFunctionsGenerator.Python
                 builder.AppendLine($"api.add_resource({table.SingularName}Endpoints, '/{table.LowerCaseName}', resource_class_kwargs ={{ 'session' : session}}) ");
             }
             builder.AppendLine();
+
+            builder.AppendLine(GenerateJsonSerializer());
 
             //start the server
             builder.AppendLine("if __name__ == '__main__':");
