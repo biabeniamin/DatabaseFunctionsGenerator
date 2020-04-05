@@ -31,7 +31,15 @@ namespace DatabaseFunctionsGenerator.Python
                 builder.AppendLine($"from {table.SingularName} import {table.SingularName}");
             builder.AppendLine();
 
-          
+           //create session
+            builder.AppendLine("app = Flask(__name__)");
+            builder.AppendLine("api = Api(app)");
+            builder.AppendLine("createDatabase()");
+
+           
+
+            //start the server
+            builder.AppendLine("app.run(debug=True, host='0.0.0.0', port=5000)");
 
             IO.WriteFile($"{path}\\FlaskRestful.py", (builder.ToString()));
         }
