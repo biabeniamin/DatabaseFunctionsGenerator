@@ -28,15 +28,20 @@ namespace DatabaseFunctionsGenerator.Python
             if(_database.HasAuthenticationSystem)
                 builder.AppendLine("import Authentication");
             foreach (Table table in _database.Tables)
-                builder.AppendLine($"from {table.SingularName} import {table.SingularName}");
+                builder.AppendLine($"from {table.SingularName}Endpoints import {table.SingularName}Endpoints");
             builder.AppendLine();
 
            //create session
             builder.AppendLine("app = Flask(__name__)");
             builder.AppendLine("api = Api(app)");
             builder.AppendLine("createDatabase()");
+            builder.AppendLine();
 
-           
+            foreach (Table table in _database.Tables)
+            {
+                builder.AppendLine($"api.add_resource({table.SingularName}Endpoints, '/{table.LowerCaseName}', resource_class_kwargs ={{ 'session' : session}}) ");
+            }
+            builder.AppendLine();
 
             //start the server
             builder.AppendLine("app.run(debug=True, host='0.0.0.0', port=5000)");
