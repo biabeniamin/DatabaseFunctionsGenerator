@@ -152,7 +152,6 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("#generated automatically");
             builder.AppendLine("from flask_restful import Resource");
             builder.AppendLine("from SqlAlchemy import dict_as_obj");
-            builder.AppendLine("from SqlAlchemyMain import *");
             builder.AppendLine("from FlaskRestfulHelpers import getArguments");
             builder.AppendLine($"import {table.SingularName}");
 

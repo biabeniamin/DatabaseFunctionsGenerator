@@ -4,6 +4,8 @@ from FlaskRestfulHelpers import getArguments
 from flask import request
 from datetime import datetime
 import uuid
+from flask_restful import wraps, abort
+from SqlAlchemyMain import *
 
 def login(session):
 	requestedArgs = getArguments(['username', 'password'])
@@ -48,3 +50,18 @@ def checkToken(session):
 	token.lastUpdate = datetime.utcnow()
 	Token.updateToken(session, token)	
 	return isAuthorized, error
+
+def authenticate(func):
+	@wraps(func)
+	def wrapper(*args, **kwargs):
+		if not getattr(func, 'authenticated', True):
+			return func(*args, **kwargs)
+
+		isAuthorized, error = checkToken(session) 
+
+		if isAuthorized:
+			return func(*args, **kwargs)
+
+		abort(401, message=error)
+		return error
+	return wrapper
