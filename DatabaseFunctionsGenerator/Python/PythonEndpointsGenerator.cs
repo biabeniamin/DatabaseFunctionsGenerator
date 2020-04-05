@@ -25,9 +25,9 @@ namespace DatabaseFunctionsGenerator.Python
             function = new StringBuilder();
 
 
-            builder.AppendLine($"def __init(self, **kwargs):");
+            builder.AppendLine($"def __init__(self, **kwargs):");
 
-            function.AppendLine($"print('test')");
+            function.AppendLine($"self.session = kwargs['session']");
 
             builder.AppendLine(Helpers.AddIndentation(function, 1));
 
@@ -52,10 +52,10 @@ namespace DatabaseFunctionsGenerator.Python
             foreach(DedicatedGetRequest request in table.DedicatedGetRequests)
             {
                 function.AppendLine($"if args['cmd'] == 'get{table.Name}By{request.ToString("")}':");
-                function.AppendLine($"\treturn {table.SingularName}.get{table.Name}By{request.ToString("")}(session, args['{request.ToString(", args['",true)}'])");
+                function.AppendLine($"\treturn {table.SingularName}.get{table.Name}By{request.ToString("")}(self.session, args['{request.ToString(", args['",true)}'])");
             }
 
-            function.AppendLine($"return {table.SingularName}.get{table.Name}(session)");
+            function.AppendLine($"return {table.SingularName}.get{table.Name}(self.session)");
 
             builder.AppendLine(Helpers.AddIndentation(function, 1));
 
@@ -76,7 +76,7 @@ namespace DatabaseFunctionsGenerator.Python
             function.AppendLine($"requestedArgs = getArguments(['{table.ToString("', '", true, onlyEditable:true)}'])");
             function.AppendLine($"args  = requestedArgs.parse_args()");
             function.AppendLine($"{table.LowerCaseSingularName}  = dict_as_obj(args, {table.SingularName}.{table.SingularName}())");
-            function.AppendLine($"return [{table.SingularName}.add{table.SingularName}(session, {table.LowerCaseSingularName})]");
+            function.AppendLine($"return [{table.SingularName}.add{table.SingularName}(self.session, {table.LowerCaseSingularName})]");
 
             builder.AppendLine(Helpers.AddIndentation(function, 1));
 
@@ -96,7 +96,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine($"def delete(self):");
             function.AppendLine($"requestedArgs = getArguments(['{table.PrimaryKeyColumn.LowerCaseName}'])");
             function.AppendLine($"args  = requestedArgs.parse_args()");
-            function.AppendLine($"return [{table.SingularName}.delete{table.SingularName}(session, args['{table.PrimaryKeyColumn.LowerCaseName}'])]");
+            function.AppendLine($"return [{table.SingularName}.delete{table.SingularName}(self.session, args['{table.PrimaryKeyColumn.LowerCaseName}'])]");
 
             builder.AppendLine(Helpers.AddIndentation(function, 1));
 
@@ -116,9 +116,9 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine($"def patch(self):");
             function.AppendLine($"requestedArgs = getArguments(['{table.ToString("', '", true)}'])");
             function.AppendLine($"args  = requestedArgs.parse_args()");
-            function.AppendLine($"{table.LowerCaseSingularName}  = {table.SingularName}.get{table.Name}By{table.PrimaryKeyColumn.Name}(session, args['{table.PrimaryKeyColumn.LowerCaseName}'])[0]");
+            function.AppendLine($"{table.LowerCaseSingularName}  = {table.SingularName}.get{table.Name}By{table.PrimaryKeyColumn.Name}(self.session, args['{table.PrimaryKeyColumn.LowerCaseName}'])[0]");
             function.AppendLine($"{table.LowerCaseSingularName}  = dict_as_obj(args, {table.LowerCaseSingularName})");
-            function.AppendLine($"return [{table.SingularName}.update{table.SingularName}(session, {table.LowerCaseSingularName})]");
+            function.AppendLine($"return [{table.SingularName}.update{table.SingularName}(self.session, {table.LowerCaseSingularName})]");
 
             builder.AppendLine(Helpers.AddIndentation(function, 1));
 
