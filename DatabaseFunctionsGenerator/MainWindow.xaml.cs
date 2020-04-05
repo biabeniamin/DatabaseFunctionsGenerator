@@ -101,7 +101,7 @@ namespace DatabaseFunctionsGenerator
             Database.Tables.Last().Columns.Add(new Column("Type", new ColumnType(Types.Varchar, 10)));
 
             Database.Tables.Add(new Table("Locations"));
-            Database.Tables.Last().RequiresSecurityToken = false;
+            Database.Tables.Last().RequiresSecurityToken = true;
             Database.Tables.Last().Columns.Add(new Column("TerminalId", new ColumnType(Types.Integer)));
             Database.Tables.Last().Columns.Add(new Column("Latitude", new ColumnType(Types.Double)));
             Database.Tables.Last().Columns.Add(new Column("Longitude", new ColumnType(Types.Double)));

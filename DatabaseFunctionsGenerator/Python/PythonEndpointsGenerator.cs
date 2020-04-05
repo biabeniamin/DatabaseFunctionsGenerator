@@ -156,6 +156,13 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine($"import {table.SingularName}");
 
             builder.AppendLine($"class {table.SingularName}List(Resource):");
+
+            if (table.RequiresSecurityToken)
+            {
+                classBuilder.AppendLine("from Authentication import authenticate");
+                classBuilder.AppendLine("method_decorators = [authenticate]");
+            }
+
             classBuilder.AppendLine(GenerateConstructor(table));
             //endpoints
             classBuilder.AppendLine(GenerateAPIEndpoints(table));
