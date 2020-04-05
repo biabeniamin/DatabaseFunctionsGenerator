@@ -155,7 +155,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("from FlaskRestfulHelpers import getArguments");
             builder.AppendLine($"import {table.SingularName}");
 
-            builder.AppendLine($"class {table.SingularName}List(Resource):");
+            builder.AppendLine($"class {table.SingularName}Endpoints(Resource):");
 
             if (table.RequiresSecurityToken)
             {
