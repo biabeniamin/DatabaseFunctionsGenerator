@@ -21,6 +21,17 @@ namespace DatabaseFunctionsGenerator.Python
 
             //imports
             builder.AppendLine("#generated automatically");
+            builder.AppendLine("from flask import Flask, make_response");
+            builder.AppendLine("from flask_restful import Api");
+            builder.AppendLine("from SqlAlchemyMain import createDatabase, session");
+            builder.AppendLine("from SqlAlchemy import convertToJson");
+            if(_database.HasAuthenticationSystem)
+                builder.AppendLine("import Authentication");
+            foreach (Table table in _database.Tables)
+                builder.AppendLine($"from {table.SingularName} import {table.SingularName}");
+            builder.AppendLine();
+
+          
 
             IO.WriteFile($"{path}\\FlaskRestful.py", (builder.ToString()));
         }
