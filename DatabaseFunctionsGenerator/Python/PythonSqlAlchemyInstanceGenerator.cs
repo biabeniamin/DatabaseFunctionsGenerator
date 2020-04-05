@@ -32,8 +32,13 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("session = scoped_session(Session)");
 
             //create database
-            builder.AppendLine("Base.metadata.bind = engine");
-            builder.AppendLine("Base.metadata.create_all()");
+            builder.AppendLine("def createDatabase():");
+            builder.AppendLine("\tBase.metadata.bind = engine");
+            builder.AppendLine("\tBase.metadata.create_all()");
+
+            //create database on main
+            builder.AppendLine("if __name__ == '__main__':");
+            builder.AppendLine("\tcreateDatabase()");
 
             IO.WriteFile($"{path}\\SqlAlchemyMain.py", (builder.ToString()));
         }
