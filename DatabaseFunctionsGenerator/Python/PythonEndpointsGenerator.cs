@@ -52,7 +52,7 @@ namespace DatabaseFunctionsGenerator.Python
             foreach(DedicatedGetRequest request in table.DedicatedGetRequests)
             {
                 function.AppendLine($"if args['cmd'] == 'get{table.Name}By{request.ToString("")}':");
-                function.AppendLine($"\treturn {table.SingularName}.get{table.Name}By{request.ToString("")}(self.session, args['{request.ToString(", args['",true)}'])");
+                function.AppendLine($"\treturn {table.SingularName}.get{table.Name}By{request.ToString("")}(self.session, args['{request.ToString("'], args['",true)}'])");
             }
 
             function.AppendLine($"return {table.SingularName}.get{table.Name}(self.session)");
