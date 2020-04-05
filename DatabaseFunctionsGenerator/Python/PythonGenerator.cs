@@ -17,6 +17,7 @@ namespace DatabaseFunctionsGenerator.Python
         private PythonFlaskRestlessInstanceGenerator _pythonFlaskRestlessInstanceGenerator;
         private PythonSqlAlchemyInstanceGenerator _pythonSqlAlchemyInstanceGenerator;
         private PythonEndpointsGenerator _pythonEndpointsGenerator;
+        private PythonFlaskRestfulInstanceGenerator _pythonFlaskRestfulInstanceGenerator;
 
         public PythonGenerator(Database database)
         {
@@ -28,6 +29,7 @@ namespace DatabaseFunctionsGenerator.Python
             _pythonFlaskRestlessInstanceGenerator = new PythonFlaskRestlessInstanceGenerator(_database);
             _pythonSqlAlchemyInstanceGenerator = new PythonSqlAlchemyInstanceGenerator(_database);
             _pythonEndpointsGenerator = new PythonEndpointsGenerator(_database);
+            _pythonFlaskRestfulInstanceGenerator = new PythonFlaskRestfulInstanceGenerator(_database);
         }
 
         public void Generate(string path)
@@ -49,6 +51,7 @@ namespace DatabaseFunctionsGenerator.Python
             _pythonFlaskRestlessInstanceGenerator.Generate(pythonServerPath);
             _pythonSqlAlchemyInstanceGenerator.Generate(pythonServerPath);
             _pythonEndpointsGenerator.Generate(pythonServerPath);
+            _pythonFlaskRestfulInstanceGenerator.Generate(pythonServerPath);
         }
     }
 }

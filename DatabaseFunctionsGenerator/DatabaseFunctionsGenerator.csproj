@@ -123,6 +123,7 @@
     <Compile Include="Documentation\RequestTextMenuGenerator.cs" />
     <Compile Include="Php\PhpRequestsGenerator.cs" />
     <Compile Include="Python\PythonEndpointsGenerator.cs" />
+    <Compile Include="Python\PythonFlaskRestfulInstanceGenerator.cs" />
     <Compile Include="Python\PythonSqlAlchemyInstanceGenerator.cs" />
     <Compile Include="Python\PythonControllerGenerator.cs" />
     <Compile Include="Python\PythonFlaskRestlessInstanceGenerator.cs" />
