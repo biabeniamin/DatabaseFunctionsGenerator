@@ -27,7 +27,7 @@ def checkToken(session):
 	token = Token.getTokensByValue(session, args['token'])
 	if len(token) == 0:
 		isAuthorized = 0
-		error = {'error' : 'Invalid token'}
+		error = 'Invalid token'
 		return isAuthorized, error
 	token = token[0]
 	diff = datetime.utcnow() - token.lastUpdate
@@ -36,12 +36,12 @@ def checkToken(session):
 	if hours > 1:
 		isAuthorized = 0
 		print("token timeouted")
-		error = {'error' : 'Token expired'}
+		error = 'Token expired'
 
 	if token.address != request.remote_addr:
 		isAuthorized = 0
 		print("different address")
-		error = {'error' : 'Token generated for other address'}
+		error = 'Token generated for other address'
 
 	if isAuthorized == 0:
 		Token.deleteToken(session, token.tokenId)
