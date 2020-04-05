@@ -44,7 +44,8 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine();
 
             //start the server
-            builder.AppendLine("app.run(debug=True, host='0.0.0.0', port=5000)");
+            builder.AppendLine("if __name__ == '__main__':");
+            builder.AppendLine("\tapp.run(debug=True, host='0.0.0.0', port=5000)");
 
             IO.WriteFile($"{path}\\FlaskRestful.py", (builder.ToString()));
         }
