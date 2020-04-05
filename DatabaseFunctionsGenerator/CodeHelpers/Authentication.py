@@ -11,7 +11,7 @@ def login(session):
 	tokenUser = TokenUser.getTokenUsersByUsernamePassword(session, args['username'], args['password'])
 	if len(tokenUser) == 0:
 		print("invalid credentials")
-		return []
+		return {'error' : 'Invalid credentials'}
 
 	token = Token.Token(value=str(uuid.uuid4()), address = request.remote_addr, lastUpdate = datetime.utcnow(), tokenUserId = tokenUser[0].tokenUserId)
 	Token.addToken(session, token)
@@ -19,12 +19,14 @@ def login(session):
 
 def checkToken(session):
 	isAuthorized = 1
+	error = None
 	requestedArgs = getArguments(['token'])
 	args  = requestedArgs.parse_args()
 	token = Token.getTokensByValue(session, args['token'])
 	if len(token) == 0:
 		isAuthorized = 0
-		return []
+		error = {'error' : 'Invalid token'}
+		return isAuthorized, error
 	token = token[0]
 	diff = datetime.utcnow() - token.lastUpdate
 	days, seconds = diff.days, diff.seconds
@@ -32,15 +34,17 @@ def checkToken(session):
 	if hours > 1:
 		isAuthorized = 0
 		print("token timeouted")
+		error = {'error' : 'Token expired'}
 
 	if token.address != request.remote_addr:
 		isAuthorized = 0
 		print("different address")
+		error = {'error' : 'Token generated for other address'}
 
 	if isAuthorized == 0:
 		Token.deleteToken(session, token.tokenId)
-		return []
+		return isAuthorized, error
 
 	token.lastUpdate = datetime.utcnow()
 	Token.updateToken(session, token)	
-	return [] 
+	return isAuthorized, error
