@@ -16,6 +16,24 @@ namespace DatabaseFunctionsGenerator.Python
         }
 
 
+        private string GenerateConstructor(Table table)
+        {
+            StringBuilder builder;
+            StringBuilder function;
+
+            builder = new StringBuilder();
+            function = new StringBuilder();
+
+
+            builder.AppendLine($"def __init(self, **kwargs):");
+
+            function.AppendLine($"print('test')");
+
+            builder.AppendLine(Helpers.AddIndentation(function, 1));
+
+            return builder.ToString();
+        }
+
         private string GenerateGetEndpoint(Table table)
         {
             StringBuilder builder;
@@ -139,6 +157,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine($"import {table.SingularName}");
 
             builder.AppendLine($"class {table.SingularName}List(Resource):");
+            classBuilder.AppendLine(GenerateConstructor(table));
             //endpoints
             classBuilder.AppendLine(GenerateAPIEndpoints(table));
             builder.AppendLine(Helpers.AddIndentation(classBuilder, 1));
