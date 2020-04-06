@@ -1,4 +1,4 @@
-﻿from sqlalchemy import *
+﻿from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy import inspect
 import json
