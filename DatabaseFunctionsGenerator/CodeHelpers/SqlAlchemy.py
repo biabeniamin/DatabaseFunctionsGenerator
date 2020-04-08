@@ -12,6 +12,12 @@ database="!--databaseName--!"
 engine = create_engine('mysql+mysqlconnector://%s@%s:%d/%s'%(username, server, port, database), echo=True)
 
 def object_as_dict(obj):
+	if isinstance(obj, list):
+		objects = []
+		for row in obj:
+			objects.append(object_as_dict(row))
+		return objects
+
     return {c: getattr(obj, c)
             for c in obj.__dict__.keys() if c[0]!='_'}
 
