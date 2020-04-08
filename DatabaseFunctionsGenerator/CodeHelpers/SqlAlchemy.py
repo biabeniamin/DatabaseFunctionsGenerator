@@ -18,8 +18,14 @@ def object_as_dict(obj):
 			objects.append(object_as_dict(row))
 		return objects
 
-    return {c: getattr(obj, c)
-            for c in obj.__dict__.keys() if c[0]!='_'}
+	dic = {}
+	for c in obj.__dict__.keys():
+		if c[0]=='_':
+			continue
+		dic[c] = getattr(obj, c)
+		if isinstance(dic[c], Base):
+			dic[c] = object_as_dict(dic[c])
+	return dic
 
 def dict_as_obj(args, obj):
 	for arg in args:
