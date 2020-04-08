@@ -41,6 +41,16 @@ def alchemyencoder(obj):
 
 def convertToJson(data):
 	if isinstance(data, dict):
-		return data
+		for key in data:
+			requireTrans = 0
+			if isinstance(data[key], list) and len(data[key]) > 0:
+				if isinstance(data[key][0], Base):
+					requireTrans = 1
+			elif isinstance(data[key], Base):
+				requireTrans = 1
 
-	return json.dumps(object_as_dict(objects), default = alchemyencoder)
+			if requireTrans > 0:
+				data[key]=object_as_dict(data[key])
+		return json.dumps(data, default = alchemyencoder)
+
+	return json.dumps(object_as_dict(data), default = alchemyencoder)
