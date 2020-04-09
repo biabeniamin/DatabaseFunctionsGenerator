@@ -43,8 +43,11 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("from flask_restful import Api");
             builder.AppendLine("from SqlAlchemyMain import createDatabase, session");
             builder.AppendLine("from SqlAlchemy import convertToJson");
-            if(_database.HasAuthenticationSystem)
+            if (_database.HasAuthenticationSystem)
+            {
                 builder.AppendLine("import Authentication");
+                builder.AppendLine("from TokenAuthenticationEndpoints import TokenAuthenticationEndpoints");
+            }
             foreach (Table table in _database.Tables)
                 builder.AppendLine($"from {table.SingularName}Endpoints import {table.SingularName}Endpoints");
             builder.AppendLine();
@@ -59,6 +62,8 @@ namespace DatabaseFunctionsGenerator.Python
             {
                 builder.AppendLine($"api.add_resource({table.SingularName}Endpoints, '/{table.LowerCaseName}', resource_class_kwargs ={{ 'session' : session}}) ");
             }
+            if (_database.HasAuthenticationSystem)
+                builder.AppendLine("api.add_resource(TokenAuthenticationEndpoints, '/tokenAuthentication', resource_class_kwargs ={ 'session' : session})");
             builder.AppendLine();
 
             builder.AppendLine(GenerateJsonSerializer());
