@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace DatabaseFunctionsGenerator.Python
 {
-    class PythonEndpointsGenerator : IGenerator
+    class PythonFlaskRestfulEndpointsGenerator : IGenerator
     {
         private Database _database;
 
-        public PythonEndpointsGenerator(Database database)
+        public PythonFlaskRestfulEndpointsGenerator(Database database)
         {
             _database = database;
         }

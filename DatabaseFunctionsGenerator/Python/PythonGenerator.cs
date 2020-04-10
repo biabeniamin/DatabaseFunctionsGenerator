@@ -16,7 +16,7 @@ namespace DatabaseFunctionsGenerator.Python
         private PythonHelpersGenerator _pythonHelpersGenerator;
         private PythonFlaskRestlessInstanceGenerator _pythonFlaskRestlessInstanceGenerator;
         private PythonSqlAlchemyInstanceGenerator _pythonSqlAlchemyInstanceGenerator;
-        private PythonEndpointsGenerator _pythonEndpointsGenerator;
+        private PythonFlaskRestfulEndpointsGenerator _pythonEndpointsGenerator;
         private PythonFlaskRestfulInstanceGenerator _pythonFlaskRestfulInstanceGenerator;
 
         public PythonGenerator(Database database)
@@ -28,7 +28,7 @@ namespace DatabaseFunctionsGenerator.Python
             _pythonHelpersGenerator = new PythonHelpersGenerator(_database);
             _pythonFlaskRestlessInstanceGenerator = new PythonFlaskRestlessInstanceGenerator(_database);
             _pythonSqlAlchemyInstanceGenerator = new PythonSqlAlchemyInstanceGenerator(_database);
-            _pythonEndpointsGenerator = new PythonEndpointsGenerator(_database);
+            _pythonEndpointsGenerator = new PythonFlaskRestfulEndpointsGenerator(_database);
             _pythonFlaskRestfulInstanceGenerator = new PythonFlaskRestfulInstanceGenerator(_database);
         }
 
