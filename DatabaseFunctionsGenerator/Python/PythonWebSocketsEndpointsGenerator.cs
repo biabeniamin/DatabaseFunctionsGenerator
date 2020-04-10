@@ -15,6 +15,22 @@ namespace DatabaseFunctionsGenerator.Python
             _database = database;
         }
 
+        private string GenerateGetEndpoint(Table table)
+        {
+            StringBuilder builder;
+
+            builder = new StringBuilder();
+
+            builder.AppendLine("#get endpoint");
+
+            builder.AppendLine($"{table.LowerCaseName} = {table.SingularName}.get{table.Name}(session)");
+            builder.AppendLine($"response = convertToJson({{'operation' : 'get', 'data' : {table.LowerCaseName}}})");
+
+            builder.AppendLine($"await websocket.send(response)");
+
+            return builder.ToString();
+        }
+
         private string GenerateEndpoints(Table table)
         {
             StringBuilder builder;
@@ -22,6 +38,8 @@ namespace DatabaseFunctionsGenerator.Python
             builder = new StringBuilder();
 
             builder.AppendLine("#Websockets endpoints");
+            builder.AppendLine("if request['action'] == 'get':");
+            builder.AppendLine(Helpers.AddIndentation(GenerateGetEndpoint(table), 1));
 
             return builder.ToString();
         }
