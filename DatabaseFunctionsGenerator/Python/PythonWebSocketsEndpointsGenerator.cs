@@ -64,9 +64,11 @@ namespace DatabaseFunctionsGenerator.Python
             }
 
             builder.AppendLine($"{table.LowerCaseSingularName} = dict_as_obj(request['data'], {table.SingularName}.{table.SingularName}())");
-            builder.AppendLine($"{table.LowerCaseSingularName} = {table.SingularName}.Add{table.SingularName}(session, {table.LowerCaseSingularName})");
-            builder.AppendLine($"");
-            builder.AppendLine($"");
+            builder.AppendLine($"{table.LowerCaseSingularName} = {table.SingularName}.add{table.SingularName}(session, {table.LowerCaseSingularName})");
+            builder.AppendLine($"response = convertToJson({{'operation' : 'add', 'data' : {table.LowerCaseSingularName}}})");
+            builder.AppendLine($"for subscriber in {table.LowerCaseName}Subsribers:");
+            builder.AppendLine($"\t await subscriber.send(response)");
+
 
             return builder.ToString();
         }
