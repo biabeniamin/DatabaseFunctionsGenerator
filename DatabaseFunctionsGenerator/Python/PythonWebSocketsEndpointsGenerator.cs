@@ -63,6 +63,11 @@ namespace DatabaseFunctionsGenerator.Python
                 builder.AppendLine($"\treturn");
             }
 
+            builder.AppendLine($"{table.LowerCaseSingularName} = dict_as_obj(request['data'], {table.SingularName}.{table.SingularName}())");
+            builder.AppendLine($"{table.LowerCaseSingularName} = {table.SingularName}.Add{table.SingularName}(session, {table.LowerCaseSingularName})");
+            builder.AppendLine($"");
+            builder.AppendLine($"");
+
             return builder.ToString();
         }
 
