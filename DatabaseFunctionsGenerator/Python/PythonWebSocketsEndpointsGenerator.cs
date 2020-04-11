@@ -58,9 +58,14 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("from WebSocketHelpers import checkArguments, removeClosedConnection");
             builder.AppendLine($"import {table.SingularName}");
 
+            builder.AppendLine($"{table.LowerCaseName}Subsribers = set()");
+
             builder.AppendLine("async def requestReceived(websocket, session, request):");
-            //endpoints
-            functionBuilder.AppendLine(GenerateEndpoints(table));
+            {
+                functionBuilder.AppendLine($"global {table.LowerCaseName}Subsribers");
+                //endpoints
+                functionBuilder.AppendLine(GenerateEndpoints(table));
+            }
             builder.AppendLine(Helpers.AddIndentation(functionBuilder, 1));
 
             IO.WriteFile($"{path}\\{table.SingularName}WebSockets.py", (builder.ToString()));
