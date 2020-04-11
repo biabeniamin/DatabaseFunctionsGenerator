@@ -42,7 +42,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine($"{table.LowerCaseName} = {table.SingularName}.get{table.Name}(session)");
             builder.AppendLine($"response = convertToJson({{'operation' : 'get', 'data' : {table.LowerCaseName}}})");
 
-            builder.AppendLine($"{table.LowerCaseName}Subsribers.add(websocket)");
+            builder.AppendLine($"{table.LowerCaseName}Subscribers.add(websocket)");
             builder.AppendLine($"await websocket.send(response)");
 
             return builder.ToString();
@@ -66,7 +66,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine($"{table.LowerCaseSingularName} = dict_as_obj(request['data'], {table.SingularName}.{table.SingularName}())");
             builder.AppendLine($"{table.LowerCaseSingularName} = {table.SingularName}.add{table.SingularName}(session, {table.LowerCaseSingularName})");
             builder.AppendLine($"response = convertToJson({{'operation' : 'add', 'data' : {table.LowerCaseSingularName}}})");
-            builder.AppendLine($"for subscriber in {table.LowerCaseName}Subsribers:");
+            builder.AppendLine($"for subscriber in {table.LowerCaseName}Subscribers:");
             builder.AppendLine($"\t await subscriber.send(response)");
 
 
@@ -106,11 +106,11 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("from WebSocketHelpers import checkArguments, removeClosedConnection");
             builder.AppendLine($"import {table.SingularName}");
 
-            builder.AppendLine($"{table.LowerCaseName}Subsribers = set()");
+            builder.AppendLine($"{table.LowerCaseName}Subscribers = set()");
 
             builder.AppendLine("async def requestReceived(websocket, session, request):");
             {
-                functionBuilder.AppendLine($"global {table.LowerCaseName}Subsribers");
+                functionBuilder.AppendLine($"global {table.LowerCaseName}Subscribers");
                 //endpoints
                 functionBuilder.AppendLine(GenerateEndpoints(table));
             }
