@@ -48,6 +48,24 @@ namespace DatabaseFunctionsGenerator.Python
             return builder.ToString();
         }
 
+        private string GenerateAddEndpoint(Table table)
+        {
+            StringBuilder builder;
+
+            builder = new StringBuilder();
+
+            builder.AppendLine("#add endpoint");
+
+            builder.AppendLine($"if checkArguments(request, ['{table.ToString("', '", withLowerCase:true, onlyEditable:true)}']) == False:");
+            {
+                builder.AppendLine($"\tprint('Not all parameters were provided for ADD in {table.Name}')");
+                builder.AppendLine($"\tawait websocket.send(convertToJson({{'error' : 'Invalid request'}}))");
+                builder.AppendLine($"\treturn");
+            }
+
+            return builder.ToString();
+        }
+
         private string GenerateEndpoints(Table table)
         {
             StringBuilder builder;
@@ -60,6 +78,9 @@ namespace DatabaseFunctionsGenerator.Python
 
             builder.AppendLine("elif request['action'] == 'subscribe':");
             builder.AppendLine(Helpers.AddIndentation(GenerateSubscriptionEndpoint(table), 1));
+
+            builder.AppendLine("elif request['action'] == 'add':");
+            builder.AppendLine(Helpers.AddIndentation(GenerateAddEndpoint(table), 1));
 
             return builder.ToString();
         }
