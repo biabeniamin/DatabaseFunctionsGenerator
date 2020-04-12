@@ -27,7 +27,7 @@ namespace DatabaseFunctionsGenerator.Python
             {
                 builder.Append($"{column.LowerCaseName} = Column({column.Type.GetSqlAlchemyType()}");
 
-                builder.Append($", ForeignKey(\"{column.ParentTable.LowerCaseName}.{column.ParentTable.PrimaryKeyColumn.LowerCaseName}\")");
+                builder.Append($", ForeignKey(\"{column.ParentTable.Name}.{column.ParentTable.PrimaryKeyColumn.Name}\")");
                 builder.AppendLine(")");
 
                 builder.Append($"{column.ParentTable.LowerCaseName} = relationship({column.ParentTable.SingularName},");
@@ -48,7 +48,7 @@ namespace DatabaseFunctionsGenerator.Python
 
             foreach (Column column in table.Columns.Where(col => !col.Type.IsForeignKey))
             {
-                builder.Append($"{column.LowerCaseName} = Column({column.Type.GetSqlAlchemyType()}");
+                builder.Append($"{column.LowerCaseName} = Column('{column.Name}', {column.Type.GetSqlAlchemyType()}");
 
                 if (column.Type.IsPrimaryKey)
                 {
@@ -346,7 +346,7 @@ namespace DatabaseFunctionsGenerator.Python
             {
                 classBuilder.AppendLine("@declared_attr");
                 classBuilder.AppendLine("def __tablename__(cls):");
-                classBuilder.AppendLine($"\treturn '{table.LowerCaseName}'");
+                classBuilder.AppendLine($"\treturn '{table.Name}'");
 
                 //generate fields
                 classBuilder.AppendLine(GenerateFields(table));
