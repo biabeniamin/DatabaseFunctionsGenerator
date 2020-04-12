@@ -25,7 +25,7 @@ namespace DatabaseFunctionsGenerator.Python
 
             foreach (Column column in table.Columns.Where(col => col.Type.IsForeignKey))
             {
-                builder.Append($"{column.LowerCaseName} = Column({column.Type.GetSqlAlchemyType()}");
+                builder.Append($"{column.LowerCaseName} = Column('{column.Name}', {column.Type.GetSqlAlchemyType()}");
 
                 builder.Append($", ForeignKey(\"{column.ParentTable.Name}.{column.ParentTable.PrimaryKeyColumn.Name}\")");
                 builder.AppendLine(")");
