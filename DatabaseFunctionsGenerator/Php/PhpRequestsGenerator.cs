@@ -128,7 +128,7 @@ namespace DatabaseFunctionsGenerator.Php
 
                         foreach (Column column in table.EditableColumns)
                         {
-                            addBlock.AppendLine($"\t\t$_GET[\'{column.LowerCaseName}\'],");
+                            addBlock.AppendLine($"\t\tIssetValueNull($_GET[\'{column.LowerCaseName}\']),");
                         }
 
                         if (addBlock.ToString().Contains(','))
@@ -217,7 +217,7 @@ namespace DatabaseFunctionsGenerator.Php
 
                         foreach (Column column in table.EditableColumns)
                         {
-                            addBlock.AppendLine($"\t\t\t$_POST[\'{column.LowerCaseName}\'],");
+                            addBlock.AppendLine($"\t\t\tIssetValueNull($_POST[\'{column.LowerCaseName}\']),");
                         }
 
                         Helpers.RemoveLastApparition(addBlock, ",");
