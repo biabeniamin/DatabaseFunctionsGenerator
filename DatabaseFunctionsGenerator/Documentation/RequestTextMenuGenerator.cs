@@ -52,24 +52,6 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
-        private string GenerateGetAddData(Table table, string serverUrl)
-        {
-            StringBuilder builder;
-
-            builder = new StringBuilder();
-
-            //get request to add data
-
-            builder.Append($"{serverUrl}{table.Name}.php?cmd=add{table.SingularName}");
-            foreach (Column column in table.EditableColumns)
-            {
-                builder.Append($"&{column.LowerCaseName}={Helpers.GetDefaultColumnDataWithoutApostrophe(column.Type.Type)}");
-            }
-            builder.AppendLine($" - GET request -add a new {table.SingularName} with specified data and return the item with id != 0 if was added");
-
-            return builder.ToString();
-        }
-
         private string GeneratePostAddData(Table table, string serverUrl)
         {
             StringBuilder builder;
@@ -136,7 +118,6 @@ namespace DatabaseFunctionsGenerator
 
             builder.AppendLine(GenerateGetAllData(table, serverUrl));
             builder.AppendLine(GenerateDedicatedRequests(table, serverUrl));
-            builder.AppendLine(GenerateGetAddData(table, serverUrl));
             builder.AppendLine(GeneratePostAddData(table, serverUrl));
             builder.AppendLine(GenerateUpdateData(table, serverUrl));
             builder.AppendLine(GenerateDeleteData(table, serverUrl));

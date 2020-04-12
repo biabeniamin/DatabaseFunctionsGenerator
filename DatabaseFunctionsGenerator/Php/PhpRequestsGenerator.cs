@@ -97,61 +97,6 @@ namespace DatabaseFunctionsGenerator.Php
             return builder.ToString();
         }
 
-        private static string GenerateGetAddRequest(Table table)
-        {
-            StringBuilder builder;
-            StringBuilder addBlock;
-
-            builder = new StringBuilder();
-            addBlock = new StringBuilder();
-
-                builder.AppendLine($"else if(\"add{table.SingularName}\" == $_GET[\"cmd\"])");
-                builder.AppendLine("{");
-                {
-
-                    addBlock.AppendLine("if(CheckGetParameters([");
-                    foreach (Column column in table.EditableMandatoryColumns)
-                    {
-                        addBlock.AppendLine($"\t\'{column.LowerCaseName}\',");
-                    }
-                    if (addBlock.ToString().Contains(','))
-                    {
-                        addBlock.Remove(addBlock.ToString().LastIndexOf(','), 1);
-                    }
-
-                    addBlock.AppendLine("]))");
-                    addBlock.AppendLine("{");
-                    {
-
-                        addBlock.AppendLine($"\t$database = new DatabaseOperations();");
-                        addBlock.AppendLine($"\t${table.LowerCaseSingularName} = new {table.SingularName}(");
-
-                        foreach (Column column in table.EditableColumns)
-                        {
-                            addBlock.AppendLine($"\t\tIssetValueNull($_GET[\'{column.LowerCaseName}\']),");
-                        }
-
-                        if (addBlock.ToString().Contains(','))
-                        {
-                            addBlock.Remove(addBlock.ToString().LastIndexOf(','), 1);
-                        }
-
-                        addBlock.AppendLine($"\t);");
-                        addBlock.AppendLine();
-
-                        addBlock.AppendLine($"\techo json_encode(Add{table.SingularName}($database, ${table.LowerCaseSingularName}));");
-
-                    }
-                    addBlock.AppendLine($"}}");
-                    builder.AppendLine(Helpers.AddIndentation(addBlock.ToString(), 1));
-
-                }
-                builder.AppendLine("}");
-
-            return builder.ToString();
-        }
-
-
         private static string GenerateGetRequest(Table table)
         {
             StringBuilder builder;
@@ -171,10 +116,6 @@ namespace DatabaseFunctionsGenerator.Php
 
                 //to get data by dedicated fields
                 builder.AppendLine(Helpers.AddIndentation(GenerateGetDedicatedRequest(table),
-                    1));
-
-                //to add data
-                builder.AppendLine(Helpers.AddIndentation(GenerateGetAddRequest(table),
                     1));
             }
             builder.AppendLine("}");
