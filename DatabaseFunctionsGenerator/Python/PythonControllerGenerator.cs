@@ -234,6 +234,8 @@ namespace DatabaseFunctionsGenerator.Python
             function.AppendLine($"result = {table.LowerCaseSingularName}");
             function.AppendLine($"session.commit()");
             function.AppendLine($"result = session.query({table.SingularName}).filter({table.SingularName}.{table.PrimaryKeyColumn.LowerCaseName} == {table.LowerCaseSingularName}.{table.PrimaryKeyColumn.LowerCaseName}).first()");
+            foreach (Table parentTable in table.Parents)
+                function.AppendLine($"result.{parentTable.LowerCaseSingularName} = get{parentTable.Name}By{parentTable.PrimaryKeyColumn.Name}(session, result.{parentTable.PrimaryKeyColumn.LowerCaseName})[0]");
             function.AppendLine($"return result");
 
             builder.AppendLine(Helpers.AddIndentation(function, 1));
@@ -337,7 +339,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("from math import floor");
             //import parent tables
             foreach (Table parentTable in table.Parents)
-                builder.AppendLine($"from {parentTable.SingularName} import {parentTable.SingularName}, get{parentTable.Name}");
+                builder.AppendLine($"from {parentTable.SingularName} import {parentTable.SingularName}, get{parentTable.Name}, get{parentTable.Name}By{parentTable.PrimaryKeyColumn.Name}");
 
             builder.AppendLine($"class {table.SingularName}(Base):");
             //class content
