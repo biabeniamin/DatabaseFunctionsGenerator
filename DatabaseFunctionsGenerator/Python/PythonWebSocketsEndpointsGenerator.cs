@@ -89,7 +89,14 @@ namespace DatabaseFunctionsGenerator.Python
                 builder.AppendLine($"\treturn");
             }
 
-            builder.AppendLine($"{table.LowerCaseSingularName} = dict_as_obj(request['data'], {table.SingularName}.{table.SingularName}())");
+            builder.AppendLine("data = request['data']");
+            builder.AppendLine($"{table.LowerCaseSingularName} = {table.SingularName}.get{table.Name}By{table.PrimaryKeyColumn.Name}(session, data['{table.PrimaryKeyColumn.LowerCaseName}'])[0]");
+            builder.AppendLine($"{table.LowerCaseSingularName} = dict_as_obj(data, {table.LowerCaseSingularName})");
+            builder.AppendLine($"{table.LowerCaseSingularName} = {table.SingularName}.update{table.SingularName}(session, {table.LowerCaseSingularName})");
+            builder.AppendLine($"response = convertToJson({{'operation' : 'update', 'data' : {table.LowerCaseSingularName}}})");
+            builder.AppendLine($"{table.LowerCaseName}Subscribers = set(filter(removeClosedConnection, {table.LowerCaseName}Subscribers))");
+            builder.AppendLine($"for subscriber in {table.LowerCaseName}Subscribers:");
+            builder.AppendLine($"\t await subscriber.send(response)");
 
 
             return builder.ToString();
