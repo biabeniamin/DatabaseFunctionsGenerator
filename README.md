@@ -12,6 +12,13 @@ The idea of the project is to pass the structure of your database and this piece
     -Python is a work in progress<br />
     -Documentation documenting the api <br />
 
+## Backend
+For backend, the generator generates:<br />
+    -Php server with all crude operations, dedicated requests, authentification, up-to-date<br />
+    -Python Restless with crude operations without direct dedicated requests and authentification, discontinued<br />
+    -Python Restful and SqlAlchemy with all crude operations, dedicated requests, authentification, up-to-date<br />
+    -Python Websockets with SqlAlchemy with all crude operations, dedicated requests, authentification, up-to-date<br />
+
 ## Motivation
 
 This project was created to save time when starting a new project. 
