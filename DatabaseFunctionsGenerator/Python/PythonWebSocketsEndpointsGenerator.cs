@@ -56,7 +56,7 @@ namespace DatabaseFunctionsGenerator.Python
 
             builder.AppendLine("#add endpoint");
 
-            builder.AppendLine($"if checkArguments(request, ['{table.ToString("', '", withLowerCase:true, onlyEditable:true)}']) == False:");
+            builder.AppendLine($"if checkArguments(request, ['{table.ToString("', '", withLowerCase: true, onlyEditable: true)}']) == False:");
             {
                 builder.AppendLine($"\tprint('Not all parameters were provided for ADD in {table.Name}')");
                 builder.AppendLine($"\tawait websocket.send(convertToJson({{'error' : 'Invalid request'}}))");
@@ -69,6 +69,27 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine($"{table.LowerCaseName}Subscribers = set(filter(removeClosedConnection, {table.LowerCaseName}Subscribers))");
             builder.AppendLine($"for subscriber in {table.LowerCaseName}Subscribers:");
             builder.AppendLine($"\t await subscriber.send(response)");
+
+
+            return builder.ToString();
+        }
+
+        private string GenerateUpdateEndpoint(Table table)
+        {
+            StringBuilder builder;
+
+            builder = new StringBuilder();
+
+            builder.AppendLine("#update endpoint");
+
+            builder.AppendLine($"if checkArguments(request, ['{table.PrimaryKeyColumn.LowerCaseName}']) == False:");
+            {
+                builder.AppendLine($"\tprint('Not all parameters were provided for UPDATE in {table.Name}')");
+                builder.AppendLine($"\tawait websocket.send(convertToJson({{'error' : 'Invalid request'}}))");
+                builder.AppendLine($"\treturn");
+            }
+
+            builder.AppendLine($"{table.LowerCaseSingularName} = dict_as_obj(request['data'], {table.SingularName}.{table.SingularName}())");
 
 
             return builder.ToString();
@@ -89,6 +110,9 @@ namespace DatabaseFunctionsGenerator.Python
 
             builder.AppendLine("elif request['action'] == 'add':");
             builder.AppendLine(Helpers.AddIndentation(GenerateAddEndpoint(table), 1));
+
+            builder.AppendLine("elif request['action'] == 'update':");
+            builder.AppendLine(Helpers.AddIndentation(GenerateUpdateEndpoint(table), 1));
 
             return builder.ToString();
         }
