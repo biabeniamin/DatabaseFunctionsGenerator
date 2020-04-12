@@ -1,4 +1,5 @@
-﻿def checkArguments(request, arguments):
+﻿from websockets.protocol import State
+def checkArguments(request, arguments):
 	print(request)
 	print('data' in request)
 	if 'data' not in request:
@@ -8,3 +9,6 @@
 		if arg not in request['data']:
 			return False
 	return True
+
+def removeClosedConnection(item):
+	return item.state == State.OPEN 
