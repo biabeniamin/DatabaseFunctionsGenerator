@@ -117,7 +117,7 @@ namespace DatabaseFunctionsGenerator.Python
                 builder.AppendLine($"\treturn");
             }
 
-            builder.AppendLine($"{table.LowerCaseSingularName} = {table.SingularName}.delete{table.SingularName}(session, request['data']['{table.PrimaryKeyColumn.LowerCaseName}']})");
+            builder.AppendLine($"{table.LowerCaseSingularName} = {table.SingularName}.delete{table.SingularName}(session, request['data']['{table.PrimaryKeyColumn.LowerCaseName}'])");
             builder.AppendLine($"response = convertToJson({{'operation' : 'delete', 'data' : {table.LowerCaseSingularName}}})");
             builder.AppendLine($"{table.LowerCaseName}Subscribers = set(filter(removeClosedConnection, {table.LowerCaseName}Subscribers))");
             builder.AppendLine($"for subscriber in {table.LowerCaseName}Subscribers:");
