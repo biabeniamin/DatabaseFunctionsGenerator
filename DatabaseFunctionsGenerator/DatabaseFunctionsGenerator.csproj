@@ -80,7 +80,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Compile Include="AuthenticationSystem.cs" />
-    <None Include="CodeHelpers\WebSocketsHelpers.py" />
+    <None Include="CodeHelpers\WebSocketsHelpers.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Compile Include="Constants.cs" />
     <Compile Include="CSharp\CSharpClientControllerGenerator.cs" />
     <Compile Include="CSharp\CSharpGenerator.cs" />

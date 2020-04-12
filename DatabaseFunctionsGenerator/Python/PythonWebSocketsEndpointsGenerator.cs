@@ -66,6 +66,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine($"{table.LowerCaseSingularName} = dict_as_obj(request['data'], {table.SingularName}.{table.SingularName}())");
             builder.AppendLine($"{table.LowerCaseSingularName} = {table.SingularName}.add{table.SingularName}(session, {table.LowerCaseSingularName})");
             builder.AppendLine($"response = convertToJson({{'operation' : 'add', 'data' : {table.LowerCaseSingularName}}})");
+            builder.AppendLine($"{table.LowerCaseName}Subscribers = set(filter(removeClosedConnection, {table.LowerCaseName}Subscribers))");
             builder.AppendLine($"for subscriber in {table.LowerCaseName}Subscribers:");
             builder.AppendLine($"\t await subscriber.send(response)");
 
@@ -103,7 +104,7 @@ namespace DatabaseFunctionsGenerator.Python
             //imports
             builder.AppendLine("#generated automatically");
             builder.AppendLine("from SqlAlchemy import convertToJson, dict_as_obj");
-            builder.AppendLine("from WebSocketHelpers import checkArguments, removeClosedConnection");
+            builder.AppendLine("from WebSocketsHelpers import checkArguments, removeClosedConnection");
             builder.AppendLine($"import {table.SingularName}");
 
             builder.AppendLine($"{table.LowerCaseName}Subscribers = set()");
