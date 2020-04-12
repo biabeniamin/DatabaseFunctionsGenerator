@@ -102,6 +102,25 @@ namespace DatabaseFunctionsGenerator.Python
             return builder.ToString();
         }
 
+        private string GenerateDeleteEndpoint(Table table)
+        {
+            StringBuilder builder;
+
+            builder = new StringBuilder();
+
+            builder.AppendLine("#delete endpoint");
+
+            builder.AppendLine($"if checkArguments(request, ['{table.PrimaryKeyColumn.LowerCaseName}']) == False:");
+            {
+                builder.AppendLine($"\tprint('Not all parameters were provided for DELETE in {table.Name}')");
+                builder.AppendLine($"\tawait websocket.send(convertToJson({{'error' : 'Invalid request'}}))");
+                builder.AppendLine($"\treturn");
+            }
+
+
+            return builder.ToString();
+        }
+
         private string GenerateEndpoints(Table table)
         {
             StringBuilder builder;
@@ -120,6 +139,9 @@ namespace DatabaseFunctionsGenerator.Python
 
             builder.AppendLine("elif request['action'] == 'update':");
             builder.AppendLine(Helpers.AddIndentation(GenerateUpdateEndpoint(table), 1));
+
+            builder.AppendLine("elif request['action'] == 'delete':");
+            builder.AppendLine(Helpers.AddIndentation(GenerateDeleteEndpoint(table), 1));
 
             return builder.ToString();
         }
