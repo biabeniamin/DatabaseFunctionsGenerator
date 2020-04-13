@@ -224,7 +224,11 @@ namespace DatabaseFunctionsGenerator
                     url = $"api/{table.LowerCaseName}";
                     sentData = $"encode{table.SingularName}({table.LowerCaseSingularName})";
                 }
-                functionBody.AppendLine($"return this.http.post<{table.SingularName}>(ServerUrl.GetUrl()  + \"{url}\", {sentData}).subscribe({table.LowerCaseSingularName} =>");
+
+                if (table.RequiresSecurityToken)
+                    url += "&token=${this.token}";
+
+                functionBody.AppendLine($"return this.http.post<{table.SingularName}>(ServerUrl.GetUrl()  + `{url}`, {sentData}).subscribe({table.LowerCaseSingularName} =>");
                 functionBody.AppendLine("{");
                 {
                     functionBody.AppendLine($"\tconsole.log({table.LowerCaseSingularName});");
@@ -255,17 +259,21 @@ namespace DatabaseFunctionsGenerator
             string url = "";
             if (_database.Type == DatabaseType.Php)
             {
-                url = $"\"{table.Name}.php?cmd=update{table.SingularName}\"";
+                url = $"{table.Name}.php?cmd=update{table.SingularName}";
             }
             else if (_database.Type == DatabaseType.Phyton)
             {
                 url = $"\"api/{table.LowerCaseName}/\" + {table.LowerCaseSingularName}.{table.PrimaryKeyColumn.LowerCaseName}";
             }
+
+            if (table.RequiresSecurityToken)
+                url += "&token=${this.token}";
+
             builder.AppendLine($"Update{table.SingularName}({table.LowerCaseSingularName})");
             builder.AppendLine("{");
             {
 
-                functionBody.AppendLine($"return this.http.put<{table.SingularName}>(ServerUrl.GetUrl()  + {url}, {table.LowerCaseSingularName}).subscribe({table.LowerCaseSingularName} =>");
+                functionBody.AppendLine($"return this.http.put<{table.SingularName}>(ServerUrl.GetUrl()  + `{url}`, {table.LowerCaseSingularName}).subscribe({table.LowerCaseSingularName} =>");
                 functionBody.AppendLine("{");
                 {
                     functionBody.AppendLine($"\tconsole.log({table.LowerCaseSingularName});");
@@ -291,18 +299,21 @@ namespace DatabaseFunctionsGenerator
             string url = "";
             if (_database.Type == DatabaseType.Php)
             {
-                url = $"\"{table.Name}.php?cmd=delete{table.SingularName}&{table.PrimaryKeyColumn.LowerCaseName}=\"";
+                url = $"{table.Name}.php?cmd=delete{table.SingularName}&{table.PrimaryKeyColumn.LowerCaseName}=";
             }
             else if (_database.Type == DatabaseType.Phyton)
             {
-                url = $"\"api/{table.LowerCaseName}/\"";
+                url = $"api/{table.LowerCaseName}/";
             }
+
+            if (table.RequiresSecurityToken)
+                url += "&token=${this.token}";
 
             builder.AppendLine($"Delete{table.SingularName}({table.LowerCaseSingularName})");
             builder.AppendLine("{");
             {
 
-                functionBody.AppendLine($"return this.http.delete<{table.SingularName}>(ServerUrl.GetUrl()  + {url} +  {table.LowerCaseSingularName}.{table.PrimaryKeyColumn.LowerCaseName}).subscribe({table.LowerCaseSingularName} =>");
+                functionBody.AppendLine($"return this.http.delete<{table.SingularName}>(ServerUrl.GetUrl()  + `{url}` +  {table.LowerCaseSingularName}.{table.PrimaryKeyColumn.LowerCaseName}).subscribe({table.LowerCaseSingularName} =>");
                 functionBody.AppendLine("{");
                 {
                     functionBody.AppendLine($"\tconsole.log({table.LowerCaseSingularName});");
