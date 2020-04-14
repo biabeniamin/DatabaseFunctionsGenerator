@@ -324,15 +324,15 @@ namespace DatabaseFunctionsGenerator
             string url = "";
             if (_database.Type == DatabaseType.Php)
             {
-                url = $"{table.Name}.php?cmd=delete{table.SingularName}&{table.PrimaryKeyColumn.LowerCaseName}=";
+                url = $"{table.Name}.php?cmd=delete{table.SingularName}";
+                if (table.RequiresSecurityToken)
+                    url += "&token=${this.token}";
+                url += $"&{table.PrimaryKeyColumn.LowerCaseName}=";
             }
             else if (_database.Type == DatabaseType.Phyton)
             {
                 url = $"api/{table.LowerCaseName}/";
             }
-
-            if (table.RequiresSecurityToken)
-                url += "&token=${this.token}";
 
             builder.AppendLine($"Delete{table.SingularName}({table.LowerCaseSingularName})");
             builder.AppendLine("{");
