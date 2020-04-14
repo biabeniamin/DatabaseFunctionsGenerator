@@ -229,6 +229,17 @@ namespace DatabaseFunctionsGenerator
                 if (table.RequiresSecurityToken)
                     url += "&token=${this.token}";
 
+                //websockets
+                functionBody.AppendLine("if (this.webSocketsSubject!=null)");
+                functionBody.AppendLine("{");
+                {
+                    functionBody.AppendLine($"\tthis.webSocketsSubject.next(new Message(this.constructor.name, new Request('add', '{table.Name}', {table.LowerCaseSingularName})));");
+                    functionBody.AppendLine("\treturn");
+                }
+                functionBody.AppendLine("}");
+                functionBody.AppendLine();
+
+                //http
                 functionBody.AppendLine($"return this.http.post<{table.SingularName}>(ServerUrl.GetUrl()  + `{url}`, {sentData}).subscribe({table.LowerCaseSingularName} =>");
                 functionBody.AppendLine("{");
                 {
