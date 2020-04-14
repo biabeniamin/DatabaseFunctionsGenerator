@@ -42,7 +42,7 @@ namespace DatabaseFunctionsGenerator
                 functionBody.AppendLine("{");
                 {
                     if (_database.Type == DatabaseType.Php)
-                        functionBody.AppendLine($"\tthis.{table.LowerCaseName} = data;");
+                        functionBody.AppendLine($"\tthis.{table.LowerCaseName}.next(data);");
                     else if (_database.Type == DatabaseType.Phyton)
                         functionBody.AppendLine($"\tthis.{table.LowerCaseName} = data[\"objects\"];");
                 }
@@ -181,6 +181,7 @@ namespace DatabaseFunctionsGenerator
             objectName = Helpers.GetLowerCaseString(table.SingularName);
 
             builder.Append($"constructor(private http:HttpClient");
+
             if(table.RequiresSecurityToken)
                 builder.Append($", private auth : AuthenticationService");
             builder.AppendLine($")");
@@ -191,7 +192,8 @@ namespace DatabaseFunctionsGenerator
                     functionBody.AppendLine("this.auth.CheckToken();");
                     functionBody.AppendLine("this.token = this.auth.GetToken();");
                 }
-                functionBody.AppendLine($"this.{table.LowerCaseName} = [{table.SingularName}Service.GetDefault{table.SingularName}()];");
+                functionBody.AppendLine($"this.{table.LowerCaseName} = new Subject();");
+                functionBody.AppendLine($"this.{table.LowerCaseName}.next([{table.SingularName}Service.GetDefault{table.SingularName}()]);");
                 functionBody.AppendLine($"this.Get{table.Name}();");
             }
             builder.AppendLine(Helpers.AddIndentation(functionBody.ToString(), 1));
@@ -235,7 +237,9 @@ namespace DatabaseFunctionsGenerator
                     functionBody.AppendLine($"\tif(0 != {table.LowerCaseSingularName}.{Helpers.GetLowerCaseString(table.PrimaryKeyColumn.Name)})");
                     functionBody.AppendLine("\t{");
                     {
-                        functionBody.AppendLine($"\t\tthis.{table.LowerCaseName}.push({table.LowerCaseSingularName})");
+                        functionBody.AppendLine($"\t\tthis.{table.LowerCaseName}List.push({table.LowerCaseSingularName})");
+                        functionBody.AppendLine($"\t\tthis.{table.LowerCaseName}.next(this.{table.LowerCaseName}List)");
+
                     }
                     functionBody.AppendLine("\t}");
                 }
@@ -337,6 +341,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine($"import {{HttpClient}} from '@angular/common/http';");
             builder.AppendLine($"import {{ ServerUrl }} from './ServerUrl'");
             builder.AppendLine("import { Injectable } from '@angular/core';");
+            builder.AppendLine("import { Subject } from 'rxjs';");
             builder.AppendLine($"import {{ {table.SingularName}, encode{table.SingularName} }} from '../app/Models/{table.SingularName}'");
 
             foreach (Table parentTable in table.Parents)
@@ -361,8 +366,9 @@ namespace DatabaseFunctionsGenerator
             {
 
 
-                classBody.AppendLine($"public {table.LowerCaseName} : {table.SingularName}[];");
-                if(table.RequiresSecurityToken)
+                classBody.AppendLine($"public {table.LowerCaseName} : Subject<{table.SingularName}[]>;");
+                classBody.AppendLine($"public {table.LowerCaseName}List : {table.SingularName}[];");
+                if (table.RequiresSecurityToken)
                     classBody.AppendLine($"private token : string;");
 
                 classBody.AppendLine(GenerateGetFunction(table));
