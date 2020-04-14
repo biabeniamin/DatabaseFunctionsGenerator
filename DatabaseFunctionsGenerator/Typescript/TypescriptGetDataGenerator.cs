@@ -332,6 +332,25 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
+        private string GenerateWebSocketsConnectFunction(Table table)
+        {
+            StringBuilder builder = new StringBuilder();
+            StringBuilder functionBody = new StringBuilder();
+            string objectName;
+
+            objectName = Helpers.GetLowerCaseString(table.SingularName);
+
+            builder.AppendLine($"ConnectToWebSockets()");
+            builder.AppendLine("{");
+            {
+                functionBody.AppendLine($"this.webSockets = new WebSockets();");
+                functionBody.AppendLine($"this.webSockets.getSubject('{table.Name}')");
+                builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
 
         private string GenerateFunctionsForTable(string path, Table table)
         {
@@ -342,6 +361,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine($"import {{ ServerUrl }} from './ServerUrl'");
             builder.AppendLine("import { Injectable } from '@angular/core';");
             builder.AppendLine("import { BehaviorSubject } from 'rxjs';");
+            builder.AppendLine("import { WebSockets, Message, Request } from './WebSockets';");
             builder.AppendLine($"import {{ {table.SingularName}, encode{table.SingularName} }} from '../app/Models/{table.SingularName}'");
 
             foreach (Table parentTable in table.Parents)
@@ -367,6 +387,7 @@ namespace DatabaseFunctionsGenerator
 
 
                 classBody.AppendLine($"public {table.LowerCaseName} : BehaviorSubject<{table.SingularName}[]>;");
+                classBody.AppendLine($"private webSockets : WebSockets;");
                 if (table.RequiresSecurityToken)
                     classBody.AppendLine($"private token : string;");
 
@@ -378,6 +399,7 @@ namespace DatabaseFunctionsGenerator
                 classBody.AppendLine(GenerateAddFunction(table));
                 classBody.AppendLine(GenerateUpdateFunction(table));
                 classBody.AppendLine(GenerateDeleteFunction(table));
+                classBody.AppendLine(GenerateWebSocketsConnectFunction(table));
             }
             builder.AppendLine(Helpers.AddIndentation(classBody.ToString(), 1));
             builder.AppendLine("}");
