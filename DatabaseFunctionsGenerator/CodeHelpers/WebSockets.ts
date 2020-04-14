@@ -2,15 +2,6 @@
 import { WebSocketSubject } from 'rxjs/webSocket';
 import { Subject } from 'rxjs';
 
-
-export class Message
-{
-    constructor(
-        public sender:string,
-        public data:any
-    ) { }
-}
-
 export class Request {
     constructor(
         public operation:string,
@@ -19,6 +10,13 @@ export class Request {
     ) { }
 }
 
+export class Message
+{
+    constructor(
+        public sender:string,
+        public data:Request
+    ) { }
+}
 
 @Injectable({
     providedIn : 'root'
