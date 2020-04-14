@@ -337,7 +337,17 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine($"Delete{table.SingularName}({table.LowerCaseSingularName})");
             builder.AppendLine("{");
             {
+                //websockets
+                functionBody.AppendLine("if (this.webSocketsSubject!=null)");
+                functionBody.AppendLine("{");
+                {
+                    functionBody.AppendLine($"\tthis.webSocketsSubject.next(new Message(this.constructor.name, new Request('delete', '{table.Name}', {table.LowerCaseSingularName})));");
+                    functionBody.AppendLine("\treturn");
+                }
+                functionBody.AppendLine("}");
+                functionBody.AppendLine();
 
+                //http
                 functionBody.AppendLine($"return this.http.delete<{table.SingularName}>(ServerUrl.GetUrl()  + `{url}` +  {table.LowerCaseSingularName}.{table.PrimaryKeyColumn.LowerCaseName}).subscribe({table.LowerCaseSingularName} =>");
                 functionBody.AppendLine("{");
                 {
