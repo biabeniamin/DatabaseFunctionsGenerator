@@ -24,7 +24,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("#get endpoint");
 
             builder.AppendLine($"{table.LowerCaseName} = {table.SingularName}.get{table.Name}(session)");
-            builder.AppendLine($"response = convertToJson({{'operation' : 'get', 'data' : {table.LowerCaseName}}})");
+            builder.AppendLine($"response = convertToJson({{'operation' : 'get', 'table' : '{table.Name}', 'data' : {table.LowerCaseName}}})");
 
             builder.AppendLine($"await websocket.send(response)");
 
@@ -40,7 +40,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("#subscription endpoint");
 
             builder.AppendLine($"{table.LowerCaseName} = {table.SingularName}.get{table.Name}(session)");
-            builder.AppendLine($"response = convertToJson({{'operation' : 'get', 'data' : {table.LowerCaseName}}})");
+            builder.AppendLine($"response = convertToJson({{'operation' : 'get', 'table' : '{table.Name}', 'data' : {table.LowerCaseName}}})");
 
             builder.AppendLine($"{table.LowerCaseName}Subscribers.add(websocket)");
             builder.AppendLine($"await websocket.send(response)");
@@ -65,7 +65,7 @@ namespace DatabaseFunctionsGenerator.Python
 
             builder.AppendLine($"{table.LowerCaseSingularName} = dict_as_obj(request['data'], {table.SingularName}.{table.SingularName}())");
             builder.AppendLine($"{table.LowerCaseSingularName} = {table.SingularName}.add{table.SingularName}(session, {table.LowerCaseSingularName})");
-            builder.AppendLine($"response = convertToJson({{'operation' : 'add', 'data' : {table.LowerCaseSingularName}}})");
+            builder.AppendLine($"response = convertToJson({{'operation' : 'add', 'table' : '{table.Name}', 'data' : {table.LowerCaseSingularName}}})");
             builder.AppendLine($"{table.LowerCaseName}Subscribers = set(filter(removeClosedConnection, {table.LowerCaseName}Subscribers))");
             builder.AppendLine($"for subscriber in {table.LowerCaseName}Subscribers:");
             builder.AppendLine($"\t await subscriber.send(response)");
@@ -93,7 +93,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine($"{table.LowerCaseSingularName} = {table.SingularName}.get{table.Name}By{table.PrimaryKeyColumn.Name}(session, data['{table.PrimaryKeyColumn.LowerCaseName}'])[0]");
             builder.AppendLine($"{table.LowerCaseSingularName} = dict_as_obj(data, {table.LowerCaseSingularName})");
             builder.AppendLine($"{table.LowerCaseSingularName} = {table.SingularName}.update{table.SingularName}(session, {table.LowerCaseSingularName})");
-            builder.AppendLine($"response = convertToJson({{'operation' : 'update', 'data' : {table.LowerCaseSingularName}}})");
+            builder.AppendLine($"response = convertToJson({{'operation' : 'update', 'table' : '{table.Name}', 'data' : {table.LowerCaseSingularName}}})");
             builder.AppendLine($"{table.LowerCaseName}Subscribers = set(filter(removeClosedConnection, {table.LowerCaseName}Subscribers))");
             builder.AppendLine($"for subscriber in {table.LowerCaseName}Subscribers:");
             builder.AppendLine($"\t await subscriber.send(response)");
@@ -118,7 +118,7 @@ namespace DatabaseFunctionsGenerator.Python
             }
 
             builder.AppendLine($"{table.LowerCaseSingularName} = {table.SingularName}.delete{table.SingularName}(session, request['data']['{table.PrimaryKeyColumn.LowerCaseName}'])");
-            builder.AppendLine($"response = convertToJson({{'operation' : 'delete', 'data' : {table.LowerCaseSingularName}}})");
+            builder.AppendLine($"response = convertToJson({{'operation' : 'delete', 'table' : '{table.Name}', 'data' : {table.LowerCaseSingularName}}})");
             builder.AppendLine($"{table.LowerCaseName}Subscribers = set(filter(removeClosedConnection, {table.LowerCaseName}Subscribers))");
             builder.AppendLine($"for subscriber in {table.LowerCaseName}Subscribers:");
             builder.AppendLine($"\t await subscriber.send(response)");
