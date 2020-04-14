@@ -383,6 +383,20 @@ namespace DatabaseFunctionsGenerator
 
                     functionBody.AppendLine("\tlet request = message.data;");
                     functionBody.AppendLine("\tconsole.log(request);");
+                    functionBody.AppendLine("if(request.operation == 'get')");
+                    functionBody.AppendLine("{");
+                    {
+                        functionBody.AppendLine($"\tthis.{table.LowerCaseName}.next(request.data);");
+                    }
+                    functionBody.AppendLine("}");
+                    functionBody.AppendLine("else if(request.operation == 'add')");
+                    functionBody.AppendLine("{");
+                    {
+                        functionBody.AppendLine($"\tlet items = this.{table.LowerCaseName}.getValue()");
+                        functionBody.AppendLine("\titems.push(request.data);");
+                        functionBody.AppendLine($"\tthis.{table.LowerCaseName}.next(items);");
+                    }
+                    functionBody.AppendLine("}");
                 }
                 functionBody.AppendLine("});");
                 functionBody.AppendLine($"this.webSocketsSubject.next(new Message(this.constructor.name, new Request('subscribe', '{table.Name}', null)));");
