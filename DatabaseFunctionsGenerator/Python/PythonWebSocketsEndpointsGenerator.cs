@@ -63,7 +63,7 @@ namespace DatabaseFunctionsGenerator.Python
                 builder.AppendLine($"\treturn");
             }
 
-            builder.AppendLine($"{table.LowerCaseSingularName} = dict_as_obj(request['data'], {table.SingularName}.{table.SingularName}())");
+            builder.AppendLine($"{table.LowerCaseSingularName} = dict_as_obj(request['data'], {table.SingularName}.{table.SingularName}(), ['{table.ToString("', '", withLowerCase: true, onlyNonEditable: true)}'])");
             builder.AppendLine($"{table.LowerCaseSingularName} = {table.SingularName}.add{table.SingularName}(session, {table.LowerCaseSingularName})");
             builder.AppendLine($"response = convertToJson({{'operation' : 'add', 'table' : '{table.Name}', 'data' : {table.LowerCaseSingularName}}})");
             builder.AppendLine($"{table.LowerCaseName}Subscribers = set(filter(removeClosedConnection, {table.LowerCaseName}Subscribers))");
