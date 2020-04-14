@@ -93,6 +93,25 @@ namespace DatabaseFunctionsGenerator
             return builder.ToString();
         }
 
+        private static string GenerateUpdateLive(Table table)
+        {
+            StringBuilder builder = new StringBuilder();
+            StringBuilder functionBody = new StringBuilder();
+
+            builder.AppendLine($"updateLive(event)");
+            builder.AppendLine("{");
+            {
+                functionBody.AppendLine("event.preventDefault();");
+                functionBody.AppendLine("const target = event.target;");
+                functionBody.AppendLine($"this.{table.LowerCaseSingularName}Service.ConnectToWebSockets();");
+
+                builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
+            }
+            builder.AppendLine("}");
+
+            return builder.ToString();
+        }
+
         private static string GenerateDropDownChangeEventHandler(Table table)
         {
             StringBuilder builder = new StringBuilder();
@@ -181,6 +200,7 @@ namespace DatabaseFunctionsGenerator
                 classBuilder.AppendLine(GenerateNgOnInit(table));
                 classBuilder.AppendLine(GenerateAddEventHandler(table));
                 classBuilder.AppendLine(GenerateGetDedicatedRequestEventHandlers(table));
+                classBuilder.AppendLine(GenerateUpdateLive(table));
 
 
                 foreach (Table parentTable in table.Parents)
