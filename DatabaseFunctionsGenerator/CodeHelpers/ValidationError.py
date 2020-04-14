@@ -4,7 +4,9 @@
     """
     pass
 
-def validate_integer(key, value):		
+def validate_integer(key, value, isMandatory):		
+	if isMandatory == False and not value:
+		return value
 	try:
 		val = int(value)
 	except:

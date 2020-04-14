@@ -77,7 +77,7 @@ namespace DatabaseFunctionsGenerator.Python
             {
                 builder.AppendLine($"@validates('{column.LowerCaseName}')");
                 builder.AppendLine($"def validate_{column.LowerCaseName}(self, key, value):");
-                builder.AppendLine($"\treturn validate_integer(key, value)");
+                builder.AppendLine($"\treturn validate_integer(key, value, {column.Type.IsMandatory})");
 
             }
 
