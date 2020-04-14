@@ -134,19 +134,19 @@ namespace DatabaseFunctionsGenerator.Python
             builder = new StringBuilder();
 
             builder.AppendLine("#Websockets endpoints");
-            builder.AppendLine("if request['action'] == 'get':");
+            builder.AppendLine("if request['operation'] == 'get':");
             builder.AppendLine(Helpers.AddIndentation(GenerateGetEndpoint(table), 1));
 
-            builder.AppendLine("elif request['action'] == 'subscribe':");
+            builder.AppendLine("elif request['operation'] == 'subscribe':");
             builder.AppendLine(Helpers.AddIndentation(GenerateSubscriptionEndpoint(table), 1));
 
-            builder.AppendLine("elif request['action'] == 'add':");
+            builder.AppendLine("elif request['operation'] == 'add':");
             builder.AppendLine(Helpers.AddIndentation(GenerateAddEndpoint(table), 1));
 
-            builder.AppendLine("elif request['action'] == 'update':");
+            builder.AppendLine("elif request['operation'] == 'update':");
             builder.AppendLine(Helpers.AddIndentation(GenerateUpdateEndpoint(table), 1));
 
-            builder.AppendLine("elif request['action'] == 'delete':");
+            builder.AppendLine("elif request['operation'] == 'delete':");
             builder.AppendLine(Helpers.AddIndentation(GenerateDeleteEndpoint(table), 1));
 
             return builder.ToString();
