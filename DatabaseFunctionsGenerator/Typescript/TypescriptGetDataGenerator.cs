@@ -354,6 +354,7 @@ namespace DatabaseFunctionsGenerator
                     functionBody.AppendLine("\tconsole.log(request);");
                 }
                 functionBody.AppendLine("});");
+                functionBody.AppendLine($"this.webSocketsSubject.next(new Message(this.constructor.name, new Request('subscribe', '{table.Name}', null)));");
                 builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
             }
             builder.AppendLine("}");
