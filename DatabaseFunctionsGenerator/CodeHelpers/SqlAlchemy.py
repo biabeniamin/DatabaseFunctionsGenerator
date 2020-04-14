@@ -27,8 +27,10 @@ def object_as_dict(obj):
 			dic[c] = object_as_dict(dic[c])
 	return dic
 
-def dict_as_obj(args, obj):
+def dict_as_obj(args, obj, exclusions = []):
 	for arg in args:
+		if arg in exclusions:
+			continue
 		setattr(obj, arg, args[arg])
 	return obj
 
