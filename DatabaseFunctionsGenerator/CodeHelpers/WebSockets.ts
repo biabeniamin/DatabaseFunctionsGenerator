@@ -31,7 +31,7 @@ export class WebSockets
 
 	constructor()
 	{
-        this.socket$ = new WebSocketSubject('ws://localhost:6789');
+        this.socket$ = new WebSocketSubject('!--url--!');
 
         this.socket$
             .subscribe(

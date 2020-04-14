@@ -18,6 +18,14 @@ namespace DatabaseFunctionsGenerator
         private string _databaseName = "gen";
         private DatabaseType _type = DatabaseType.Php;
         private bool _hasAuthenticationSystem;
+        private string _webSocketsServerAddress = "ws://localhost:6789";
+
+        public string WebSocketsServerAddress
+        {
+            get { return _webSocketsServerAddress; }
+            set { _webSocketsServerAddress = value; }
+        }
+
 
         public bool HasAuthenticationSystem
         {
