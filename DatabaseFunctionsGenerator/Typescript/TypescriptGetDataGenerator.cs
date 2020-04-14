@@ -343,8 +343,17 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine($"ConnectToWebSockets()");
             builder.AppendLine("{");
             {
-                functionBody.AppendLine($"this.webSockets = new WebSockets();");
-                functionBody.AppendLine($"this.webSockets.getSubject('{table.Name}')");
+                functionBody.AppendLine($"this.webSocketsSubject = new WebSockets().getSubject('{table.Name}');");
+                functionBody.AppendLine($"this.webSocketsSubject.subscribe(message =>");
+                functionBody.AppendLine("{");
+                {
+                    functionBody.AppendLine("\tif(message.sender != WebSockets.name)");
+                    functionBody.AppendLine("\t\treturn");
+
+                    functionBody.AppendLine("\tlet request = message.data;");
+                    functionBody.AppendLine("\tconsole.log(request);");
+                }
+                functionBody.AppendLine("});");
                 builder.Append(Helpers.AddIndentation(functionBody.ToString(), 1));
             }
             builder.AppendLine("}");
@@ -360,7 +369,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine($"import {{HttpClient}} from '@angular/common/http';");
             builder.AppendLine($"import {{ ServerUrl }} from './ServerUrl'");
             builder.AppendLine("import { Injectable } from '@angular/core';");
-            builder.AppendLine("import { BehaviorSubject } from 'rxjs';");
+            builder.AppendLine("import { BehaviorSubject, Subject } from 'rxjs';");
             builder.AppendLine("import { WebSockets, Message, Request } from './WebSockets';");
             builder.AppendLine($"import {{ {table.SingularName}, encode{table.SingularName} }} from '../app/Models/{table.SingularName}'");
 
@@ -387,7 +396,7 @@ namespace DatabaseFunctionsGenerator
 
 
                 classBody.AppendLine($"public {table.LowerCaseName} : BehaviorSubject<{table.SingularName}[]>;");
-                classBody.AppendLine($"private webSockets : WebSockets;");
+                classBody.AppendLine($"private webSocketsSubject : Subject<Message>;");
                 if (table.RequiresSecurityToken)
                     classBody.AppendLine($"private token : string;");
 
