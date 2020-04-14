@@ -287,7 +287,17 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine($"Update{table.SingularName}({table.LowerCaseSingularName})");
             builder.AppendLine("{");
             {
+                //websockets
+                functionBody.AppendLine("if (this.webSocketsSubject!=null)");
+                functionBody.AppendLine("{");
+                {
+                    functionBody.AppendLine($"\tthis.webSocketsSubject.next(new Message(this.constructor.name, new Request('update', '{table.Name}', {table.LowerCaseSingularName})));");
+                    functionBody.AppendLine("\treturn");
+                }
+                functionBody.AppendLine("}");
+                functionBody.AppendLine();
 
+                //http
                 functionBody.AppendLine($"return this.http.put<{table.SingularName}>(ServerUrl.GetUrl()  + `{url}`, {table.LowerCaseSingularName}).subscribe({table.LowerCaseSingularName} =>");
                 functionBody.AppendLine("{");
                 {
