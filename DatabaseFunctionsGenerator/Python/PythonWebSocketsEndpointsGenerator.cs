@@ -171,6 +171,17 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("async def requestReceived(websocket, session, request):");
             {
                 functionBuilder.AppendLine($"global {table.LowerCaseName}Subscribers");
+
+                //authentication
+                if (table.RequiresSecurityToken)
+                {
+                    functionBuilder.AppendLine($"if websocket.authenticated == False:");
+                    {
+                        functionBuilder.AppendLine($"\tawait websocket.send(convertToJson({{'operation' : 'tokenError', 'table' : '{table.Name}'}}))");
+                        functionBuilder.AppendLine($"\treturn");
+                    }
+                }
+
                 //endpoints
                 functionBuilder.AppendLine(GenerateEndpoints(table));
             }

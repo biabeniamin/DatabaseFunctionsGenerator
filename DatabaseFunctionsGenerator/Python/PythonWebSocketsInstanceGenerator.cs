@@ -72,6 +72,7 @@ namespace DatabaseFunctionsGenerator.Python
                 StringBuilder functionBuilder = new StringBuilder();
 
                 functionBuilder.AppendLine("users.add(websocket)");
+                functionBuilder.AppendLine("websocket.authenticated = False");
                 functionBuilder.AppendLine("try:");
                 functionBuilder.AppendLine("\tawait websocket.send(connectedSuccessfullyEvent())");
                 functionBuilder.AppendLine("\tprint('client connected')");
