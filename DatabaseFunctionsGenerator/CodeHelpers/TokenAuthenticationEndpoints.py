@@ -2,7 +2,9 @@
 from flask_restful import Resource
 from flask_restful import wraps, abort
 from SqlAlchemyMain import session
-from Authentication import checkToken
+from flask import request
+from FlaskRestfulHelpers import getArguments
+from Authentication import checkToken, login
 class TokenAuthenticationEndpoints(Resource):
 	def __init__(self, **kwargs):
 		self.session = kwargs['session']
@@ -10,7 +12,9 @@ class TokenAuthenticationEndpoints(Resource):
 	#API endpoints
 	#post endpoint
 	def post(self):
-		return Authentication.login(self.session)  
+		requestedArgs = getArguments(['username', 'password'])
+		args  = requestedArgs.parse_args()
+		return login(self.session, args['username'], args['password'], request.remote_addr)  
 
 
 def authenticate(func):
@@ -19,7 +23,9 @@ def authenticate(func):
 		if not getattr(func, 'authenticated', True):
 			return func(*args, **kwargs)
 
-		isAuthorized, error = checkToken(session) 
+		requestedArgs = getArguments(['token'])
+		parsedArgs  = requestedArgs.parse_args()
+		isAuthorized, error = checkToken(session, parsedArgs['token'], request.remote_addr) 
 
 		if isAuthorized:
 			return func(*args, **kwargs)

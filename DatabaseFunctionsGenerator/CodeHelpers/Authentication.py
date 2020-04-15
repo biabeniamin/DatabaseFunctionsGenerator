@@ -1,29 +1,23 @@
 ﻿import Token
 import TokenUser
-from FlaskRestfulHelpers import getArguments
-from flask import request
 from datetime import datetime
 import uuid
-from SqlAlchemyMain import *
+from SqlAlchemyMain import session
 
-def login(session):
-	requestedArgs = getArguments(['username', 'password'])
-	args  = requestedArgs.parse_args()
-	tokenUser = TokenUser.getTokenUsersByUsernamePassword(session, args['username'], args['password'])
+def login(session, username, password, remote_addr):
+	tokenUser = TokenUser.getTokenUsersByUsernamePassword(session, username, password)
 	if len(tokenUser) == 0:
 		print("invalid credentials")
 		return {'error' : 'Invalid credentials'}
 
-	token = Token.Token(value=str(uuid.uuid4()), address = request.remote_addr, lastUpdate = datetime.utcnow(), tokenUserId = tokenUser[0].tokenUserId)
+	token = Token.Token(value=str(uuid.uuid4()), address = remote_addr, lastUpdate = datetime.utcnow(), tokenUserId = tokenUser[0].tokenUserId)
 	Token.addToken(session, token)
 	return [token]
 
-def checkToken(session):
+def checkToken(session, token, remote_addr):
 	isAuthorized = 1
 	error = None
-	requestedArgs = getArguments(['token'])
-	args  = requestedArgs.parse_args()
-	token = Token.getTokensByValue(session, args['token'])
+	token = Token.getTokensByValue(session, token)
 	if len(token) == 0:
 		isAuthorized = 0
 		error = 'Invalid token'
@@ -37,7 +31,7 @@ def checkToken(session):
 		print("token timeouted")
 		error = 'Token expired'
 
-	if token.address != request.remote_addr:
+	if token.address != remote_addr:
 		isAuthorized = 0
 		print("different address")
 		error = 'Token generated for other address'
