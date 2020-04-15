@@ -378,25 +378,47 @@ namespace DatabaseFunctionsGenerator
                 functionBody.AppendLine($"this.webSocketsSubject.subscribe(message =>");
                 functionBody.AppendLine("{");
                 {
-                    functionBody.AppendLine("\tif(message.sender != WebSockets.name)");
-                    functionBody.AppendLine("\t\treturn");
+                    StringBuilder observer = new StringBuilder();
 
-                    functionBody.AppendLine("\tlet request = message.data;");
-                    functionBody.AppendLine("\tconsole.log(request);");
-                    functionBody.AppendLine("if(request.operation == 'get')");
-                    functionBody.AppendLine("{");
+                    observer.AppendLine("\tif(message.sender != WebSockets.name)");
+                    observer.AppendLine("\t\treturn");
+
+                    observer.AppendLine("\tlet request = message.data;");
+                    observer.AppendLine("\tconsole.log(request);");
+                    observer.AppendLine("if(request.operation == 'get')");
+                    observer.AppendLine("{");
                     {
-                        functionBody.AppendLine($"\tthis.{table.LowerCaseName}.next(request.data);");
+                        observer.AppendLine($"\tthis.{table.LowerCaseName}.next(request.data);");
                     }
-                    functionBody.AppendLine("}");
-                    functionBody.AppendLine("else if(request.operation == 'add')");
-                    functionBody.AppendLine("{");
+                    observer.AppendLine("}");
+                    observer.AppendLine("else if(request.operation == 'add')");
+                    observer.AppendLine("{");
                     {
-                        functionBody.AppendLine($"\tlet items = this.{table.LowerCaseName}.getValue()");
-                        functionBody.AppendLine("\titems.push(request.data);");
-                        functionBody.AppendLine($"\tthis.{table.LowerCaseName}.next(items);");
+                        observer.AppendLine($"\tlet items = this.{table.LowerCaseName}.getValue()");
+                        observer.AppendLine("\titems.push(request.data);");
+                        observer.AppendLine($"\tthis.{table.LowerCaseName}.next(items);");
                     }
-                    functionBody.AppendLine("}");
+                    observer.AppendLine("}");
+                    observer.AppendLine("else if(request.operation == 'update')");
+                    observer.AppendLine("{");
+                    {
+                        observer.AppendLine($"\tlet items = this.{table.LowerCaseName}.getValue()");
+                        observer.AppendLine("\tfor(let i = 0; i < items.length; i++)");
+                        observer.AppendLine("\t{");
+                        { 
+                            observer.AppendLine($"\t\tif(items[i].{table.PrimaryKeyColumn.LowerCaseName} == request.data.{table.PrimaryKeyColumn.LowerCaseName})");
+                            observer.AppendLine("\t\t{");
+                            observer.AppendLine("\t\t\titems[i] = request.data;");
+                            observer.AppendLine("\t\t\tbreak;");
+                            observer.AppendLine("\t\t}");
+                        }
+                        observer.AppendLine("\t}");
+                        observer.AppendLine($"\tthis.{table.LowerCaseName}.next(items);");
+                    }
+                    observer.AppendLine("}");
+
+
+                    functionBody.AppendLine(Helpers.AddIndentation(observer, 1));
                 }
                 functionBody.AppendLine("});");
                 functionBody.AppendLine($"this.webSocketsSubject.next(new Message(this.constructor.name, new Request('subscribe', '{table.Name}', null)));");
