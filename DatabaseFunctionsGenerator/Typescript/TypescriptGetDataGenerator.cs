@@ -434,6 +434,13 @@ namespace DatabaseFunctionsGenerator
                         observer.AppendLine($"\tthis.{table.LowerCaseName}.next(items);");
                     }
                     observer.AppendLine("}");
+                    //authentication token error
+                    observer.AppendLine("else if(request.operation == 'tokenError')");
+                    observer.AppendLine("{");
+                    {
+                        observer.AppendLine($"\tthis.auth.RemoveToken();");
+                    }
+                    observer.AppendLine("}");
 
 
                     functionBody.AppendLine(Helpers.AddIndentation(observer, 1));
