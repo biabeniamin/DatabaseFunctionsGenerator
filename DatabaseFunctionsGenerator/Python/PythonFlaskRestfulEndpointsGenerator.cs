@@ -159,7 +159,7 @@ namespace DatabaseFunctionsGenerator.Python
 
             if (table.RequiresSecurityToken)
             {
-                classBuilder.AppendLine("from Authentication import authenticate");
+                classBuilder.AppendLine("from TokenAuthenticationEndpoints import authenticate");
                 classBuilder.AppendLine("method_decorators = [authenticate]");
             }
 
