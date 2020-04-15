@@ -180,7 +180,7 @@ namespace DatabaseFunctionsGenerator
 
             objectName = Helpers.GetLowerCaseString(table.SingularName);
 
-            builder.Append($"constructor(private http:HttpClient");
+            builder.Append($"constructor(private http:HttpClient, private webSockets : WebSockets");
 
             if(table.RequiresSecurityToken)
                 builder.Append($", private auth : AuthenticationService");
@@ -374,7 +374,7 @@ namespace DatabaseFunctionsGenerator
             builder.AppendLine($"ConnectToWebSockets()");
             builder.AppendLine("{");
             {
-                functionBody.AppendLine($"this.webSocketsSubject = new WebSockets().getSubject('{table.Name}');");
+                functionBody.AppendLine($"this.webSocketsSubject = this.webSockets.getSubject('{table.Name}');");
                 functionBody.AppendLine($"this.webSocketsSubject.subscribe(message =>");
                 functionBody.AppendLine("{");
                 {
