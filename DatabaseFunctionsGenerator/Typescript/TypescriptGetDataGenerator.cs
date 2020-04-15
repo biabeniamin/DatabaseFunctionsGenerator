@@ -194,6 +194,7 @@ namespace DatabaseFunctionsGenerator
                 }
                 functionBody.AppendLine($"this.{table.LowerCaseName} = new BehaviorSubject([{table.SingularName}Service.GetDefault{table.SingularName}()]);");
                 functionBody.AppendLine($"this.Get{table.Name}();");
+                functionBody.AppendLine("this.webSockets.SetOnConnectionEstablished(() => this.ConnectToWebSockets());");
             }
             builder.AppendLine(Helpers.AddIndentation(functionBody.ToString(), 1));
             builder.AppendLine("}");
