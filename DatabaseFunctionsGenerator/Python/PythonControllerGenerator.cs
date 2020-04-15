@@ -212,6 +212,8 @@ namespace DatabaseFunctionsGenerator.Python
             function.AppendLine($"session.commit()");
             function.AppendLine($"#this must stay because sqlalchemy query the database because of this line");
             function.AppendLine($"print('Value inserted with {table.PrimaryKeyColumn.LowerCaseName}=', {table.LowerCaseSingularName}.{table.PrimaryKeyColumn.LowerCaseName})");
+            foreach (Table parentTable in table.Parents)
+                function.AppendLine($"{table.LowerCaseSingularName}.{parentTable.LowerCaseSingularName} = get{parentTable.Name}By{parentTable.PrimaryKeyColumn.Name}(session, {table.LowerCaseSingularName}.{parentTable.PrimaryKeyColumn.LowerCaseName})[0]");
             function.AppendLine($"return {table.LowerCaseSingularName}");
 
             builder.AppendLine(Helpers.AddIndentation(function, 1));
