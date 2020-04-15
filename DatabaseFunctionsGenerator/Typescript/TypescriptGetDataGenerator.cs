@@ -435,12 +435,15 @@ namespace DatabaseFunctionsGenerator
                     }
                     observer.AppendLine("}");
                     //authentication token error
-                    observer.AppendLine("else if(request.operation == 'tokenError')");
-                    observer.AppendLine("{");
+                    if (table.RequiresSecurityToken)
                     {
-                        observer.AppendLine($"\tthis.auth.RemoveToken();");
+                        observer.AppendLine("else if(request.operation == 'tokenError')");
+                        observer.AppendLine("{");
+                        {
+                            observer.AppendLine($"\tthis.auth.RemoveToken();");
+                        }
+                        observer.AppendLine("}");
                     }
-                    observer.AppendLine("}");
 
 
                     functionBody.AppendLine(Helpers.AddIndentation(observer, 1));
