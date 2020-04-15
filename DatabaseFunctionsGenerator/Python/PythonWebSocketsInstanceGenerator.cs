@@ -19,8 +19,20 @@ namespace DatabaseFunctionsGenerator.Python
         {
             StringBuilder builder = new StringBuilder();
 
-            builder.AppendLine("data = json.loads(request)");
-            builder.AppendLine("print(data)");
+            builder.AppendLine("request = json.loads(requestJson)");
+            builder.AppendLine("print(request)");
+
+            for (int i = 0; i < _database.Tables.Count; i++)
+            {
+                Table table = _database.Tables[i];
+
+                //generate else if
+                if (i > 0)
+                    builder.Append("el");
+
+                builder.AppendLine($"if request['table'] == '{table.Name}':");
+                builder.AppendLine($"\tawait {table.SingularName}WebSockets.requestReceived(websocket, session, request)");
+            }
 
             return builder.ToString();
         }
@@ -47,7 +59,7 @@ namespace DatabaseFunctionsGenerator.Python
 
                 functionBuilder.AppendLine("try:");
                 functionBuilder.AppendLine("\tprint('client connected')");
-                functionBuilder.AppendLine("\tasync for request in websocket:");
+                functionBuilder.AppendLine("\tasync for requestJson in websocket:");
                 {
                     functionBuilder.AppendLine(Helpers.AddIndentation(GenerateRequestHandle(), 2));
                 }
