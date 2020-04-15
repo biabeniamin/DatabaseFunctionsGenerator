@@ -52,11 +52,13 @@ namespace DatabaseFunctionsGenerator.Python
                 builder.AppendLine($"import {table.SingularName}WebSockets");
             builder.AppendLine();
 
-            //create session
+            builder.AppendLine("users = set()");
+
             builder.AppendLine("async def requestReceived(websocket, path):");
             {
                 StringBuilder functionBuilder = new StringBuilder();
 
+                functionBuilder.AppendLine("users.add(websocket)");
                 functionBuilder.AppendLine("try:");
                 functionBuilder.AppendLine("\tprint('client connected')");
                 functionBuilder.AppendLine("\tasync for requestJson in websocket:");
@@ -65,6 +67,7 @@ namespace DatabaseFunctionsGenerator.Python
                 }
                 functionBuilder.AppendLine("finally:");
                 functionBuilder.AppendLine("\tprint('client disconnected')");
+                functionBuilder.AppendLine("\tusers.remove(websocket)");
                 functionBuilder.AppendLine();
 
                 builder.AppendLine(Helpers.AddIndentation(functionBuilder, 1));
