@@ -137,6 +137,7 @@
     <Compile Include="Python\PythonHelpersGenerator.cs" />
     <Compile Include="Python\PythonModelsGenerator.cs" />
     <Compile Include="Python\PythonWebSocketsEndpointsGenerator.cs" />
+    <Compile Include="Python\PythonWebSocketsInstanceGenerator.cs" />
     <Compile Include="Typescript\TypescriptComponentGenerator.cs" />
     <Compile Include="Typescript\TypescriptComponentStyleGenerator.cs" />
     <Compile Include="Typescript\TypescriptControllerComponentGenerator.cs" />
