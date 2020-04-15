@@ -15,6 +15,16 @@ namespace DatabaseFunctionsGenerator.Python
             _database = database;
         }
 
+        private string GenerateConnectedSuccessfullyEvent()
+        {
+            StringBuilder builder = new StringBuilder();
+
+            builder.AppendLine("def connectedSuccessfullyEvent():");
+            builder.AppendLine("\treturn json.dumps({'table': 'WebSockets', 'operation' : 'connectedSuccessfully'})");
+
+            return builder.ToString();
+        }
+
         private string GenerateRequestHandle()
         {
             StringBuilder builder = new StringBuilder();
@@ -54,12 +64,16 @@ namespace DatabaseFunctionsGenerator.Python
 
             builder.AppendLine("users = set()");
 
+            builder.AppendLine(GenerateConnectedSuccessfullyEvent());
+            builder.AppendLine();
+
             builder.AppendLine("async def requestReceived(websocket, path):");
             {
                 StringBuilder functionBuilder = new StringBuilder();
 
                 functionBuilder.AppendLine("users.add(websocket)");
                 functionBuilder.AppendLine("try:");
+                functionBuilder.AppendLine("\tawait websocket.send(connectedSuccessfullyEvent())");
                 functionBuilder.AppendLine("\tprint('client connected')");
                 functionBuilder.AppendLine("\tasync for requestJson in websocket:");
                 {
