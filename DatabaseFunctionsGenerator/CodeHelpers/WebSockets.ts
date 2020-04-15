@@ -26,6 +26,8 @@ export class WebSockets
     private socket$: WebSocketSubject<Request>;
     //public limeBasket: Subject<string> = new Subject<string>();
     private subscriber : {[table : string]:Subject<Message>} = {};
+    private onConnectionEstablished : (() => void)[] = [];
+    private isConnected : boolean;
 
 	constructor()
 	{
@@ -35,13 +37,30 @@ export class WebSockets
             .subscribe(
             (request) => {
                 console.log(request)
-                if(this.subscriber[request.table] != null)
+                if(request.table == this.constructor.name)
+                {
+                    if(request["operation"] == "connectedSuccessfully")
+                    {
+                        this.onConnectionEstablished.forEach(callback => {
+                            callback();
+                        })
+                    }
+                }
+                else if(this.subscriber[request.table] != null)
                     this.subscriber[request.table].next(new Message(this.constructor.name, request))
             },
             (err) => console.error(err),
             () => console.warn('Completed!')
             );
-	}
+    }
+    
+    public SetOnConnectionEstablished(onConnectionEstablished : () => void)
+    {
+        this.onConnectionEstablished.push(onConnectionEstablished);
+
+        if(this.isConnected)
+            onConnectionEstablished();
+    }
 
     public getSubject(table)
     {
