@@ -405,10 +405,27 @@ namespace DatabaseFunctionsGenerator
                         observer.AppendLine($"\tlet items = this.{table.LowerCaseName}.getValue()");
                         observer.AppendLine("\tfor(let i = 0; i < items.length; i++)");
                         observer.AppendLine("\t{");
-                        { 
+                        {
                             observer.AppendLine($"\t\tif(items[i].{table.PrimaryKeyColumn.LowerCaseName} == request.data.{table.PrimaryKeyColumn.LowerCaseName})");
                             observer.AppendLine("\t\t{");
                             observer.AppendLine("\t\t\titems[i] = request.data;");
+                            observer.AppendLine("\t\t\tbreak;");
+                            observer.AppendLine("\t\t}");
+                        }
+                        observer.AppendLine("\t}");
+                        observer.AppendLine($"\tthis.{table.LowerCaseName}.next(items);");
+                    }
+                    observer.AppendLine("}");
+                    observer.AppendLine("else if(request.operation == 'delete')");
+                    observer.AppendLine("{");
+                    {
+                        observer.AppendLine($"\tlet items = this.{table.LowerCaseName}.getValue()");
+                        observer.AppendLine("\tfor(let i = 0; i < items.length; i++)");
+                        observer.AppendLine("\t{");
+                        {
+                            observer.AppendLine($"\t\tif(items[i].{table.PrimaryKeyColumn.LowerCaseName} == request.data.{table.PrimaryKeyColumn.LowerCaseName})");
+                            observer.AppendLine("\t\t{");
+                            observer.AppendLine("\t\t\titems.splice(i, 1);");
                             observer.AppendLine("\t\t\tbreak;");
                             observer.AppendLine("\t\t}");
                         }
