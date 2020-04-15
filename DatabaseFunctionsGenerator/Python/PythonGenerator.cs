@@ -19,6 +19,7 @@ namespace DatabaseFunctionsGenerator.Python
         private PythonFlaskRestfulEndpointsGenerator _pythonEndpointsGenerator;
         private PythonFlaskRestfulInstanceGenerator _pythonFlaskRestfulInstanceGenerator;
         private PythonWebSocketsEndpointsGenerator _pythonWebSocketsEndpointsGenerator;
+        private PythonWebSocketsInstanceGenerator _pythonWebSocketsInstanceGenerator;
 
         public PythonGenerator(Database database)
         {
@@ -32,6 +33,7 @@ namespace DatabaseFunctionsGenerator.Python
             _pythonEndpointsGenerator = new PythonFlaskRestfulEndpointsGenerator(_database);
             _pythonFlaskRestfulInstanceGenerator = new PythonFlaskRestfulInstanceGenerator(_database);
             _pythonWebSocketsEndpointsGenerator = new PythonWebSocketsEndpointsGenerator(_database);
+            _pythonWebSocketsInstanceGenerator = new PythonWebSocketsInstanceGenerator(_database);
         }
 
         public void Generate(string path)
@@ -55,6 +57,7 @@ namespace DatabaseFunctionsGenerator.Python
             _pythonEndpointsGenerator.Generate(pythonServerPath);
             _pythonFlaskRestfulInstanceGenerator.Generate(pythonServerPath);
             _pythonWebSocketsEndpointsGenerator.Generate(pythonServerPath);
+            _pythonWebSocketsInstanceGenerator.Generate(pythonServerPath);
         }
     }
 }
