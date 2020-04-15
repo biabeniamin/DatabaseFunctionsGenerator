@@ -15,7 +15,15 @@ namespace DatabaseFunctionsGenerator.Python
             _database = database;
         }
 
-        
+        private string GenerateRequestHandle()
+        {
+            StringBuilder builder = new StringBuilder();
+
+            builder.AppendLine("data = json.loads(request)");
+            builder.AppendLine("print(data)");
+
+            return builder.ToString();
+        }
 
         public void Generate(string path)
         {
@@ -39,6 +47,10 @@ namespace DatabaseFunctionsGenerator.Python
 
                 functionBuilder.AppendLine("try:");
                 functionBuilder.AppendLine("\tprint('client connected')");
+                functionBuilder.AppendLine("\tasync for request in websocket:");
+                {
+                    functionBuilder.AppendLine(Helpers.AddIndentation(GenerateRequestHandle(), 2));
+                }
                 functionBuilder.AppendLine("finally:");
                 functionBuilder.AppendLine("\tprint('client disconnected')");
                 functionBuilder.AppendLine();
