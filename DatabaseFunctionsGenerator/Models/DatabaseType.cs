@@ -9,6 +9,8 @@ namespace DatabaseFunctionsGenerator.Models
     public enum DatabaseType
     {
         Php = 0,
-        PhytonFlaskRestless = 1
+        PhytonFlaskRestless = 1,
+        PythonFlaskRestful = 2,
+        PythonWebSockets = 4
     }
 }
