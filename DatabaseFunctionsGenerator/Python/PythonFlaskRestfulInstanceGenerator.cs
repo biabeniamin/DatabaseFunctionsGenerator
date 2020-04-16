@@ -43,6 +43,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("from flask_restful import Api");
             builder.AppendLine("from SqlAlchemyMain import createDatabase, session");
             builder.AppendLine("from SqlAlchemy import convertToJson");
+            builder.AppendLine("from flask_cors import CORS");
             if (_database.HasAuthenticationSystem)
             {
                 builder.AppendLine("import Authentication");
@@ -54,6 +55,7 @@ namespace DatabaseFunctionsGenerator.Python
 
            //create session
             builder.AppendLine("app = Flask(__name__)");
+            builder.AppendLine("CORS(app)");
             builder.AppendLine("api = Api(app)");
             builder.AppendLine("createDatabase()");
             builder.AppendLine();
@@ -63,7 +65,7 @@ namespace DatabaseFunctionsGenerator.Python
                 builder.AppendLine($"api.add_resource({table.SingularName}Endpoints, '/{table.Name}', resource_class_kwargs ={{ 'session' : session}}) ");
             }
             if (_database.HasAuthenticationSystem)
-                builder.AppendLine("api.add_resource(TokenAuthenticationEndpoints, '/tokenAuthentication', resource_class_kwargs ={ 'session' : session})");
+                builder.AppendLine("api.add_resource(TokenAuthenticationEndpoints, '/TokenAuthentication', resource_class_kwargs ={ 'session' : session})");
             builder.AppendLine();
 
             builder.AppendLine(GenerateJsonSerializer());
