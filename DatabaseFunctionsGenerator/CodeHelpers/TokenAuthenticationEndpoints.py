@@ -25,7 +25,7 @@ def authenticate(func):
 
 		requestedArgs = getArguments(['token'])
 		parsedArgs  = requestedArgs.parse_args()
-		isAuthorized, error = checkToken(session, parsedArgs['token'], request.remote_addr) 
+		isAuthorized, error = checkToken(session, parsedArgs['token'], request.remote_addr)
 
 		if isAuthorized:
 			return func(*args, **kwargs)

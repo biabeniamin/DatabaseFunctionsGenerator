@@ -77,11 +77,6 @@ export class WebSockets
         return this.subscriber[table]
     }
 
-	public Authenticate(username, password)
-	{
-		this.socket$.next(new Request('login', 'TokenAuthentication', {'username' : username, 'password': password}));
-    }
-
     public Send(request)
     {
         this.socket$.next(request);

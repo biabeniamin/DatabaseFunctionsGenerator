@@ -90,7 +90,7 @@ export class AuthenticationService
 			}
 		
         });
-		this.webSocketsSubject.next(new Message(this.constructor.name, new Request('setToken', 'TokenAuthentication', this.GetToken())));
+		this.webSocketsSubject.next(new Message(this.constructor.name, new Request('setToken', 'TokenAuthentication', {'token' : this.GetToken()})));
 	}
 
 }
