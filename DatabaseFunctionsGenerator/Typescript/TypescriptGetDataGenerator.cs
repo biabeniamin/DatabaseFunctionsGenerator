@@ -32,6 +32,8 @@ namespace DatabaseFunctionsGenerator
                 string url = "";
                 if (_database.Type == DatabaseType.Php)
                     url = $"{table.Name}.php?cmd=get{ table.Name}";
+                else if (_database.Type == DatabaseType.PythonFlaskRestful)
+                    url = $"{table.Name}";
                 else if (_database.Type == DatabaseType.PhytonFlaskRestless)
                     url = $"api/{table.LowerCaseName}";
 
@@ -41,7 +43,7 @@ namespace DatabaseFunctionsGenerator
                 functionBody.AppendLine($"return this.http.get<{table.SingularName}[]>(ServerUrl.GetUrl()  + `{url}`).subscribe(data =>");
                 functionBody.AppendLine("{");
                 {
-                    if (_database.Type == DatabaseType.Php)
+                    if (_database.Type == DatabaseType.Php || _database.Type == DatabaseType.PythonFlaskRestful)
                         functionBody.AppendLine($"\tthis.{table.LowerCaseName}.next(data);");
                     else if (_database.Type == DatabaseType.PhytonFlaskRestless)
                         functionBody.AppendLine($"\tthis.{table.LowerCaseName} = data[\"objects\"];");
@@ -96,7 +98,7 @@ namespace DatabaseFunctionsGenerator
                 foreach (Column column in request.Columns)
                 {
                     parameters.Append($"{column.LowerCaseName}, ");
-                    if(_database.Type == DatabaseType.Php)
+                    if (_database.Type == DatabaseType.Php || _database.Type == DatabaseType.PythonFlaskRestful)
                         urlParameters.Append($"&{column.LowerCaseName}=${{{column.LowerCaseName}}}");
                     else if (_database.Type == DatabaseType.PhytonFlaskRestless)
                         urlParameters.Append($"{{\"name\":\"{column.LowerCaseName}\",\"op\":\"eq\",\"val\":\"${{{column.LowerCaseName}}}\"}}, ");
@@ -109,6 +111,10 @@ namespace DatabaseFunctionsGenerator
                 if (_database.Type == DatabaseType.Php)
                 {
                     url = $"{table.Name}.php?cmd=get{table.Name}By{request.ToString("")}{urlParameters}";
+                }
+                else if (_database.Type == DatabaseType.PythonFlaskRestful)
+                {
+                    url = $"{table.Name}?cmd=get{table.Name}By{request.ToString("")}{urlParameters}";
                 }
                 else if (_database.Type == DatabaseType.PhytonFlaskRestless)
                 {
@@ -221,6 +227,11 @@ namespace DatabaseFunctionsGenerator
                     url = $"{table.Name}.php?cmd=add{table.SingularName}";
                     sentData = table.LowerCaseSingularName;
                 }
+                else if (_database.Type == DatabaseType.PythonFlaskRestful)
+                {
+                    url = $"{table.Name}";
+                    sentData = table.LowerCaseSingularName;
+                }
                 else if (_database.Type == DatabaseType.PhytonFlaskRestless)
                 {
                     url = $"api/{table.LowerCaseName}";
@@ -277,6 +288,10 @@ namespace DatabaseFunctionsGenerator
             {
                 url = $"{table.Name}.php?cmd=update{table.SingularName}";
             }
+            else if (_database.Type == DatabaseType.PythonFlaskRestful)
+            {
+                url = $"{table.Name}?cmd=update{table.SingularName}";
+            }
             else if (_database.Type == DatabaseType.PhytonFlaskRestless)
             {
                 url = $"\"api/{table.LowerCaseName}/\" + {table.LowerCaseSingularName}.{table.PrimaryKeyColumn.LowerCaseName}";
@@ -299,7 +314,7 @@ namespace DatabaseFunctionsGenerator
                 functionBody.AppendLine();
 
                 //http
-                functionBody.AppendLine($"return this.http.put<{table.SingularName}>(ServerUrl.GetUrl()  + `{url}`, {table.LowerCaseSingularName}).subscribe({table.LowerCaseSingularName} =>");
+                functionBody.AppendLine($"return this.http.patch<{table.SingularName}>(ServerUrl.GetUrl()  + `{url}`, {table.LowerCaseSingularName}).subscribe({table.LowerCaseSingularName} =>");
                 functionBody.AppendLine("{");
                 {
                     functionBody.AppendLine($"\tconsole.log({table.LowerCaseSingularName});");
@@ -329,6 +344,13 @@ namespace DatabaseFunctionsGenerator
                 if (table.RequiresSecurityToken)
                     url += "&token=${this.token}";
                 url += $"&{table.PrimaryKeyColumn.LowerCaseName}=";
+            }
+            else if (_database.Type == DatabaseType.PythonFlaskRestful)
+            {
+                url = $"{table.Name}";
+                url += $"?{table.PrimaryKeyColumn.LowerCaseName}=";
+                if (table.RequiresSecurityToken)
+                    url += "&token=${this.token}";
             }
             else if (_database.Type == DatabaseType.PhytonFlaskRestless)
             {
@@ -486,7 +508,8 @@ namespace DatabaseFunctionsGenerator
                     classBody.AppendLine($"private token : string;");
 
                 classBody.AppendLine(GenerateGetFunction(table));
-                classBody.AppendLine(GenerateGetLastFunction(table));
+                if(_database.Type == DatabaseType.Php)
+                    classBody.AppendLine(GenerateGetLastFunction(table));
                 classBody.AppendLine(GenerateGetDefaultValueFunction(table));
                 classBody.AppendLine(GenerateDedicatedGetRequestsFunction(table));
                 classBody.AppendLine(GenerateConstructor(table));
