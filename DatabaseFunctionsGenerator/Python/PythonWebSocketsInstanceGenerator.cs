@@ -44,6 +44,23 @@ namespace DatabaseFunctionsGenerator.Python
                 builder.AppendLine($"\tawait {table.SingularName}WebSockets.requestReceived(websocket, session, request)");
             }
 
+            if(_database.HasAuthenticationSystem)
+            {
+                builder.AppendLine($"if request['table'] == 'TokenAuthentication' and request['operation'] == 'login':");
+                builder.AppendLine($"\tdata = request['data']");
+                builder.AppendLine($"\tif 'username' not in data or 'password' not in data:");
+                builder.AppendLine("\t\tawait websocket.send(json.dumps({'table': 'TokenAuthentication', 'operation' : 'invalidCredentials'}))");
+                builder.AppendLine("\t\tcontinue");
+
+                builder.AppendLine("\ttoken, isSuccessful = Authentication.login(session, data['username'], data['password'], '*')");
+                builder.AppendLine($"\tif isSuccessful == 0:");
+                builder.AppendLine("\t\tawait websocket.send(convertToJson({'table': 'TokenAuthentication', 'operation' : 'invalidCredentials'}))");
+                builder.AppendLine("\t\tcontinue");
+
+                builder.AppendLine("\tawait websocket.send(convertToJson({'table': 'TokenAuthentication', 'operation' : 'authenticationGranted', 'data' : token}))");
+                builder.AppendLine("\twebsocket.authenticated = True");
+            }
+
             return builder.ToString();
         }
 
@@ -56,8 +73,12 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("import asyncio");
             builder.AppendLine("import websockets");
             builder.AppendLine("import json");
+            builder.AppendLine("from SqlAlchemy import convertToJson");
             builder.AppendLine("from SqlAlchemyMain import session");
-            
+
+            if(_database.HasAuthenticationSystem)
+                builder.AppendLine("import Authentication");
+
             foreach (Table table in _database.Tables)
                 builder.AppendLine($"import {table.SingularName}WebSockets");
             builder.AppendLine();
