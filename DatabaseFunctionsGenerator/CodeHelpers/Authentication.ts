@@ -67,12 +67,30 @@ export class AuthenticationService
     constructor(private http:HttpClient, private cookieService: CookieService, private tokenService : TokenService,
         private router: Router, private webSockets : WebSockets)
 	{
-		this.webSockets.SetOnConnectionEstablished(() => this.AuthenticateWebSocket());
+		this.webSockets.SetOnConnectionEstablished(() => this.SetTokenWebSocket());
 	}
 
-	AuthenticateWebSocket()
+    AuthenticateWebSockets(username, password)
 	{
-        this.webSockets.Send(new Request("setToken", "TokenAuthentication", {"token" : this.GetToken()}))
+		this.webSockets.Send(new Request('login', 'TokenAuthentication', {'username' : username, 'password': password}));
+    }
+
+	SetTokenWebSocket()
+	{
+        this.webSocketsSubject = this.webSockets.getSubject('TokenAuthentication');
+		this.webSocketsSubject.subscribe(message =>
+		{
+			if(message.sender != WebSockets.name)
+				return
+			let request = message.data;
+			console.log(request);
+			if(request.operation == 'authenticationGranted')
+			{
+                this.cookieService.set("token", request.data.value);
+			}
+		
+        });
+		this.webSocketsSubject.next(new Message(this.constructor.name, new Request('setToken', 'TokenAuthentication', this.GetToken())));
 	}
 
 }
