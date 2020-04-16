@@ -177,7 +177,7 @@ namespace DatabaseFunctionsGenerator.Python
                 {
                     functionBuilder.AppendLine($"if websocket.authenticated == False:");
                     {
-                        functionBuilder.AppendLine($"\tawait websocket.send(convertToJson({{'operation' : 'tokenError', 'table' : '{table.Name}'}}))");
+                        functionBuilder.AppendLine($"\tawait websocket.send(convertToJson({{'operation' : 'tokenError', 'table' : 'TokenAuthentication'}}))");
                         functionBuilder.AppendLine($"\treturn");
                     }
                 }

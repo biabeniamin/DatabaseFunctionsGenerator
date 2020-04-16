@@ -27,3 +27,4 @@ async def requestReceived(websocket, session, request):
 			return
 
 		await websocket.send(convertToJson({'table': 'TokenAuthentication', 'operation' : 'validToken'}))
+		websocket.authenticated = True

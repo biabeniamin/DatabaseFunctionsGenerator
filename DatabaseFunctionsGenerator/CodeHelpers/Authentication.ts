@@ -88,6 +88,10 @@ export class AuthenticationService
 			{
                 this.cookieService.set("token", request.data.value);
 			}
+			else if(request.operation == 'tokenError')
+			{
+				this.RemoveToken();
+			}
 		
         });
 		this.webSocketsSubject.next(new Message(this.constructor.name, new Request('setToken', 'TokenAuthentication', {'token' : this.GetToken()})));
