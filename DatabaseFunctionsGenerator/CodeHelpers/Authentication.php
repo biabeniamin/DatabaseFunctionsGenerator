@@ -20,7 +20,7 @@ function CheckToken($database, $value)
 	if(!$tokens[0]->tokenId)
 		$isAuthorized = 0;
 
-	$timestamp = time()-strtotime($tokens[0]->lastUpdate);
+	$timestamp = gmdate("M d Y H:i:s", time())-strtotime($tokens[0]->lastUpdate);
 	$elapsedHours = $timestamp / 60 / 60;
 	if($elapsedHours > 1)
 		$isAuthorized = 0;
@@ -34,7 +34,7 @@ function CheckToken($database, $value)
 
 	if($isAuthorized)
 	{
-		$now = date("Y-m-d H:i:s");
+		$now = gmdate("Y-m-d H:i:s");
 		$tokens[0]->lastUpdate = $now;
 		UpdateToken($database, $tokens[0]);
 	}
@@ -63,7 +63,7 @@ if(!CheckGetParameters(["token"]))
                     die(json_encode( GetEmptyToken()));
 
                 $ip = $_SERVER['REMOTE_ADDR'];
-                $now = date("Y-m-d H:i:s");
+                $now = gmdate("Y-m-d H:i:s");
                 $guid = GUID();
                 $token = new Token(
                     $users[0]->tokenUserId,//TokenUserId
