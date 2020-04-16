@@ -36,7 +36,7 @@ namespace DatabaseFunctionsGenerator
                 {
                     if(_database.Type == Models.DatabaseType.Php)
                         builder.AppendLine($"{parentTable.LowerCaseSingularName} : {parentTable.SingularName};");
-                    else if (_database.Type == Models.DatabaseType.Phyton)
+                    else if (_database.Type == Models.DatabaseType.PhytonFlaskRestless)
                         builder.AppendLine($"{parentTable.LowerCaseName} : {parentTable.SingularName};");
                 }
             }

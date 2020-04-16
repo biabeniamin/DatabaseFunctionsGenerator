@@ -27,7 +27,7 @@ namespace DatabaseFunctionsGenerator.Java
 
             if (_database.Type == Models.DatabaseType.Php)
                 type = $"List<{table.SingularName}>";
-            else if (_database.Type == Models.DatabaseType.Phyton)
+            else if (_database.Type == Models.DatabaseType.PhytonFlaskRestless)
                 type = $"{table.SingularName}Response";
 
             builder.AppendLine($"public static {type} get{table.Name}(Call<{type}> call)");
@@ -125,7 +125,7 @@ namespace DatabaseFunctionsGenerator.Java
 
             if (_database.Type == Models.DatabaseType.Php)
                 type = $"List<{table.SingularName}>";
-            else if (_database.Type == Models.DatabaseType.Phyton)
+            else if (_database.Type == Models.DatabaseType.PhytonFlaskRestless)
                 type = $"{table.SingularName}Response";
 
             foreach (DedicatedGetRequest dedicatedRequest in table.DedicatedGetRequests)
@@ -205,7 +205,7 @@ namespace DatabaseFunctionsGenerator.Java
 
             if (_database.Type == Models.DatabaseType.Php)
                 type = $"List<{table.SingularName}>";
-            else if (_database.Type == Models.DatabaseType.Phyton)
+            else if (_database.Type == Models.DatabaseType.PhytonFlaskRestless)
                 type = $"{table.SingularName}Response";
 
             builder.AppendLine($"public static void get{table.Name}(Call<{type}> call, Callback<{type}> callback)");
@@ -296,7 +296,7 @@ namespace DatabaseFunctionsGenerator.Java
 
             if (_database.Type == Models.DatabaseType.Php)
                 type = $"List<{table.SingularName}>";
-            else if (_database.Type == Models.DatabaseType.Phyton)
+            else if (_database.Type == Models.DatabaseType.PhytonFlaskRestless)
                 type = $"{table.SingularName}Response";
 
             foreach (DedicatedGetRequest dedicatedRequest in table.DedicatedGetRequests)
@@ -342,7 +342,7 @@ namespace DatabaseFunctionsGenerator.Java
                             }
                             Helpers.RemoveLastApparition(methodBody, ", ");
                         }
-                        else if (_database.Type == Models.DatabaseType.Phyton)
+                        else if (_database.Type == Models.DatabaseType.PhytonFlaskRestless)
                         {
                             StringBuilder urlParameters;
 
@@ -498,7 +498,7 @@ namespace DatabaseFunctionsGenerator.Java
                     interfaceBuilder.AppendLine($"@GET(\"{table.Name}.php?cmd=get{table.Name}\")");
                     interfaceBuilder.AppendLine($"Call<List<{table.SingularName}>> get{table.Name}();");
                 }
-                else if (_database.Type == Models.DatabaseType.Phyton)
+                else if (_database.Type == Models.DatabaseType.PhytonFlaskRestless)
                 {
                     interfaceBuilder.AppendLine($"@GET(\"api/{table.LowerCaseName}\")");
                     interfaceBuilder.AppendLine($"Call<{table.SingularName}Response> get{table.Name}();");

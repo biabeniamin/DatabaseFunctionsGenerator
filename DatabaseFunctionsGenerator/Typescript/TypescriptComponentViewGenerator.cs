@@ -62,7 +62,7 @@ namespace DatabaseFunctionsGenerator
                             {
                                 if (type == DatabaseType.Php)
                                     tableBody.AppendLine($"\t\t{{{{{table.LowerCaseSingularName}.{parentTable.LowerCaseSingularName}.{Helpers.GetLowerCaseString(column.Name)}}}}}");
-                                else if (type == DatabaseType.Phyton)
+                                else if (type == DatabaseType.PhytonFlaskRestless)
                                     tableBody.AppendLine($"\t\t{{{{{table.LowerCaseSingularName}.{parentTable.LowerCaseName}.{Helpers.GetLowerCaseString(column.Name)}}}}}");
                             }
                             tableBody.AppendLine("\t</td>");

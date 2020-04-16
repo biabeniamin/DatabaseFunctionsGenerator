@@ -309,7 +309,7 @@ namespace DatabaseFunctionsGenerator.Java
             foreach (Table table in _database.Tables)
             {
                 GenerateModel(table, modelsPath, _database.JavaPackageName);
-                if(_database.Type == Models.DatabaseType.Phyton)
+                if(_database.Type == Models.DatabaseType.PhytonFlaskRestless)
                     GenerateModelResponse(table, modelsPath, _database.JavaPackageName);
             }
         }

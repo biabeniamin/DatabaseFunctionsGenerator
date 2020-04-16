@@ -32,7 +32,7 @@ namespace DatabaseFunctionsGenerator
                 string url = "";
                 if (_database.Type == DatabaseType.Php)
                     url = $"{table.Name}.php?cmd=get{ table.Name}";
-                else if (_database.Type == DatabaseType.Phyton)
+                else if (_database.Type == DatabaseType.PhytonFlaskRestless)
                     url = $"api/{table.LowerCaseName}";
 
                 if (table.RequiresSecurityToken)
@@ -43,7 +43,7 @@ namespace DatabaseFunctionsGenerator
                 {
                     if (_database.Type == DatabaseType.Php)
                         functionBody.AppendLine($"\tthis.{table.LowerCaseName}.next(data);");
-                    else if (_database.Type == DatabaseType.Phyton)
+                    else if (_database.Type == DatabaseType.PhytonFlaskRestless)
                         functionBody.AppendLine($"\tthis.{table.LowerCaseName} = data[\"objects\"];");
                 }
                 functionBody.AppendLine("});");
@@ -98,7 +98,7 @@ namespace DatabaseFunctionsGenerator
                     parameters.Append($"{column.LowerCaseName}, ");
                     if(_database.Type == DatabaseType.Php)
                         urlParameters.Append($"&{column.LowerCaseName}=${{{column.LowerCaseName}}}");
-                    else if (_database.Type == DatabaseType.Phyton)
+                    else if (_database.Type == DatabaseType.PhytonFlaskRestless)
                         urlParameters.Append($"{{\"name\":\"{column.LowerCaseName}\",\"op\":\"eq\",\"val\":\"${{{column.LowerCaseName}}}\"}}, ");
 
                 }
@@ -110,7 +110,7 @@ namespace DatabaseFunctionsGenerator
                 {
                     url = $"{table.Name}.php?cmd=get{table.Name}By{request.ToString("")}{urlParameters}";
                 }
-                else if (_database.Type == DatabaseType.Phyton)
+                else if (_database.Type == DatabaseType.PhytonFlaskRestless)
                 {
                     url = $"api/{table.LowerCaseName}?q={{\"filters\":[{urlParameters}]}}";
                 }
@@ -155,7 +155,7 @@ namespace DatabaseFunctionsGenerator
                 {
                     if(_database.Type == DatabaseType.Php)
                         functionBody.AppendLine($"{parentTable.LowerCaseSingularName} : {parentTable.SingularName}Service.GetDefault{parentTable.SingularName}(),");
-                    else if (_database.Type == DatabaseType.Phyton)
+                    else if (_database.Type == DatabaseType.PhytonFlaskRestless)
                         functionBody.AppendLine($"{parentTable.LowerCaseName} : {parentTable.SingularName}Service.GetDefault{parentTable.SingularName}(),");
                 }
 
@@ -221,7 +221,7 @@ namespace DatabaseFunctionsGenerator
                     url = $"{table.Name}.php?cmd=add{table.SingularName}";
                     sentData = table.LowerCaseSingularName;
                 }
-                else if (_database.Type == DatabaseType.Phyton)
+                else if (_database.Type == DatabaseType.PhytonFlaskRestless)
                 {
                     url = $"api/{table.LowerCaseName}";
                     sentData = $"encode{table.SingularName}({table.LowerCaseSingularName})";
@@ -277,7 +277,7 @@ namespace DatabaseFunctionsGenerator
             {
                 url = $"{table.Name}.php?cmd=update{table.SingularName}";
             }
-            else if (_database.Type == DatabaseType.Phyton)
+            else if (_database.Type == DatabaseType.PhytonFlaskRestless)
             {
                 url = $"\"api/{table.LowerCaseName}/\" + {table.LowerCaseSingularName}.{table.PrimaryKeyColumn.LowerCaseName}";
             }
@@ -330,7 +330,7 @@ namespace DatabaseFunctionsGenerator
                     url += "&token=${this.token}";
                 url += $"&{table.PrimaryKeyColumn.LowerCaseName}=";
             }
-            else if (_database.Type == DatabaseType.Phyton)
+            else if (_database.Type == DatabaseType.PhytonFlaskRestless)
             {
                 url = $"api/{table.LowerCaseName}/";
             }
