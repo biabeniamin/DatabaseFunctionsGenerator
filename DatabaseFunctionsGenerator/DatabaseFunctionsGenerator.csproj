@@ -86,6 +86,9 @@
     <None Include="CodeHelpers\WebSocketsHelpers.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="CodeHelpers\TokenAuthenticationWebSockets.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Compile Include="Constants.cs" />
     <Compile Include="CSharp\CSharpClientControllerGenerator.cs" />
     <Compile Include="CSharp\CSharpGenerator.cs" />
