@@ -37,7 +37,7 @@ namespace DatabaseFunctionsGenerator
             webSockets = webSockets.Replace("!--url--!", _database.WebSocketsServerAddress);
 
             IO.WriteFile($"{helpersPath}\\ServerUrl.ts", serverUrl);
-            IO.WriteFile($"{helpersPath}\\Authentication.ts", authentication);
+            IO.WriteFile($"{helpersPath}\\AuthenticationService.ts", authentication);
             IO.WriteFile($"{helpersPath}\\WebSockets.ts", webSockets);
         }
     }

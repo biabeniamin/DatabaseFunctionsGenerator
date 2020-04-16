@@ -3,8 +3,10 @@ import { ServerUrl } from './ServerUrl'
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { TokenService } from './TokenService';
+import { WebSockets, Message, Request } from './WebSockets';
 import { Token } from './Models/Token';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
 
 @Injectable({
     providedIn : 'root'
@@ -12,6 +14,7 @@ import { Router } from '@angular/router';
 export class AuthenticationService
 {
     public locations : Location[];
+	private webSocketsSubject : Subject<Message>;
 
     RemoveToken()
     {
@@ -21,6 +24,11 @@ export class AuthenticationService
     }
 
 	GetToken()
+    {
+        return this.cookieService.get("token"); 
+    }
+
+	CheckToken()
 	{
         if(!this.cookieService.check("token"))
             this.RemoveToken();
@@ -39,9 +47,8 @@ export class AuthenticationService
             }
 
         });
-		
     }
-    
+
     Login(username, password)
     {
         let login = {"username" : username, "password" : password};
@@ -58,9 +65,14 @@ export class AuthenticationService
     }
     
     constructor(private http:HttpClient, private cookieService: CookieService, private tokenService : TokenService,
-        private router: Router)
+        private router: Router, private webSockets : WebSockets)
 	{
-	
+		this.webSockets.SetOnConnectionEstablished(() => this.AuthenticateWebSocket());
+	}
+
+	AuthenticateWebSocket()
+	{
+        this.webSockets.Send(new Request("setToken", "TokenAuthentication", {"token" : this.GetToken()}))
 	}
 
 }
