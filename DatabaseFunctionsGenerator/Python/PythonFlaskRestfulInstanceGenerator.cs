@@ -60,7 +60,7 @@ namespace DatabaseFunctionsGenerator.Python
 
             foreach (Table table in _database.Tables)
             {
-                builder.AppendLine($"api.add_resource({table.SingularName}Endpoints, '/{table.LowerCaseName}', resource_class_kwargs ={{ 'session' : session}}) ");
+                builder.AppendLine($"api.add_resource({table.SingularName}Endpoints, '/{table.Name}', resource_class_kwargs ={{ 'session' : session}}) ");
             }
             if (_database.HasAuthenticationSystem)
                 builder.AppendLine("api.add_resource(TokenAuthenticationEndpoints, '/tokenAuthentication', resource_class_kwargs ={ 'session' : session})");
