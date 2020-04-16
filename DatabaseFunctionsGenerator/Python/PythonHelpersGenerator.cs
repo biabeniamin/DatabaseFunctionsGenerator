@@ -22,6 +22,7 @@ namespace DatabaseFunctionsGenerator.Python
             string validationError;
             string websocketsHelpers;
             string tokenAuthenticationEndpoints;
+            string tokenAuthenticationWebSockets;
 
             builder = new StringBuilder();
             sqlAlchemy = IO.ReadFile("CodeHelpers\\SqlAlchemy.py");
@@ -30,6 +31,7 @@ namespace DatabaseFunctionsGenerator.Python
             restfulHelpers = IO.ReadFile("CodeHelpers\\FlaskRestfulHelpers.py");
             websocketsHelpers = IO.ReadFile("CodeHelpers\\WebSocketsHelpers.py");
             tokenAuthenticationEndpoints = IO.ReadFile("CodeHelpers\\TokenAuthenticationEndpoints.py");
+            tokenAuthenticationWebSockets = IO.ReadFile("CodeHelpers\\TokenAuthenticationWebSockets.py");
 
             //replace databaseName
             sqlAlchemy = sqlAlchemy.Replace("!--databaseName--!", _database.DatabaseName);
@@ -39,6 +41,7 @@ namespace DatabaseFunctionsGenerator.Python
             IO.WriteFile($"{path}\\ValidationError.py", validationError);
             IO.WriteFile($"{path}\\WebSocketsHelpers.py", websocketsHelpers);
             IO.WriteFile($"{path}\\TokenAuthenticationEndpoints.py", tokenAuthenticationEndpoints);
+            IO.WriteFile($"{path}\\TokenAuthenticationWebSockets.py", tokenAuthenticationWebSockets);
 
             if (_database.HasAuthenticationSystem)
                 IO.WriteFile($"{path}\\Authentication.py", authentication);

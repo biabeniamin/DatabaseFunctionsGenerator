@@ -65,7 +65,7 @@ namespace DatabaseFunctionsGenerator.Python
             builder.AppendLine("from SqlAlchemyMain import session");
 
             if(_database.HasAuthenticationSystem)
-                builder.AppendLine("import TokenAuthenticationSockets");
+                builder.AppendLine("import TokenAuthenticationWebSockets");
 
             foreach (Table table in _database.Tables)
                 builder.AppendLine($"import {table.SingularName}WebSockets");
