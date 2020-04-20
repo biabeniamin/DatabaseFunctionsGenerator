@@ -58,9 +58,9 @@ namespace DatabaseFunctionsGenerator
                     {
                         foreach (Column column in parentTable.Columns)
                         {
-                            tableBody.AppendLine("\t<td>");
+                            tableBody.AppendLine($"\t<td *ngIf=\"{table.LowerCaseSingularName}.{parentTable.LowerCaseSingularName}\">");
                             {
-                                if (type == DatabaseType.Php)
+                                if (type == DatabaseType.Php || type == DatabaseType.PythonFlaskRestful)
                                     tableBody.AppendLine($"\t\t{{{{{table.LowerCaseSingularName}.{parentTable.LowerCaseSingularName}.{Helpers.GetLowerCaseString(column.Name)}}}}}");
                                 else if (type == DatabaseType.PhytonFlaskRestless)
                                     tableBody.AppendLine($"\t\t{{{{{table.LowerCaseSingularName}.{parentTable.LowerCaseName}.{Helpers.GetLowerCaseString(column.Name)}}}}}");
