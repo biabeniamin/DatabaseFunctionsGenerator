@@ -10,7 +10,7 @@ async def requestReceived(websocket, session, request):
 		if 'username' not in data or 'password' not in data:
 			await websocket.send(convertToJson({'table': 'TokenAuthentication', 'operation' : 'invalidCredentials'}))
 			return
-		token, isSuccessful = Authentication.login(session, data['username'], data['password'], '::1')
+		token, isSuccessful = Authentication.login(session, data['username'], data['password'], websocket.remote_address[0])
 		if isSuccessful == 0:
 			await websocket.send(convertToJson({'table': 'TokenAuthentication', 'operation' : 'invalidCredentials'}))
 			return
@@ -21,7 +21,7 @@ async def requestReceived(websocket, session, request):
 		if 'token' not in data:
 			await websocket.send(convertToJson({'table': 'TokenAuthentication', 'operation' : 'invalidToken'}))
 			return
-		isAuthorized, error = Authentication.checkToken(session, data['token'], '::1')
+		isAuthorized, error = Authentication.checkToken(session, data['token'], websocket.remote_address[0])
 		if isAuthorized == 0:
 			await websocket.send(convertToJson({'table': 'TokenAuthentication', 'operation' : 'invalidToken', 'data': {'error' : error}}))
 			return
