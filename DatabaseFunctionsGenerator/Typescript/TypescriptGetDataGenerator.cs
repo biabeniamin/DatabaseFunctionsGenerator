@@ -33,7 +33,7 @@ namespace DatabaseFunctionsGenerator
                 if (_database.Type == DatabaseType.Php)
                     url = $"{table.Name}.php?cmd=get{ table.Name}";
                 else if (_database.Type == DatabaseType.PythonFlaskRestful)
-                    url = $"{table.Name}";
+                    url = $"{table.Name}?cmd=get";
                 else if (_database.Type == DatabaseType.PhytonFlaskRestless)
                     url = $"api/{table.LowerCaseName}";
 
@@ -229,7 +229,7 @@ namespace DatabaseFunctionsGenerator
                 }
                 else if (_database.Type == DatabaseType.PythonFlaskRestful)
                 {
-                    url = $"{table.Name}";
+                    url = $"{table.Name}?cmd=post";
                     sentData = table.LowerCaseSingularName;
                 }
                 else if (_database.Type == DatabaseType.PhytonFlaskRestless)
@@ -347,10 +347,10 @@ namespace DatabaseFunctionsGenerator
             }
             else if (_database.Type == DatabaseType.PythonFlaskRestful)
             {
-                url = $"{table.Name}";
-                url += $"?{table.PrimaryKeyColumn.LowerCaseName}=";
+                url = $"{table.Name}&cmd=delete";
                 if (table.RequiresSecurityToken)
                     url += "&token=${this.token}";
+                url += $"&{table.PrimaryKeyColumn.LowerCaseName}=";
             }
             else if (_database.Type == DatabaseType.PhytonFlaskRestless)
             {
