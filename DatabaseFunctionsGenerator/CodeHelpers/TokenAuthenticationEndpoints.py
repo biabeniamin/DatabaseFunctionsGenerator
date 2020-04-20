@@ -18,11 +18,15 @@ class TokenAuthenticationEndpoints(Resource):
 		if isAuthorized:
 			return {'status' : 'ok'}
 		abort(401, message=error)
-	#post endpoint
+	#post endpoint	
 	def post(self):
 		requestedArgs = getArguments(['username', 'password'])
 		args  = requestedArgs.parse_args()
-		return login(self.session, args['username'], args['password'], request.remote_addr)  
+		token, succ = login(self.session, args['username'], args['password'], request.remote_addr)  
+		if succ == 0:
+			abort(401, error=token)
+		return token
+
 
 
 def authenticate(func):
