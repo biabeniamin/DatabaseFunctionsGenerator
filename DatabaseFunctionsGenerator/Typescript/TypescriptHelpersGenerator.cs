@@ -36,6 +36,18 @@ namespace DatabaseFunctionsGenerator
             serverUrl = serverUrl.Replace("!--url--!", _database.ServerUrl);
             webSockets = webSockets.Replace("!--url--!", _database.WebSocketsServerAddress);
 
+            //replace token authentication endpoints
+            if (_database.Type == Models.DatabaseType.Php)
+            {
+                authentication = authentication.Replace("!--loginEndpoint--!", "Authentication.php?cmd=addToken");
+                authentication = authentication.Replace("!--tokenCheck--!", "TokenAuthentication.php?cmd=checkToken");
+            }
+            else
+            {
+                authentication = authentication.Replace("!--loginEndpoint--!", "TokenAuthentication");
+                authentication = authentication.Replace("!--tokenCheck--!", "TokenAuthentication?cmd=checkToken");
+            }
+
             IO.WriteFile($"{helpersPath}\\ServerUrl.ts", serverUrl);
             IO.WriteFile($"{helpersPath}\\AuthenticationService.ts", authentication);
             IO.WriteFile($"{helpersPath}\\WebSockets.ts", webSockets);

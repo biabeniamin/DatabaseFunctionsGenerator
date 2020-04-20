@@ -34,7 +34,7 @@ export class AuthenticationService
             this.RemoveToken();
 
         let token = this.cookieService.get("token"); 
-        this.http.get<string>(ServerUrl.GetUrl()  + `Authentication.php?cmd=checkToken&token=${token}`).subscribe(data =>
+        this.http.get<string>(ServerUrl.GetUrl()  + `!--tokenCheck--!&token=${token}`).subscribe(data =>
         {
             console.log(data);
             if(data["status"] == "ok")
@@ -53,7 +53,7 @@ export class AuthenticationService
     {
         let login = {"username" : username, "password" : password};
 		console.log(login);
-		return this.http.post<Token>(ServerUrl.GetUrl()  + "Authentication.php?cmd=addToken", login).subscribe(token =>
+		return this.http.post<Token>(ServerUrl.GetUrl()  + "!--loginEndpoint--!", login).subscribe(token =>
 		{
                 console.log(token);
                 if(token.tokenId != 0)
