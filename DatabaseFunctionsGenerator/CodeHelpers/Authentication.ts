@@ -46,7 +46,11 @@ export class AuthenticationService
                 this.RemoveToken();
             }
 
-        });
+        },
+		error => {
+			console.log(error);
+			this.RemoveToken();
+		});
     }
 
     Login(username, password)
