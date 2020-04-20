@@ -10,6 +10,14 @@ class TokenAuthenticationEndpoints(Resource):
 		self.session = kwargs['session']
 	
 	#API endpoints
+	#get endpoint to check token
+	def get(self):
+		requestedArgs = getArguments(['token'])
+		parsedArgs  = requestedArgs.parse_args()
+		isAuthorized, error = checkToken(session, parsedArgs['token'], request.remote_addr)
+		if isAuthorized:
+			return {'status' : 'ok'}
+		abort(401, message=error)
 	#post endpoint
 	def post(self):
 		requestedArgs = getArguments(['username', 'password'])
